@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard | RankUp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    /* Adding to existing styles */
+.dashboard-body {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.dashboard-sidebar {
+    width: 260px;
+    background: white;
+    border-right: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+.side-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 25px;
+    text-decoration: none;
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.side-item.active {
+    background: #f1f5ff;
+    color: #5D5FEF;
+    border-right: 3px solid #5D5FEF;
+}
+
+.menu-toggle { display: none; }
+
+/* Main Content Wrapper */
+.main-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-header {
+    height: 70px;
+    background: white;
+    border-bottom: 1px solid #eee;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left { display: flex; gap: 40px; align-items: center; }
+.top-nav-links { display: flex; gap: 20px; }
+.top-nav-links a { text-decoration: none; color: #64748b; font-size: 0.85rem; }
+.top-nav-links a.active { color: #333; font-weight: 600; }
+
+.header-right { display: flex; align-items: center; gap: 20px; }
+.header-avatar { width: 35px; height: 35px; border-radius: 50%; }
+.notification-btn { background: none; border: none; font-size: 1.2rem; color: #64748b; cursor: pointer; }
+
+/* Content Section */
+.dashboard-content {
+    padding: 40px;
+    background: #fcfcfd;
+}
+
+.welcome-section h1 { font-size: 1.6rem; margin-bottom: 5px; }
+.welcome-section p { color: #64748b; font-size: 0.9rem; margin-bottom: 30px; }
+
+/* Grid Layouts */
+.action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Card Enhancements */
+.action-card {
+    position: relative;
+    padding: 30px;
+    overflow: hidden;
+}
+
+.primary-bg { background-color: #5D5FEF; color: white; }
+.background-icon {
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    font-size: 5rem;
+    opacity: 0.1;
+}
+
+.purple-text { color: #5D5FEF; opacity: 0.1; }
+
+.btn-white {
+    background: white;
+    color: #5D5FEF;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-top: 15px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.btn-white a {
+    text-decoration: none;
+    color: #5D5FEF;
+}
+
+/* Stat Cards */
+.stat-card h3 { font-size: 0.95rem; margin-bottom: 20px; color: #1e293b; }
+
+.summary-details { display: flex; gap: 40px; margin-bottom: 20px; }
+.summary-item .label { display: block; font-size: 0.75rem; color: #64748b; }
+.summary-item .value { font-size: 1.2rem; font-weight: 700; }
+
+.recent-score .value { font-weight: 700; color: #333; }
+.progress-bar-container { background: #f1f5f9; height: 8px; border-radius: 4px; margin: 15px 0 5px; }
+.progress-bar { background: #5D5FEF; height: 100%; border-radius: 4px; }
+.progress-note { font-size: 0.7rem; color: #94a3b8; }
+
+.chart-placeholder {
+    height: 150px;
+    background: #f8fafc;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #cbd5e1;
+    text-align: center;
+    padding: 20px;
+}
+
+.chart-placeholder i { font-size: 2.5rem; margin-bottom: 10px; }
+.chart-placeholder p { font-size: 0.75rem; }
+
+.skills-list { list-style: none; }
+.skills-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.85rem;
+}
+
+.profile-info-list { list-style: none; }
+.profile-info-list li {
+    font-size: 0.85rem;
+    color: #475569;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 12px;
+}
+
+.pink-bg { background-color: #fff1f2; border: 1px solid #ffe4e6; }
+.quote-text { font-style: italic; font-size: 0.9rem; color: #444; margin-bottom: 10px; }
+cite { font-size: 0.8rem; font-weight: 600; color: #64748b; }
+
+/* Footer */
+.dashboard-footer { padding: 30px 40px; display: flex; justify-content: space-between; font-size: 0.75rem; color: #94a3b8; border-top: 1px solid #eee; background: white; }
+
+/* Responsive */
+@media (max-width: 1100px) {
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 850px) {
+    .dashboard-sidebar { display: none; }
+    .action-grid, .stats-grid { grid-template-columns: 1fr; }
+}
+/* Enhanced Footer Styles */
+.footer {
+    background-color: #fff;
+    padding: 60px 0 30px;
+    border-top: 1px solid #eee;
+    margin-top: 50px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-col h4 {
+    margin-bottom: 20px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.footer-col p {
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.6;
+}
+
+.footer-col ul {
+    list-style: none;
+}
+
+.footer-col ul li {
+    margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+    font-size: 0.85rem;
+    color: #666;
+    transition: color 0.3s;
+}
+
+.footer-col ul li a:hover {
+    color: #5d5fef;
+}
+
+/* WhatsApp Button */
+.whatsapp-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #25D366; /* Official WhatsApp Green */
+    color: white !important;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: transform 0.3s ease;
+}
+
+.whatsapp-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 30px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.footer-bottom p {
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.socials {
+    display: flex;
+    gap: 20px;
+}
+
+.socials a {
+    color: #999;
+    font-size: 1.1rem;
+    transition: color 0.3s;
+}
+
+.socials a:hover {
+    color: #5d5fef;
+}
+
+/* Mobile Responsive Footer */
+@media (max-width: 768px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+}
+</style>
+</head>
+<body class="bg-light dashboard-body">
+
+    <aside class="dashboard-sidebar">
+        <div class="sidebar-top">
+            <button class="menu-toggle"><i class="fa-solid fa-xmark"></i></button>
+            <nav class="side-menu">
+                <a href="/dashboard/" class="side-item active"><i class="fa-solid fa-house"></i> Dashboard</a>
+                <a href="../practice/" class="side-item"><i class="fa-solid fa-book-open"></i> Practice</a>
+                <a href="../dashboard/" class="side-item"><i class="fa-solid fa-user"></i> Profile</a>
+            </nav>
+        </div>
+        <div class="sidebar-bottom">
+            <a href="#" class="side-item"><i class="fa-solid fa-gear"></i> Settings</a>
+            <a href="#" class="side-item"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </div>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="main-header">
+            <div class="header-left">
+                <div class="logo"><i class="fa-solid fa-square-poll-vertical"></i> RankUp</div>
+                <nav class="top-nav-links">
+                    <a href="/dashboard/" class="active">Dashboard</a>
+                    <a href="/practice/">Practice</a>
+                </nav>
+            </div>
+            <div class="header-right">
+                <button class="notification-btn"><i class="fa-regular fa-bell"></i></button>
+                <img src="https://i.pravatar.cc/150?u=john" alt="User Avatar" class="header-avatar">
+            </div>
+        </header>
+
+        <main class="dashboard-content">
+            <div class="welcome-section">
+                <h1>Welcome back, John Doe!</h1>
+                <p>Here's a quick overview of your progress and what's new.</p>
+            </div>
+
+            <div class="action-grid">
+                <div class="card action-card primary-bg">
+                    <h3>Start New Test</h3>
+                    <p>Begin your JAMB practice with a fresh set of questions.</p>
+                    <button class="btn-white"><a href="/practice/">Start Now</a></button>
+                    <i class="fa-solid fa-clock-rotate-left background-icon"></i>
+                </div>
+                <div class="card action-card">
+                    <h3>Review Past Tests</h3>
+                    <p>Correct mistakes and learn from your previous performances.</p>
+                    <button class="btn-outline">View</button>
+                    <i class="fa-solid fa-clipboard-check background-icon purple-text"></i>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="card stat-card">
+                    <h3>Your Performance Summary</h3>
+                    <div class="summary-details">
+                        <div class="summary-item">
+                            <span class="label">Current Rank</span>
+                            <span class="value">2,342th</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Overall Progress</span>
+                            <span class="value">75%</span>
+                        </div>
+                    </div>
+                    <div class="recent-score">
+                        <span class="label">Recent Score</span>
+                        <span class="value">285/400</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 75%;"></div>
+                    </div>
+                    <p class="progress-note">Progress towards next rank</p>
+                </div>
+
+                <div class="card stat-card">
+                    <h3><i class="fa-solid fa-chart-line"></i> Subject Performance</h3>
+                    <div class="chart-placeholder">
+                        <i class="fa-solid fa-chart-column"></i>
+                        <p>Subject Performance Overview (Data visualization goes here)</p>
+                    </div>
+                </div>
+
+                <div class="card stat-card">
+                    <h3><i class="fa-solid fa-wand-magic-sparkles"></i> Weekly Practice Hours</h3>
+                    <div class="chart-placeholder">
+                        <i class="fa-solid fa-chart-area"></i>
+                        <p>Weekly Practice Trends (Data visualization goes here)</p>
+                    </div>
+                </div>
+
+                <div class="card stat-card">
+                    <h3>Skills & Subjects Mastered</h3>
+                    <ul class="skills-list">
+                        <li><span>English Language</span> <span>85%</span></li>
+                        <li><span>Mathematics</span> <span>78%</span></li>
+                        <li><span>Physics</span> <span>60%</span></li>
+                        <li><span>Chemistry</span> <span>72%</span></li>
+                    </ul>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="card-header-flex">
+                        <h3>Personal Profile</h3>
+                        <button class="btn-text-icon"><i class="fa-solid fa-pen"></i> Edit Profile</button>
+                    </div>
+                    <ul class="profile-info-list">
+                        <li><i class="fa-solid fa-user"></i> John Doe</li>
+                        <li><i class="fa-solid fa-envelope"></i> john.doe@example.com</li>
+                        <li><i class="fa-solid fa-phone"></i> +234 801 234 5678</li>
+                        <li><i class="fa-solid fa-location-dot"></i> Lagos, Nigeria</li>
+                    </ul>
+                </div>
+
+                <div class="card stat-card pink-bg">
+                    <h3>Keep Going!</h3>
+                    <blockquote class="quote-text">
+                        "The only way to do great work is to love what you do. Keep pushing your limits!"
+                    </blockquote>
+                    <cite>- Steve Jobs</cite>
+                </div>
+            </div>
+        </main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo" style="margin-bottom: 15px;">
+                    <i class="fa-solid fa-square-poll-vertical"></i> RankUp
+                </div>
+                <p>Empowering JAMB candidates with real-time rankings and academic insights to reach their dream institutions.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/rankings/">Rankings</a></li>
+                    <li><a href="/about/">About Us</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Join the Conversation</h4>
+                <p style="margin-bottom: 15px;">Get updates and study tips directly in our community.</p>
+                <a href="https://wa.me/yourlink" class="whatsapp-link">
+                    <i class="fa-brands fa-whatsapp"></i> Join WhatsApp Community
+                </a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 JAMB Ranker. All rights reserved.</p>
+            <div class="socials">
+                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>    </div>
+
+</body>
+</html>

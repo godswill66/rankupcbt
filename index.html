@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JAMB Ranker | Achieve Your Dreams</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* General Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        color: #333;
+        line-height: 1.6;
+        background-color: #fff;
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      /* Navbar */
+      .navbar {
+        height: 70px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+      }
+
+      .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
+
+      .logo {
+        font-weight: 700;
+        color: #5d5fef;
+        font-size: 1.2rem;
+      }
+
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 30px;
+      }
+
+      .nav-links a {
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+
+      .btn-text {
+        margin-right: 15px;
+        font-weight: 500;
+        font-size: 0.9rem;
+      }
+
+      /* Buttons */
+      .btn-primary {
+        background-color: #5d5fef;
+        color: white;
+        padding: 10px 22px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-block;
+      }
+
+      .btn-outline {
+        border: 1px solid #fff;
+        color: white;
+        padding: 10px 22px;
+        border-radius: 6px;
+        font-weight: 600;
+      }
+
+      /* Hero Section */
+      .hero {
+        background: url("https://images.unsplash.com/photo-1523240715630-38896068e64c?auto=format&fit=crop&q=80&w=1600")
+          no-repeat center center/cover;
+        height: 500px;
+        position: relative;
+        text-align: center;
+        color: white;
+      }
+
+      .hero-overlay {
+        background: rgba(255, 255, 255, 0.7); /* Light overlay as per image */
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        color: #333;
+      }
+
+      .hero h1 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        font-weight: 800;
+      }
+
+      .hero p {
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+        color: #555;
+      }
+
+      .hero-btns {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      .hero-btns .btn-outline {
+        border-color: #5d5fef;
+        color: #5d5fef;
+      }
+
+      /* Section Grids */
+      .section {
+        padding: 80px 0;
+      }
+
+      .bg-light {
+        background-color: #fcfcfc;
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 50px;
+        font-size: 1.8rem;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+      }
+
+      .card {
+        background: white;
+        padding: 40px 30px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        border: 1px solid #f0f0f0;
+      }
+
+      .card h3 {
+        margin: 15px 0;
+        font-size: 1.1rem;
+      }
+
+      .card p {
+        font-size: 0.9rem;
+        color: #666;
+      }
+
+      .icon {
+        font-size: 2rem;
+        color: #5d5fef;
+      }
+
+      /* Ranking Specifics */
+      .ranking-card {
+        text-align: left;
+        position: relative;
+      }
+
+      .rank-tag {
+        color: #5d5fef;
+        font-weight: bold;
+        font-size: 1.2rem;
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      .score {
+        font-weight: 600;
+        color: #333 !important;
+        margin-bottom: 10px;
+      }
+
+      .center-btn {
+        text-align: center;
+        margin-top: 40px;
+      }
+
+      /* Ad Box */
+      .ad-box {
+        background-color: #f9f9f9;
+        padding: 60px;
+        text-align: center;
+        border-radius: 8px;
+        color: #888;
+        font-size: 0.9rem;
+        margin: 20px 0;
+      }
+
+      /* Footer */
+      .footer {
+        padding: 40px 0;
+        border-top: 1px solid #eee;
+        font-size: 0.8rem;
+        color: #888;
+      }
+
+      .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .socials {
+        display: flex;
+        gap: 15px;
+      }
+
+      .socials i {
+        font-size: 1.1rem;
+        cursor: pointer;
+      }
+
+      .footer-p {
+        position: absolute;
+        left: 600px;
+      }
+      /* Mobile Responsive */
+      @media (max-width: 768px) {
+        .grid-3 {
+          grid-template-columns: 1fr;
+        }
+        .hero h1 {
+          font-size: 2rem;
+        }
+      }
+      /* Enhanced Footer Styles */
+.footer {
+    background-color: #fff;
+    padding: 60px 0 30px;
+    border-top: 1px solid #eee;
+    margin-top: 50px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-col h4 {
+    margin-bottom: 20px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.footer-col p {
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.6;
+}
+
+.footer-col ul {
+    list-style: none;
+}
+
+.footer-col ul li {
+    margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+    font-size: 0.85rem;
+    color: #666;
+    transition: color 0.3s;
+}
+
+.footer-col ul li a:hover {
+    color: #5d5fef;
+}
+
+/* WhatsApp Button */
+.whatsapp-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #25D366; /* Official WhatsApp Green */
+    color: white !important;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: transform 0.3s ease;
+}
+
+.whatsapp-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 30px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.footer-bottom p {
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.socials {
+    display: flex;
+    gap: 20px;
+}
+
+.socials a {
+    color: #999;
+    font-size: 1.1rem;
+    transition: color 0.3s;
+}
+
+.socials a:hover {
+    color: #5d5fef;
+}
+
+/* Mobile Responsive Footer */
+@media (max-width: 768px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+}
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container nav-content">
+        <div class="logo">
+          <i class="fa-solid fa-square-poll-vertical"></i> RankUp
+        </div>
+        <ul class="nav-links">
+          <li><a href="/rankings/">Rankings</a></li>
+        </ul>
+        <div class="nav-auth">
+          <a href="/login/" class="btn-text">Login</a>
+          <a href="/signup/" class="btn-primary">Sign Up</a>
+        </div>
+      </div>
+    </nav>
+    <header class="hero">
+      <div class="hero-overlay">
+        <div class="container">
+          <h1>
+            Achieve Your JAMB Dreams with <br />RankUp For
+            <span style="color: #5d5fef">Free</span>
+          </h1>
+          <p>
+            Unlock Your Potential, See Where You Stand, Get Linked To <br />
+            Your Dream Institution.
+          </p>
+          <div class="hero-btns">
+            <a href="/signup/" class="btn-primary">Sign Up Now</a>
+            <a href="/login/" class="btn-outline">Login</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">How JAMB Ranker Works</h2>
+        <div class="grid-3">
+          <div class="card">
+            <i class="fa-solid fa-user-plus icon"></i>
+            <h3>Submit Your Profile</h3>
+            <p>
+              Enter your academic details and career aspirations to build your
+              comprehensive profile for ranking.
+            </p>
+          </div>
+          <div class="card">
+            <i class="fa-solid fa-file-lines icon"></i>
+            <h3>Input JAMB Scores</h3>
+            <p>
+              Accurately enter your JAMB score and scores in all relevant
+              subjects to get ranked.
+            </p>
+          </div>
+          <div class="card">
+            <i class="fa-solid fa-award icon"></i>
+            <h3>Get Ranked Instantly</h3>
+            <p>
+              Our system dynamically ranks you based on various criteria and
+              gives valuable insights.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <div class="ad-box">
+        Advertisement: Elevate your JAMB Score with Our Premium Study Materials
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Featured Rankings Preview</h2>
+        <div class="grid-3">
+          <div class="card ranking-card">
+            <span class="rank-tag">#1</span>
+            <h3>Aminu Muhammad</h3>
+            <p class="score">Score: 350</p>
+            <p class="desc">
+              Exceptional performance in engineering! Your dedication shows
+              through.
+            </p>
+          </div>
+          <div class="card ranking-card">
+            <span class="rank-tag">#2</span>
+            <h3>Chisom Okoro</h3>
+            <p class="score">Score: 332</p>
+            <p class="desc">
+              Outstanding results! Keep pushing forward toward Pharmacy studies
+              in your state.
+            </p>
+          </div>
+          <div class="card ranking-card">
+            <span class="rank-tag">#3</span>
+            <h3>Abubakar Iyabo</h3>
+            <p class="score">Score: 310</p>
+            <p class="desc">
+              Great results, you're on the right path! Many options planned
+              ahead.
+            </p>
+          </div>
+        </div>
+        <div class="center-btn">
+          <a href="/rankings/" class="btn-primary">View Rankings</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section bg-light">
+      <div class="container">
+        <h2 class="section-title">Why Choose RankUp?</h2>
+        <div class="grid-3">
+          <div class="card">
+            <i class="fa-solid fa-lightbulb icon"></i>
+            <h3>Personalized Insights</h3>
+            <p>
+              Receive detailed analysis of your performance to boost your JAMB
+              performance.
+            </p>
+          </div>
+          <div class="card">
+            <i class="fa-solid fa-trophy icon"></i>
+            <h3>Competitive Edge</h3>
+            <p>
+              Benchmark yourself against thousands of candidates and understand
+              your ranking in the competition.
+            </p>
+          </div>
+          <div class="card">
+            <i class="fa-solid fa-users icon"></i>
+            <h3>Supportive Community</h3>
+            <p>
+              Connect with peers who share your goals and navigate your JAMB
+              journey together.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <div class="ad-box">
+        Advertisement: Check Out Our Full JAMB Ranking Preview
+      </div>
+    </div>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo" style="margin-bottom: 15px;">
+                    <i class="fa-solid fa-square-poll-vertical"></i> RankUp
+                </div>
+                <p>Empowering JAMB candidates with real-time rankings and academic insights to reach their dream institutions.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/rankings/">Rankings</a></li>
+                    <li><a href="/about/">About Us</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Join the Conversation</h4>
+                <p style="margin-bottom: 15px;">Get updates and study tips directly in our community.</p>
+                <a href="https://wa.me/yourlink" class="whatsapp-link" target="_self">
+                    <i class="fa-brands fa-whatsapp"></i> Join WhatsApp Community
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 JAMB Ranker. All rights reserved.</p>
+            <div class="socials">
+                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>  </body>
+</html>
