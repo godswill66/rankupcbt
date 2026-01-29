@@ -1,377 +1,425 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit JAMB Details | JAMB Ranker</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-    /* Base styles from the landing page plus specific form styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Submit JAMB Details | RankUp</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-color: #5d5fef;
+        --text-dark: #333;
+        --text-light: #666;
+        --bg-light: #f9f9fb;
+        --border-color: #eee;
+        --white: #ffffff;
+      }
 
-body {
-    font-family: 'Inter', sans-serif;
-    color: #333;
-    line-height: 1.6;
-}
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-.bg-light {
-    background-color: #f9f9fb; /* Slightly off-white background */
-}
+      body {
+        font-family: "Inter", sans-serif;
+        color: var(--text-dark);
+        line-height: 1.6;
+        background-color: var(--bg-light);
+        overflow-x: hidden;
+      }
 
-.container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
 
-/* Navbar */
-.navbar {
-    height: 70px;
-    background: white;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #eee;
-}
+      /* --- UPDATED RESPONSIVE NAVBAR --- */
+      .navbar {
+        height: 80px;
+        background: var(--white);
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid var(--border-color);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
 
-.nav-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
+      .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
 
-.logo {
-    font-weight: 700;
-    color: #5D5FEF;
-}
+      .logo {
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
 
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-}
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 30px;
+        align-items: center;
+      }
 
-.avatar {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    object-fit: cover;
-}
+      .nav-links a {
+        text-decoration: none;
+        color: var(--text-dark);
+        font-weight: 500;
+        transition: color 0.3s;
+      }
 
-/* Header */
-.form-header {
-    text-align: center;
-    padding: 50px 0 30px;
-}
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--primary-color);
+      }
 
-.form-header h1 {
-    font-size: 2rem;
-    margin-bottom: 10px;
-    font-weight: 700;
-}
+      /* --- FORM HEADER --- */
+      .form-header {
+        text-align: center;
+        padding: 60px 0 40px;
+      }
 
-.form-header p {
-    color: #666;
-    max-width: 600px;
-    margin: 0 auto;
-}
+      .form-header h1 {
+        font-size: clamp(1.8rem, 5vw, 2.5rem);
+        margin-bottom: 15px;
+        font-weight: 800;
+        color: #1a1a1a;
+      }
 
-/* Card Styles */
-.form-card {
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    border: 1px solid #e1e4e8;
-    margin-bottom: 30px;
-}
+      /* --- FORM CARDS --- */
+      .form-card {
+        background: var(--white);
+        padding: clamp(20px, 5vw, 40px);
+        border-radius: 16px;
+        border: 1px solid #e1e4e8;
+        margin-bottom: 30px;
+      }
 
-.form-card h3 {
-    font-size: 1.1rem;
-    margin-bottom: 25px;
-    font-weight: 600;
-}
+      .form-card h3 {
+        font-size: 1.25rem;
+        margin-bottom: 25px;
+        border-left: 4px solid var(--primary-color);
+        padding-left: 15px;
+      }
 
-/* Form Controls */
-.input-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
+      /* --- INPUT CONTROLS --- */
+      .input-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+      }
 
-.performance-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
-    margin-bottom: 15px;
-}
+      .performance-grid {
+        display: grid;
+        grid-template-columns: 2.5fr 1fr;
+        gap: 20px;
+        margin-bottom: 15px;
+      }
 
-.input-group {
-    margin-bottom: 20px;
-}
+      .input-group label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
 
-.input-group label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #444;
-}
+      input,
+      textarea {
+        width: 100%;
+        padding: 14px;
+        border: 1.5px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 1rem;
+      }
 
-input, textarea {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-family: inherit;
-    background-color: #fff;
-}
+      /* --- BUTTONS --- */
+      .btn-add {
+        background: #f0f1ff;
+        border: 1px dashed var(--primary-color);
+        padding: 12px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--primary-color);
+        width: auto;
+      }
 
-input:focus, textarea:focus {
-    outline: none;
-    border-color: #5D5FEF;
-}
+      .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 18px 45px;
+        border-radius: 12px;
+        font-weight: 700;
+        width: 100%;
+        max-width: 400px;
+        cursor: pointer;
+      }
 
-.form-note {
-    font-size: 0.8rem;
-    color: #888;
-    margin-top: -10px;
-}
+      .submit-container {
+        text-align: center;
+        margin: 40px 0 80px;
+      }
 
-.instruction-text {
-    font-size: 0.85rem;
-    color: #666;
-    margin: 20px 0;
-    line-height: 1.5;
-}
+      /* --- PROMO BANNER --- */
+      .promo-banner {
+        background: #fff9e6;
+        padding: 25px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 40px;
+      }
 
-/* Buttons */
-.btn-add {
-    background: none;
-    border: 1px solid #ddd;
-    padding: 10px 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    color: #444;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+      /* --- FOOTER --- */
+      .footer {
+        background: var(--white);
+        padding: 60px 0 30px;
+        border-top: 1px solid var(--border-color);
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1.5fr;
+        gap: 40px;
+      }
+      .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 30px;
+        border-top: 1px solid var(--border-color);
+      }
 
-.btn-primary {
-    background-color: #5D5FEF;
-    color: white;
-    border: none;
-    padding: 15px 35px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-}
+      /* =============================================
+         MEDIA QUERIES
+         ============================================= */
 
-.btn-large {
-    width: auto;
-    min-width: 250px;
-}
+      /* Tablets (992px and down) */
+      @media (max-width: 992px) {
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
 
-.submit-container {
-    text-align: left;
-    margin-bottom: 80px;
-}
+      /* Small Tablets / Large Phones (768px and down) */
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        } /* Hide links for simple mobile view */
 
-/* Upload Section */
-.upload-section {
-    margin-top: 30px;
-}
+        .input-grid {
+          grid-template-columns: 1fr; /* Single column for personal info */
+        }
 
-.upload-section label {
-    font-size: 0.9rem;
-    font-weight: 600;
-    display: block;
-    margin-bottom: 15px;
-}
+        .performance-grid {
+          grid-template-columns: 1fr; /* Subject and score stack on mobile */
+          gap: 10px;
+          border-bottom: 1px solid #eee;
+          padding-bottom: 15px;
+        }
 
-.file-upload-placeholder {
-    border: 1px solid #eee;
-    padding: 15px;
-    border-radius: 8px;
-    color: #888;
-    font-size: 0.85rem;
-}
+        .promo-banner {
+          flex-direction: column;
+          text-align: center;
+        }
 
-/* Promo Banner */
-.promo-banner {
-    background: white;
-    border: 1px solid #e1e4e8;
-    padding: 20px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 40px;
-}
+        .footer-grid {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+        .footer-bottom {
+          flex-direction: column;
+          gap: 20px;
+        }
+      }
 
-.promo-banner i {
-    font-size: 1.5rem;
-    color: #f1c40f; /* Yellowish icon */
-}
-
-.promo-banner p {
-    font-size: 0.9rem;
-    color: #555;
-}
-
-/* Footer */
-.footer {
-    padding: 40px 0;
-    background: white;
-    border-top: 1px solid #eee;
-}
-
-.footer-content {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    color: #888;
-}
-
-.socials {
-    display: flex;
-    gap: 20px;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-    .input-grid, .performance-grid {
-        grid-template-columns: 1fr;
-    }
-}
-</style>
-</head>
-<body class="bg-light">
-
+      /* Small Phones (480px and down) */
+      @media (max-width: 480px) {
+        .form-header {
+          padding: 40px 0 20px;
+        }
+        .btn-primary {
+          padding: 15px 25px;
+          font-size: 1rem;
+        }
+        .form-card {
+          border-radius: 0;
+          border-left: none;
+          border-right: none;
+        } /* Edge to edge on tiny screens */
+      }
+    </style>
+  </head>
+  <body>
     <nav class="navbar">
-        <div class="container nav-content">
-            <div class="logo">JAMB Ranker</div>
-            <ul class="nav-links">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Rankings</a></li>
-            </ul>
-            <div class="nav-auth">
-                <img src="https://via.placeholder.com/35" alt="Profile" class="avatar">
-            </div>
-        </div>
+      <div class="container nav-content">
+        <a href="#" class="logo">
+          <i class="fa-solid fa-square-poll-vertical"></i> RankUp
+        </a>
+        <ul class="nav-links">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Rankings</a></li>
+          <li>
+            <img
+              src="https://via.placeholder.com/40"
+              alt="User"
+              class="avatar"
+            />
+          </li>
+        </ul>
+      </div>
     </nav>
 
     <header class="form-header">
-        <div class="container">
-            <h1>Submit Your JAMB Details</h1>
-            <p>Share your academic background and JAMB performance to get ranked among your peers and access personalized insights.</p>
-        </div>
+      <div class="container">
+        <h1>Submit Your JAMB Details</h1>
+        <p>Join thousands of students and see where you stand.</p>
+      </div>
     </header>
 
     <main class="container">
-        <form id="jamb-form">
-            
-            <section class="form-card">
-                <h3>Personal Information</h3>
-                <div class="input-grid">
-                    <div class="input-group">
-                        <label>Full Name</label>
-                        <input type="text" placeholder="Aminu Abubakar">
-                    </div>
-                    <div class="input-group">
-                        <label>Email Address</label>
-                        <input type="email" placeholder="aminu.abubakar@example.com">
-                    </div>
-                    <div class="input-group">
-                        <label>Phone Number</label>
-                        <input type="tel" placeholder="+234 801 234 5678">
-                    </div>
-                    <div class="input-group">
-                        <label>Date of Birth</label>
-                        <input type="date">
-                    </div>
-                </div>
-                <p class="form-note">Ensure all details are accurate for proper ranking.</p>
-            </section>
-
-            <section class="form-card">
-                <h3>Skills & Achievements</h3>
-                <div class="input-group">
-                    <label>Your Skills (comma separated)</label>
-                    <textarea rows="4" placeholder="Critical Thinking, Data Analysis, Communication, Teamwork"></textarea>
-                </div>
-                <p class="form-note">List your key skills and notable achievements, separated by commas, to enhance your profile.</p>
-            </section>
-
-            <section class="form-card">
-                <h3>JAMB Exam Performance</h3>
-                
-                <div class="subject-rows">
-                    <div class="performance-grid">
-                        <div class="input-group">
-                            <label>Subject Name</label>
-                            <input type="text" placeholder="English Language">
-                        </div>
-                        <div class="input-group">
-                            <label>Score (0-100)</label>
-                            <input type="number" placeholder="85">
-                        </div>
-                    </div>
-                    <div class="performance-grid">
-                        <div class="input-group">
-                            <label>Subject Name</label>
-                            <input type="text" placeholder="Mathematics">
-                        </div>
-                        <div class="input-group">
-                            <label>Score (0-100)</label>
-                            <input type="number" placeholder="90">
-                        </div>
-                    </div>
-                </div>
-
-                <button type="button" class="btn-add"><i class="fa-solid fa-plus"></i> Add Another Subject</button>
-                
-                <p class="instruction-text">Enter your JAMB subjects and their corresponding scores. Maximum score for each subject is 100 in the JAMB system, but the total score can be up to 400 across four subjects.</p>
-
-                <div class="upload-section">
-                    <label>Upload JAMB Result Slip (Optional)</label>
-                    <div class="file-upload-placeholder">
-                        <p>Provide a scanned copy or screenshot of your JAMB result for verification purposes.</p>
-                    </div>
-                </div>
-            </section>
-
-            <div class="promo-banner">
-                <i class="fa-solid fa-book-open"></i>
-                <p>Boost your JAMB score with our premium study resources! Click here to learn more.</p>
+      <form id="jamb-form">
+        <section class="form-card">
+          <h3>Personal Information</h3>
+          <div class="input-grid">
+            <div class="input-group">
+              <label>Full Name</label>
+              <input type="text" placeholder="e.g. Aminu Abubakar" required />
             </div>
-
-            <div class="submit-container">
-                <button type="submit" class="btn-primary btn-large">Submit for Ranking</button>
+            <div class="input-group">
+              <label>Email Address</label>
+              <input type="email" placeholder="name@example.com" required />
             </div>
+            <div class="input-group">
+              <label>Phone Number</label>
+              <input type="tel" placeholder="+234..." />
+            </div>
+            <div class="input-group">
+              <label>Date of Birth</label>
+              <input type="date" />
+            </div>
+          </div>
+        </section>
 
-        </form>
+        <section class="form-card">
+          <h3>Skills & Achievements</h3>
+          <div class="input-group">
+            <label>Key Skills</label>
+            <textarea
+              rows="3"
+              placeholder="Critical Thinking, Programming..."
+            ></textarea>
+          </div>
+        </section>
+
+        <section class="form-card">
+          <h3>JAMB Exam Performance</h3>
+          <div class="subject-rows">
+            <div class="performance-grid">
+              <div class="input-group">
+                <label>Subject</label>
+                <input type="text" value="Use of English" readonly />
+              </div>
+              <div class="input-group">
+                <label>Score</label>
+                <input type="number" placeholder="0-100" />
+              </div>
+            </div>
+            <div class="performance-grid">
+              <div class="input-group">
+                <label>Subject</label>
+                <input type="text" placeholder="Mathematics / Biology..." />
+              </div>
+              <div class="input-group">
+                <label>Score</label>
+                <input type="number" placeholder="0-100" />
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn-add">
+            <i class="fa-solid fa-plus"></i> Add Subject
+          </button>
+        </section>
+
+        <div class="promo-banner">
+          <i
+            class="fa-solid fa-lightbulb"
+            style="font-size: 2rem; color: #f1c40f"
+          ></i>
+          <div>
+            <strong>Want to improve?</strong>
+            <p>Our AI study paths help increase scores by 25%.</p>
+          </div>
+        </div>
+
+        <div class="submit-container">
+          <button type="submit" class="btn-primary">
+            Submit for Ranking
+            <i class="fa-solid fa-arrow-right" style="margin-left: 10px"></i>
+          </button>
+        </div>
+      </form>
     </main>
 
     <footer class="footer">
-        <div class="container footer-content">
-            <p>&copy; 2024 JAMB Ranker. All rights reserved.</p>
-            <div class="socials">
-                <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
-                <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-            </div>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <div class="logo" style="margin-bottom: 15px">RankUp</div>
+            <p>Empowering JAMB candidates with real-time insights.</p>
+          </div>
+          <div class="footer-col">
+            <h4>Platform</h4>
+            <ul style="list-style: none; color: var(--text-light)">
+              <li>Rankings</li>
+              <li>Resources</li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Community</h4>
+            <a
+              href="#"
+              class="whatsapp-link"
+              style="
+                background: #25d366;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 10px;
+                text-decoration: none;
+                display: inline-block;
+                font-weight: 600;
+              "
+            >
+              <i class="fa-brands fa-whatsapp"></i> WhatsApp Group
+            </a>
+          </div>
         </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 RankUp. All rights reserved.</p>
+        </div>
+      </div>
     </footer>
-
-</body>
+  </body>
 </html>

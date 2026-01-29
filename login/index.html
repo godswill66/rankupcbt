@@ -59,7 +59,7 @@
         align-items: center;
         gap: 10px;
       }
-            .whatsapp-icon{
+      .whatsapp-icon {
         width: 20px;
         color: #5d5fef;
       }
@@ -175,7 +175,7 @@
       .btn-small {
         padding: 8px 18px;
         font-size: 0.85rem;
-         text-decoration: none;
+        text-decoration: none;
       }
       .btn-block {
         width: 100%;
@@ -219,7 +219,7 @@
         width: 16px;
         text-align: center;
       }
-      .btn-social-outline{
+      .btn-social-outline {
         position: relative;
         left: 120px;
         margin-bottom: 20px;
@@ -264,110 +264,179 @@
         }
       }
       /* Enhanced Footer Styles */
-.footer {
-    background-color: #fff;
-    padding: 60px 0 30px;
-    border-top: 1px solid #eee;
-    margin-top: 50px;
-}
+      .footer {
+        background-color: #fff;
+        padding: 60px 0 30px;
+        border-top: 1px solid #eee;
+        margin-top: 50px;
+      }
 
-.footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1.5fr;
-    gap: 40px;
-    margin-bottom: 40px;
-}
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1.5fr;
+        gap: 40px;
+        margin-bottom: 40px;
+      }
 
-.footer-col h4 {
-    margin-bottom: 20px;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #333;
-}
+      .footer-col h4 {
+        margin-bottom: 20px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #333;
+      }
 
-.footer-col p {
-    font-size: 0.85rem;
-    color: #666;
-    line-height: 1.6;
-}
+      .footer-col p {
+        font-size: 0.85rem;
+        color: #666;
+        line-height: 1.6;
+      }
 
-.footer-col ul {
-    list-style: none;
-}
+      .footer-col ul {
+        list-style: none;
+      }
 
-.footer-col ul li {
-    margin-bottom: 10px;
-}
+      .footer-col ul li {
+        margin-bottom: 10px;
+      }
 
-.footer-col ul li a {
-    font-size: 0.85rem;
-    color: #666;
-    transition: color 0.3s;
-}
+      .footer-col ul li a {
+        font-size: 0.85rem;
+        color: #666;
+        transition: color 0.3s;
+      }
 
-.footer-col ul li a:hover {
-    color: #5d5fef;
-}
+      .footer-col ul li a:hover {
+        color: #5d5fef;
+      }
 
-/* WhatsApp Button */
-.whatsapp-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background-color: #25D366; /* Official WhatsApp Green */
-    color: white !important;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: transform 0.3s ease;
-}
+      /* WhatsApp Button */
+      .whatsapp-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background-color: #25d366; /* Official WhatsApp Green */
+        color: white !important;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: transform 0.3s ease;
+      }
 
-.whatsapp-link:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-}
+      .whatsapp-link:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+      }
 
-.footer-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 30px;
-    border-top: 1px solid #f0f0f0;
-}
+      .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 30px;
+        border-top: 1px solid #f0f0f0;
+      }
 
-.footer-bottom p {
-    font-size: 0.8rem;
-    color: #999;
-}
+      .footer-bottom p {
+        font-size: 0.8rem;
+        color: #999;
+      }
 
-.socials {
-    display: flex;
-    gap: 20px;
-}
-
-.socials a {
-    color: #999;
-    font-size: 1.1rem;
-    transition: color 0.3s;
-}
-
-.socials a:hover {
-    color: #5d5fef;
-}
-
-/* Mobile Responsive Footer */
-@media (max-width: 768px) {
-    .footer-grid {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
-    
-    .footer-bottom {
-        flex-direction: column;
+      .socials {
+        display: flex;
         gap: 20px;
-        text-align: center;
-    }
+      }
+
+      .socials a {
+        color: #999;
+        font-size: 1.1rem;
+        transition: color 0.3s;
+      }
+
+      .socials a:hover {
+        color: #5d5fef;
+      }
+
+      /* Mobile Responsive Footer */
+      @media (max-width: 768px) {
+        .footer-grid {
+          grid-template-columns: 1fr;
+          gap: 30px;
+        }
+
+        .footer-bottom {
+          flex-direction: column;
+          gap: 20px;
+          text-align: center;
+        }
+      }
+      /* --- RESPONSIVE UPDATES --- */
+
+/* Tablet and below */
+@media (max-width: 768px) {
+  .nav-content {
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center; /* Center logo and button on small screens */
+  }
+
+  /* Hide the long WhatsApp text on mobile, keep the icon or shorten it */
+  .btn-text {
+    display: none; 
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 30px;
+  }
+
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-bottom {
+    flex-direction: column-reverse;
+    gap: 20px;
+    text-align: center;
+  }
+}
+
+/* Mobile Phones */
+@media (max-width: 480px) {
+  .auth-center-wrapper {
+    padding: 20px 15px; /* Less padding to give form more room */
+  }
+
+  .login-card {
+    padding: 30px 20px;
+    border: none; /* Optional: Remove border on mobile for a flush look */
+    box-shadow: none;
+    background: transparent; /* Makes it feel more native on mobile */
+  }
+
+  .auth-title {
+    font-size: 1.3rem;
+  }
+
+  /* Fix the Google button positioning */
+  .btn-social-outline {
+    left: 0 !important; /* Resets the 'left: 120px' in your original CSS */
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .whatsapp-link {
+    width: 100%;
+    justify-content: center;
+  }
 }
     </style>
   </head>
@@ -378,7 +447,17 @@
           <i class="fa-solid fa-square-poll-vertical"></i> RankUp
         </div>
         <div class="nav-auth">
-          <a href="https://chat.whatsapp.com/EdRuXNAiECzHCBJZYIb2WN" class="btn-text"> <img class="whatsapp-icon" src="/asssts/whatsapp-icon.png"alt="whatsapp icon"> Join Rankup group on  Whatsapp for more update</a>
+          <a
+            href="https://chat.whatsapp.com/EdRuXNAiECzHCBJZYIb2WN"
+            class="btn-text"
+          >
+            <img
+              class="whatsapp-icon"
+              src="/asssts/whatsapp-icon.png"
+              alt="whatsapp icon"
+            />
+            Join Rankup group on Whatsapp for more update</a
+          >
           <a href="#" class="btn-primary btn-small">Sign Up</a>
         </div>
       </div>
@@ -437,43 +516,49 @@
         </form>
       </div>
     </main>
-<footer class="footer">
-    <div class="container">
+    <footer class="footer">
+      <div class="container">
         <div class="footer-grid">
-            <div class="footer-col">
-                <div class="logo" style="margin-bottom: 15px;">
-                    <i class="fa-solid fa-square-poll-vertical"></i> RankUp
-                </div>
-                <p>Empowering JAMB candidates with real-time rankings and academic insights to reach their dream institutions.</p>
+          <div class="footer-col">
+            <div class="logo" style="margin-bottom: 15px">
+              <i class="fa-solid fa-square-poll-vertical"></i> RankUp
             </div>
+            <p>
+              Empowering JAMB candidates with real-time rankings and academic
+              insights to reach their dream institutions.
+            </p>
+          </div>
 
-            <div class="footer-col">
-                <h4>Platform</h4>
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/rankings/">Rankings</a></li>
-                    <li><a href="/about/">About Us</a></li>
-                </ul>
-            </div>
+          <div class="footer-col">
+            <h4>Platform</h4>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/rankings/">Rankings</a></li>
+              <li><a href="/about/">About Us</a></li>
+            </ul>
+          </div>
 
-            <div class="footer-col">
-                <h4>Join the Conversation</h4>
-                <p style="margin-bottom: 15px;">Get updates and study tips directly in our community.</p>
-                <a href="https://wa.me/yourlink" class="whatsapp-link">
-                    <i class="fa-brands fa-whatsapp"></i> Join WhatsApp Community
-                </a>
-            </div>
+          <div class="footer-col">
+            <h4>Join the Conversation</h4>
+            <p style="margin-bottom: 15px">
+              Get updates and study tips directly in our community.
+            </p>
+            <a href="https://wa.me/yourlink" class="whatsapp-link">
+              <i class="fa-brands fa-whatsapp"></i> Join WhatsApp Community
+            </a>
+          </div>
         </div>
 
         <div class="footer-bottom">
-            <p>&copy; 2024 JAMB Ranker. All rights reserved.</p>
-            <div class="socials">
-                <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-            </div>
+          <p>&copy; 2024 RankUp. All rights reserved.</p>
+          <div class="socials">
+            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+          </div>
         </div>
-    </div>
-</footer>  </body>
+      </div>
+    </footer>
+  </body>
 </html>

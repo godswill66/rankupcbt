@@ -1,352 +1,481 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CBT Test | RankUp</title>
-       <link
+    <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
-    /><style>
-    /* Core Styling for Test Page */
-.test-page {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-.test-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-/* Header */
-.test-header {
-    background-color: #5D5FEF;
-    color: white;
-    padding: 15px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9rem;
-}
-
-.exam-year-badge {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 4px 12px;
-    border-radius: 4px;
-    font-weight: 600;
-}
-
-/* Main Content Area */
-.test-main {
-    flex: 1;
-    padding: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-}
-
-.question-card {
-    width: 100%;
-    max-width: 900px;
-    padding: 40px;
-    border: 1px solid #e1e4e8;
-    background: white;
-}
-
-.question-text {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 30px;
-    color: #1e293b;
-}
-
-/* Option Items */
-.options-form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.option-item {
-    display: flex;
-    align-items: center;
-    padding: 15px 20px;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.option-item:hover {
-    background-color: #f8fafc;
-    border-color: #cbd5e1;
-}
-
-/* Hide default radio */
-.option-item input {
-    display: none;
-}
-
-/* Custom radio circle */
-.radio-custom {
-    width: 18px;
-    height: 18px;
-    border: 2px solid #cbd5e1;
-    border-radius: 50%;
-    margin-right: 15px;
-    position: relative;
-}
-
-/* Active State Styling */
-.option-item input:checked + .radio-custom {
-    border-color: #5D5FEF;
-}
-
-.option-item input:checked + .radio-custom::after {
-    content: '';
-    width: 10px;
-    height: 10px;
-    background: #5D5FEF;
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.option-label {
-    font-size: 0.95rem;
-    color: #475569;
-}
-
-/* Footer Navigation */
-.test-footer {
-    background: white;
-    border-top: 1px solid #eee;
-    padding: 20px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.btn-nav {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    padding: 10px 25px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #64748b;
-    cursor: pointer;
-}
-
-.btn-submit {
-    padding: 12px 30px;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-    .test-header, .test-footer { padding: 15px 20px; }
-    .test-main { padding: 20px; }
-    .question-card { padding: 20px; }
-}
-/* Enhanced Footer Styles */
-.footer {
-    background-color: #fff;
-    padding: 60px 0 30px;
-    border-top: 1px solid #eee;
-    margin-top: 50px;
-}
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1.5fr;
-    gap: 40px;
-    margin-bottom: 40px;
-}
-
-.footer-col h4 {
-    margin-bottom: 20px;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #333;
-}
-
-.footer-col p {
-    font-size: 0.85rem;
-    color: #666;
-    line-height: 1.6;
-}
-
-.footer-col ul {
-    list-style: none;
-}
-
-.footer-col ul li {
-    margin-bottom: 10px;
-}
-
-.footer-col ul li a {
-    font-size: 0.85rem;
-    color: #666;
-    transition: color 0.3s;
-}
-
-.footer-col ul li a:hover {
-    color: #5d5fef;
-}
-
-/* WhatsApp Button */
-.whatsapp-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background-color: #25D366; /* Official WhatsApp Green */
-    color: white !important;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: transform 0.3s ease;
-}
-
-.whatsapp-link:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-}
-
-.footer-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 30px;
-    border-top: 1px solid #f0f0f0;
-}
-
-.footer-bottom p {
-    font-size: 0.8rem;
-    color: #999;
-}
-
-.socials {
-    display: flex;
-    gap: 20px;
-}
-
-.socials a {
-    color: #999;
-    font-size: 1.1rem;
-    transition: color 0.3s;
-}
-
-.socials a:hover {
-    color: #5d5fef;
-}
-
-/* Mobile Responsive Footer */
-@media (max-width: 768px) {
-    .footer-grid {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
-    
-    .footer-bottom {
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f8fafc;
+        color: #1e293b;
+        display: flex;
         flex-direction: column;
-        gap: 20px;
-        text-align: center;
-    }
-}
-</style>
-</head>
-<body class="bg-light test-page">
+        min-height: 100vh;
+      }
 
+      /* Test Layout */
+      .test-header {
+        background-color: #5d5fef;
+        color: white;
+        padding: 15px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 10px rgba(93, 95, 239, 0.2);
+      }
+
+      .exam-year-badge {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.85rem;
+      }
+
+      .test-main {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        padding: 40px 20px;
+      }
+
+      .question-card {
+        width: 100%;
+        max-width: 850px;
+        background: white;
+        padding: 40px;
+        border-radius: 16px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      }
+
+      .question-text {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 30px;
+        line-height: 1.5;
+        color: #0f172a;
+      }
+
+      /* Options */
+      .options-form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .option-item {
+        display: flex;
+        align-items: center;
+        padding: 18px 24px;
+        border: 2px solid #f1f5f9;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .option-item:hover {
+        background-color: #f1f5ff;
+        border-color: #5d5fef;
+      }
+
+      .option-item input {
+        display: none;
+      }
+
+      .radio-custom {
+        width: 22px;
+        height: 22px;
+        border: 2px solid #cbd5e1;
+        border-radius: 50%;
+        margin-right: 18px;
+        position: relative;
+        flex-shrink: 0;
+      }
+
+      .option-item input:checked + .radio-custom {
+        border-color: #5d5fef;
+        background-color: #5d5fef;
+      }
+
+      .option-item input:checked + .radio-custom::after {
+        content: "";
+        width: 8px;
+        height: 8px;
+        background: white;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .option-label {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #475569;
+      }
+
+      /* Professional Test Navigation Footer */
+      .test-nav-footer {
+        background: white;
+        border-top: 1px solid #e2e8f0;
+        padding: 20px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        bottom: 0;
+      }
+
+      .nav-buttons {
+        display: flex;
+        gap: 12px;
+      }
+
+      .btn {
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: none;
+      }
+
+      .btn-prev {
+        background: #f1f5f9;
+        color: #475569;
+      }
+      .btn-prev:hover {
+        background: #e2e8f0;
+      }
+
+      .btn-next {
+        background: #5d5fef;
+        color: white;
+      }
+      .btn-next:hover {
+        background: #4a4ce0;
+        opacity: 0.9;
+      }
+
+      .btn-submit {
+        background: #10b981;
+        color: white;
+      }
+      .btn-submit:hover {
+        background: #059669;
+      }
+
+      /* Scanty Fix: Site Info Footer (Professional Version) */
+      .site-footer {
+        background: white;
+        padding: 60px 40px 30px;
+        border-top: 1px solid #eee;
+        margin-top: 40px;
+      }
+
+      .footer-grid {
+        max-width: 1100px;
+        margin: 0 auto 40px;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1.5fr;
+        gap: 50px;
+      }
+
+      .footer-col h4 {
+        margin-bottom: 18px;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #94a3b8;
+      }
+      .footer-col p {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: #64748b;
+      }
+      .footer-col ul {
+        list-style: none;
+      }
+      .footer-col ul li {
+        margin-bottom: 10px;
+      }
+      .footer-col ul li a {
+        text-decoration: none;
+        color: #475569;
+        font-size: 0.9rem;
+        transition: 0.3s;
+      }
+      .footer-col ul li a:hover {
+        color: #5d5fef;
+      }
+
+      .whatsapp-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: #25d366;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.85rem;
+        margin-top: 10px;
+      }
+
+      .footer-bottom {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding-top: 30px;
+        border-top: 1px solid #f1f5f9;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #94a3b8;
+        font-size: 0.8rem;
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 15px;
+      }
+      .social-icons a {
+        color: #cbd5e1;
+        font-size: 1.2rem;
+        transition: 0.3s;
+      }
+      .social-icons a:hover {
+        color: #5d5fef;
+      }
+
+      @media (max-width: 768px) {
+        .footer-grid {
+          grid-template-columns: 1fr;
+          gap: 30px;
+        }
+        .test-header,
+        .test-nav-footer {
+          padding: 15px 20px;
+        }
+        .footer-bottom {
+          flex-direction: column;
+          gap: 15px;
+          text-align: center;
+        }
+      }
+      .option-item {
+        user-select: none; /* Prevents text from being highlighted while clicking fast */
+      }
+    </style>
+  </head>
+  <body>
     <div class="test-container">
-        <header class="test-header">
-            <div class="test-info">
-                <span class="exam-year-badge">2023</span>
-            </div>
-            <div class="question-counter">
-                Question <strong>2</strong> of <strong>15</strong>
-            </div>
-        </header>
+      <header class="test-header">
+        <div class="test-info">
+          <span class="exam-year-badge">JAMB 2023 | Biology</span>
+        </div>
+        <div class="question-counter">
+          Question <strong>2</strong> of <strong>15</strong>
+        </div>
+        <div class="timer">
+          <i class="fa-regular fa-clock"></i> <strong>54:02</strong>
+        </div>
+      </header>
 
-        <main class="test-main">
-            <div class="card question-card">
-                <h2 class="question-text">Question 2: Which of the following is an example of a carbohydrate?</h2>
-                
-                <form class="options-form">
-                    <label class="option-item">
-                        <input type="radio" name="jamb-option" value="insulin">
-                        <span class="radio-custom"></span>
-                        <span class="option-label">Insulin</span>
-                    </label>
+      <main class="test-main">
+        <div class="question-card">
+          <h2 class="question-text">
+            Which of the following is an example of a carbohydrate?
+          </h2>
 
-                    <label class="option-item">
-                        <input type="radio" name="jamb-option" value="glucose">
-                        <span class="radio-custom"></span>
-                        <span class="option-label">Glucose</span>
-                    </label>
+          <form class="options-form">
+            <label class="option-item">
+              <input type="radio" name="jamb-option" value="insulin" />
+              <span class="radio-custom"></span>
+              <span class="option-label">Insulin</span>
+            </label>
 
-                    <label class="option-item">
-                        <input type="radio" name="jamb-option" value="hemoglobin">
-                        <span class="radio-custom"></span>
-                        <span class="option-label">Hemoglobin</span>
-                    </label>
+            <label class="option-item">
+              <input type="radio" name="jamb-option" value="glucose" />
+              <span class="radio-custom"></span>
+              <span class="option-label">Glucose</span>
+            </label>
 
-                    <label class="option-item">
-                        <input type="radio" name="jamb-option" value="oxygen">
-                        <span class="radio-custom"></span>
-                        <span class="option-label">Oxygen</span>
-                    </label>
-                </form>
-            </div>
-        </main>
-<footer class="footer">
-    <div class="container">
+            <label class="option-item">
+              <input type="radio" name="jamb-option" value="hemoglobin" />
+              <span class="radio-custom"></span>
+              <span class="option-label">Hemoglobin</span>
+            </label>
+
+            <label class="option-item">
+              <input type="radio" name="jamb-option" value="oxygen" />
+              <span class="radio-custom"></span>
+              <span class="option-label">Oxygen</span>
+            </label>
+          </form>
+        </div>
+      </main>
+
+      <footer class="test-nav-footer">
+        <button class="btn btn-prev">
+          <i class="fa-solid fa-arrow-left"></i> Previous
+        </button>
+
+        <div class="nav-buttons">
+          <button class="btn btn-next">
+            Next Question <i class="fa-solid fa-arrow-right"></i>
+          </button>
+          <button class="btn btn-submit">Submit Exam</button>
+        </div>
+      </footer>
+
+      <footer class="site-footer">
         <div class="footer-grid">
-            <div class="footer-col">
-                <div class="logo" style="margin-bottom: 15px;">
-                    <i class="fa-solid fa-square-poll-vertical"></i> RankUp
-                </div>
-                <p>Empowering JAMB candidates with real-time rankings and academic insights to reach their dream institutions.</p>
+          <div class="footer-col">
+            <div
+              class="logo"
+              style="
+                color: #5d5fef;
+                font-weight: 700;
+                font-size: 1.2rem;
+                margin-bottom: 15px;
+              "
+            >
+              <i class="fa-solid fa-square-poll-vertical"></i> RankUp
             </div>
+            <p>
+              Providing the most accurate JAMB simulation and real-time ranking
+              system in Nigeria.
+            </p>
+          </div>
 
-            <div class="footer-col">
-                <h4>Platform</h4>
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/rankings/">Rankings</a></li>
-                    <li><a href="/about/">About Us</a></li>
-                </ul>
-            </div>
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="#">Dashboard</a></li>
+              <li><a href="#">Past Questions</a></li>
+              <li><a href="#">Rankings</a></li>
+            </ul>
+          </div>
 
-            <div class="footer-col">
-                <h4>Join the Conversation</h4>
-                <p style="margin-bottom: 15px;">Get updates and study tips directly in our community.</p>
-                <a href="https://wa.me/yourlink" class="whatsapp-link">
-                    <i class="fa-brands fa-whatsapp"></i> Join WhatsApp Community
-                </a>
-            </div>
+          <div class="footer-col">
+            <h4>Community</h4>
+            <p>Join 10,000+ students preparing for success.</p>
+            <a href="#" class="whatsapp-link">
+              <i class="fa-brands fa-whatsapp"></i> WhatsApp Community
+            </a>
+          </div>
         </div>
 
         <div class="footer-bottom">
-            <p>&copy; 2024 JAMB Ranker. All rights reserved.</p>
-            <div class="socials">
-                <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-            </div>
+          <p>&copy; 2024 RankUp Education. All rights reserved.</p>
+          <div class="social-icons">
+            <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          </div>
         </div>
+      </footer>
     </div>
-</footer>    </div>
+  </body>
+  <script>
+    // 1. Timer Logic
+    let timeInSeconds = 54 * 60 + 2; // 54 minutes 2 seconds
+    const timerDisplay = document.querySelector(".timer strong");
 
-</body>
+    const startTimer = () => {
+      const countdown = setInterval(() => {
+        if (timeInSeconds <= 0) {
+          clearInterval(countdown);
+          alert("Time is up! Your exam will be submitted automatically.");
+          // Add auto-submit logic here
+          return;
+        }
+        timeInSeconds--;
+
+        const minutes = Math.floor(timeInSeconds / 60);
+        const seconds = timeInSeconds % 60;
+
+        // Format time to 00:00
+        timerDisplay.textContent = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+
+        // Turn timer red when less than 5 minutes left
+        if (timeInSeconds < 300) {
+          timerDisplay.parentElement.style.color = "#ff4d4d";
+        }
+      }, 1000);
+    };
+
+    // 2. Option Selection Visual Feedback
+    const options = document.querySelectorAll(".option-item");
+
+    options.forEach((option) => {
+      option.addEventListener("click", function () {
+        // Remove 'selected' styling from all options
+        options.forEach((opt) => {
+          opt.style.borderColor = "#f1f5f9";
+          opt.style.backgroundColor = "white";
+        });
+
+        // Apply 'selected' styling to the clicked one
+        this.style.borderColor = "#5D5FEF";
+        this.style.backgroundColor = "#f1f5ff";
+
+        // Ensure the radio input inside is checked
+        const radio = this.querySelector('input[type="radio"]');
+        radio.checked = true;
+      });
+    });
+
+    // 3. Navigation & Submit Logic
+    const btnNext = document.querySelector(".btn-next");
+    const btnPrev = document.querySelector(".btn-prev");
+    const btnSubmit = document.querySelector(".btn-submit");
+
+    btnNext.addEventListener("click", () => {
+      console.log("Navigating to next question...");
+      // In a real app, you would fetch the next question data here
+    });
+
+    btnPrev.addEventListener("click", () => {
+      console.log("Navigating to previous question...");
+    });
+
+    btnSubmit.addEventListener("click", () => {
+      const confirmSubmit = confirm(
+        "Are you sure you want to submit your exam?",
+      );
+      if (confirmSubmit) {
+        alert("Exam submitted successfully! Redirecting to results...");
+        // window.location.href = "/results.html";
+      }
+    });
+
+    // Initialize Timer on Load
+    window.onload = startTimer;
+  </script>
 </html>
