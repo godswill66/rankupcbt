@@ -224,36 +224,7 @@
         left: 120px;
         margin-bottom: 20px;
       }
-      /* Footer Link */
-      .auth-footer {
-        font-size: 0.9rem;
-        color: #64748b;
-      }
-      .auth-footer a {
-        color: #5d5fef;
-        text-decoration: none;
-        font-weight: 600;
-      }
 
-      /* Site Footer */
-      .footer {
-        padding: 30px 0;
-        border-top: 1px solid #eee;
-        background: white;
-      }
-      .footer-content {
-        display: flex;
-        font-size: 0.8rem;
-        color: #94a3b8;
-      }
-      .socials {
-        display: flex;
-        gap: 20px;
-      }
-      .footer-p {
-        position: absolute;
-        left: 600px;
-      }
       /* Responsive */
       @media (max-width: 640px) {
         .social-grid {
@@ -269,8 +240,9 @@
         padding: 60px 0 30px;
         border-top: 1px solid #eee;
         margin-top: 50px;
+        text-decoration: none;
       }
-
+      
       .footer-grid {
         display: grid;
         grid-template-columns: 2fr 1fr 1.5fr;
@@ -371,73 +343,74 @@
       }
       /* --- RESPONSIVE UPDATES --- */
 
-/* Tablet and below */
-@media (max-width: 768px) {
-  .nav-content {
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center; /* Center logo and button on small screens */
-  }
+      /* Tablet and below */
+      @media (max-width: 768px) {
+        .nav-content {
+          flex-wrap: wrap;
+          gap: 10px;
+          justify-content: center; /* Center logo and button on small screens */
+        }
 
-  /* Hide the long WhatsApp text on mobile, keep the icon or shorten it */
-  .btn-text {
-    display: none; 
-  }
+        /* Hide the long WhatsApp text on mobile, keep the icon or shorten it */
+        .btn-text {
+          display: none;
+        }
 
-  .footer-grid {
-    grid-template-columns: 1fr;
-    text-align: center;
-    gap: 30px;
-  }
+        .footer-grid {
+          grid-template-columns: 1fr;
+          text-align: center;
+          gap: 30px;
+          font-weight: bolder;
+        }
 
-  .footer-col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+        .footer-col {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
 
-  .footer-bottom {
-    flex-direction: column-reverse;
-    gap: 20px;
-    text-align: center;
-  }
-}
+        .footer-bottom {
+          flex-direction: column-reverse;
+          gap: 20px;
+          text-align: center;
+        }
+      }
 
-/* Mobile Phones */
-@media (max-width: 480px) {
-  .auth-center-wrapper {
-    padding: 20px 15px; /* Less padding to give form more room */
-  }
+      /* Mobile Phones */
+      @media (max-width: 480px) {
+        .auth-center-wrapper {
+          padding: 20px 15px; /* Less padding to give form more room */
+        }
 
-  .login-card {
-    padding: 30px 20px;
-    border: none; /* Optional: Remove border on mobile for a flush look */
-    box-shadow: none;
-    background: transparent; /* Makes it feel more native on mobile */
-  }
+        .login-card {
+          padding: 30px 20px;
+          border: none; /* Optional: Remove border on mobile for a flush look */
+          box-shadow: none;
+          background: transparent; /* Makes it feel more native on mobile */
+        }
 
-  .auth-title {
-    font-size: 1.3rem;
-  }
+        .auth-title {
+          font-size: 1.3rem;
+        }
 
-  /* Fix the Google button positioning */
-  .btn-social-outline {
-    left: 0 !important; /* Resets the 'left: 120px' in your original CSS */
-    width: 100%;
-    margin-left: 0;
-  }
+        /* Fix the Google button positioning */
+        .btn-social-outline {
+          left: 0 !important; /* Resets the 'left: 120px' in your original CSS */
+          width: 100%;
+          margin-left: 0;
+        }
 
-  .form-options {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
+        .form-options {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+        }
 
-  .whatsapp-link {
-    width: 100%;
-    justify-content: center;
-  }
-}
+        .whatsapp-link {
+          width: 100%;
+          justify-content: center;
+        }
+      }
     </style>
   </head>
   <body class="bg-light login-page">
@@ -458,7 +431,7 @@
             />
             Join Rankup group on Whatsapp for more update</a
           >
-          <a href="/login/" class="btn-primary btn-small">Sign Up</a>
+          <a href="/signup/" class="btn-primary btn-small">Sign Up</a>
         </div>
       </div>
     </nav>
@@ -467,15 +440,12 @@
         <h1 class="auth-title">Welcome Back</h1>
         <p class="auth-subtitle">Enter your details to access your account.</p>
 
-        <form class="login-form">
+        <form id="loginForm">
           <div class="input-group">
-            <label>Email or Phone Number</label>
+            <label>Email</label>
             <div class="input-with-icon">
               <i class="fa-regular fa-envelope"></i>
-              <input
-                type="text"
-                placeholder="Enter your email or phone number"
-              />
+              <input type="text" id="loginEmail" placeholder="Enter your email" />
             </div>
           </div>
 
@@ -483,7 +453,7 @@
             <label>Password</label>
             <div class="input-with-icon">
               <i class="fa-solid fa-lock"></i>
-              <input type="password" placeholder="Enter your password" />
+              <input type="password" id="loginPassword" placeholder="Enter your password" />
             </div>
           </div>
 
@@ -495,8 +465,12 @@
             </label>
             <a href="#" class="forgot-link">Forgot password?</a>
           </div>
+          <p id="loginMessage" style="color: red; margin-bottom: 10px;"></p>
 
-          <button type="submit" class="btn-primary btn-block"><a href="/dashboard/">Login</a></button>
+          <button type="submit" class="btn-primary btn-block">
+            Login
+          </button>
+          
 
           <div class="separator"><span>OR CONTINUE WITH</span></div>
 
@@ -511,53 +485,89 @@
           </div>
 
           <div class="auth-footer">
-            Don't have an account? <a href="/login/">Sign Up</a>
+            Don't have an account? <a href="/signup/">Sign Up</a>
           </div>
         </form>
       </div>
     </main>
+
     <footer class="footer">
       <div class="container">
         <div class="footer-grid">
           <div class="footer-col">
-            <div class="logo" style="margin-bottom: 15px">
-              <i class="fa-solid fa-square-poll-vertical"></i> RankUp
-            </div>
+            <div class="logo" style="margin-bottom: 15px">RankUp</div>
             <p>
               Empowering JAMB candidates with real-time rankings and academic
-              insights to reach their dream institutions.
+              insights.
             </p>
           </div>
 
           <div class="footer-col">
             <h4>Platform</h4>
             <ul>
-              <li><a href="/">Home</a></li>
-              <li><a href="/rankings/">Rankings</a></li>
-              <li><a href="/about/">About Us</a></li>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="/">Rankings</a></li>
+              <li><a href="#">About Us</a></li>
             </ul>
           </div>
 
           <div class="footer-col">
-            <h4>Join the Conversation</h4>
-            <p style="margin-bottom: 15px">
-              Get updates and study tips directly in our community.
+            <h4>Community</h4>
+            <p style="margin-bottom: 15px; font-size: 0.85rem">
+              Get updates and study tips directly.
             </p>
-            <a href="https://chat.whatsapp.com/EdRuXNAiECzHCBJZYIb2WN"="whatsapp-link">
-              <i class="fa-brands fa-whatsapp"></i> Join WhatsApp Community
+            <a href="#" class="whatsapp-link">
+              <i class="fa-brands fa-whatsapp"></i> Join Community
             </a>
           </div>
         </div>
+
         <div class="footer-bottom">
-          <p>&copy; 2024 RankUp. All rights reserved.</p>
+          <p>&copy; 2026 RankUp. All rights reserved.</p>
           <div class="socials">
             <a href="#"><i class="fa-brands fa-twitter"></i></a>
             <a href="#"><i class="fa-brands fa-facebook"></i></a>
             <a href="#"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#"><i class="fa-brands fa-linkedin"></i></a>
           </div>
         </div>
       </div>
     </footer>
+    <script>
+      const loginForm = document.getElementById("loginForm");
+      
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+      
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
+      
+        try {
+          const response = await fetch("http://127.0.0.1:3001/api/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+          });
+      
+          const data = await response.json();
+      
+          if (!response.ok) {
+            alert(data.message);
+            return;
+          }
+      
+          // Save token
+          localStorage.setItem("token", data.token);
+      
+          alert("Login successful!");
+          window.location.href = "/dashboard/";
+        } catch (error) {
+          console.error(error);
+          alert("Login failed");
+        }
+      });
+      </script>
+      
   </body>
 </html>
