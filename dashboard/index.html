@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Dashboard | RankUp</title>
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -808,7 +809,78 @@
         background: #4a4cd8;
         transform: translateY(-2px);
       }
-    </style>
+      /* ===============================
+   LOADING SPINNER
+=============================== */
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.hidden {
+  display: none;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #eee;
+  border-top: 5px solid #4f46e5;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===============================
+   TOAST NOTIFICATIONS
+=============================== */
+
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+}
+
+.toast {
+  background: #111827;
+  color: white;
+  padding: 12px 18px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s ease;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.toast.success {
+  background: #16a34a;
+}
+
+.toast.error {
+  background: #dc2626;
+}
+  </style>
   </head>
   <body class="dashboard-body">
     <aside class="dashboard-sidebar">
@@ -1111,165 +1183,179 @@
         </div>
       </div>
     </div>
-  </body>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // 1. Sidebar & Top Nav Navigation (Active States)
-      const sideItems = document.querySelectorAll(".side-item");
-      const topNavLinks = document.querySelectorAll(".top-nav-links a");
+    <!-- Loading Spinner -->
+<div id="loadingOverlay" class="loading-overlay hidden">
+  <div class="spinner"></div>
+</div>
 
-      const handleActiveState = (elements, clickedElement) => {
-        elements.forEach((el) => el.classList.remove("active"));
-        clickedElement.classList.add("active");
-      };
-
-      sideItems.forEach((item) => {
-        item.addEventListener("click", function (e) {
-          // If it's a link to another page, don't prevent default,
-          // just update the UI before the page transition
-          handleActiveState(sideItems, this);
-        });
-      });
-
-      topNavLinks.forEach((link) => {
-        link.addEventListener("click", function () {
-          handleActiveState(topNavLinks, this);
-        });
-      });
-      // 2. Updated Notification Logic (Toggle Menu instead of Alert)
-      const notifyBtn = document.getElementById("notificationBtn");
-      const notifDropdown = document.getElementById("notificationDropdown");
-      const badge = document.querySelector(".notification-badge");
-      const markReadBtn = document.querySelector(".mark-read");
-      const notifItems = document.querySelectorAll(".notif-item");
-
-      // Toggle the dropdown menu
-      notifyBtn.addEventListener("click", (e) => {
-        e.stopPropagation(); // Prevents the 'document click' from closing it immediately
-        notifDropdown.classList.toggle("active");
-      });
-
-      // Close dropdown if user clicks anywhere else on the screen
-      document.addEventListener("click", (e) => {
-        if (!notifDropdown.contains(e.target) && e.target !== notifyBtn) {
-          notifDropdown.classList.remove("active");
-        }
-      });
-
-      // Mark all as read logic
-      markReadBtn.addEventListener("click", () => {
-        notifItems.forEach((item) => item.classList.remove("unread"));
-        if (badge) {
-          badge.style.transform = "scale(0)"; // Smooth shrink animation
-          setTimeout(() => (badge.style.display = "none"), 300);
-        }
-      });
-
-      // Individual item click (removes unread blue background)
-      notifItems.forEach((item) => {
-        item.addEventListener("click", function () {
-          this.classList.remove("unread");
-          // Logic to decrease badge count could go here
-        });
-      });
-      // 3. Action Card Interactivity (Buttons)
-      const btnOutline = document.querySelector(".btn-outline"); // Review Past Tests
-      btnOutline.addEventListener("click", () => {
-        alert("Opening your Test History... Loading scores.");
-      });
-
-      const editProfileBtn = document.querySelector(".btn-text-icon");
-      editProfileBtn.addEventListener("click", () => {
-        const newName = prompt("Enter your new display name:", "John Doe");
-        if (newName) {
-          document.querySelector(".welcome-section h1").innerText =
-            `Welcome back, ${newName}!`;
-          document.querySelector(
-            ".profile-info-list li:first-child",
-          ).innerHTML = `<i class="fa-solid fa-user"></i> ${newName}`;
-        }
-      });
-
-      // 4. Simulated Data Animation (Progress Bar)
-      // This gives the dashboard a "living" feel when it loads
-      const progressBar = document.querySelector(".progress-bar");
-      const progressValue = 75; // The target percentage
-
-      // Reset to 0 then animate to target
-      progressBar.style.width = "0%";
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container"></div>
+  </body><script>
+    // ===============================
+    // GLOBAL CONFIG
+    // ===============================
+    
+    const API_URL = "http://localhost:3001";
+    const token = localStorage.getItem("token");
+    
+    // Protect dashboard
+    if (!token) {
+      window.location.href = "/login/";
+    }
+    
+    // ===============================
+    // SPINNER CONTROL
+    // ===============================
+    
+    function showLoader() {
+      document.getElementById("loadingOverlay").classList.remove("hidden");
+    }
+    
+    function hideLoader() {
+      document.getElementById("loadingOverlay").classList.add("hidden");
+    }
+    
+    // ===============================
+    // TOAST SYSTEM
+    // ===============================
+    
+    function showToast(message, type = "success") {
+      const container = document.getElementById("toastContainer");
+    
+      const toast = document.createElement("div");
+      toast.className = `toast ${type}`;
+      toast.innerText = message;
+    
+      container.appendChild(toast);
+    
+      setTimeout(() => toast.classList.add("show"), 10);
+    
       setTimeout(() => {
-        progressBar.style.transition = "width 1.5s ease-in-out";
-        progressBar.style.width = progressValue + "%";
-      }, 500);
-
-      // 5. Weekly Practice Hours Mock Interaction
-      const chartPlaceholders = document.querySelectorAll(".chart-placeholder");
-      chartPlaceholders.forEach((chart) => {
-        chart.style.cursor = "pointer";
-        chart.addEventListener("mouseenter", () => {
-          chart.style.backgroundColor = "#f1f5ff";
+        toast.classList.remove("show");
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+    
+    // ===============================
+    // LOAD USER
+    // ===============================
+    
+    document.addEventListener("DOMContentLoaded", loadUser);
+    
+    async function loadUser() {
+      showLoader();
+    
+      try {
+        const res = await fetch(`${API_URL}/api/users/me`, {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
         });
-        chart.addEventListener("mouseleave", () => {
-          chart.style.backgroundColor = "#f8fafc";
-        });
-        chart.addEventListener("click", () => {
-          alert("Detailed analytics feature coming soon!");
-        });
-      });
-    });
-    document
-      .querySelector(".fa-right-from-bracket")
-      .parentElement.addEventListener("click", () => {
-        if (confirm("Are you sure you want to logout?")) {
-          window.location.href = "/login";
-        }
-      });
-    // Settings Modal Logic
-    const settingsLink = document.querySelector(
-      ".side-item i.fa-gear",
-    ).parentElement;
-    const settingsModal = document.getElementById("settingsModal");
-    const closeSettings = document.getElementById("closeSettings");
-    const cancelBtn = document.getElementById("cancelBtn");
+    
+        if (!res.ok) throw new Error("Unauthorized");
+    
+        const user = await res.json();
+    
+        // Update welcome text
+        document.querySelector(".welcome-section h1").innerText =
+          `Welcome back, ${user.fullName}!`;
+    
+        // Update profile card
+        document.querySelector(".profile-info-list").innerHTML = `
+          <li><i class="fa-solid fa-user"></i> ${user.fullName}</li>
+          <li><i class="fa-solid fa-envelope"></i> ${user.email}</li>
+          <li><i class="fa-solid fa-phone"></i> ${user.phone || "-"}</li>
+          <li><i class="fa-solid fa-location-dot"></i> ${user.location || "-"}</li>
+        `;
+    
+        // Prefill modal
+        document.getElementById("editName").value = user.fullName || "";
+        document.getElementById("editEmail").value = user.email || "";
+        document.getElementById("editPhone").value = user.phone || "";
+        document.getElementById("editLocation").value = user.location || "";
+    
+      } catch (error) {
+        localStorage.removeItem("token");
+        window.location.href = "/login/";
+      } finally {
+        hideLoader();
+      }
+    }
+    
+    // ===============================
+    // UPDATE PROFILE
+    // ===============================
+    
     const saveSettings = document.getElementById("saveSettings");
-
-    // Open Modal
-    settingsLink.addEventListener("click", (e) => {
-      e.preventDefault();
-      settingsModal.style.display = "flex";
-    });
-
-    // Close functions
-    const closeModal = () => {
-      settingsModal.style.display = "none";
-    };
-
-    [closeSettings, cancelBtn].forEach((btn) =>
-      btn.addEventListener("click", closeModal),
-    );
-
-    // Close on outside click
-    window.addEventListener("click", (e) => {
-      if (e.target === settingsModal) closeModal();
-    });
-
-    // Save Logic
-    saveSettings.addEventListener("click", () => {
-      const newName = document.getElementById("editName").value;
-
-      // Update the dashboard UI live
-      document.querySelector(".welcome-section h1").innerText =
-        `Welcome back, ${newName}!`;
-      document.querySelector(".profile-info-list li:first-child").innerHTML =
-        `<i class="fa-solid fa-user"></i> ${newName}`;
-
-      // Nice feedback
-      saveSettings.innerHTML =
-        '<i class="fa-solid fa-circle-check"></i> Saved!';
-      setTimeout(() => {
-        saveSettings.innerHTML = "Save Changes";
-        closeModal();
-      }, 1000);
-    });
-  </script>
-</html>
+    
+    if (saveSettings) {
+      saveSettings.addEventListener("click", async () => {
+    
+        const updatedData = {
+          fullName: document.getElementById("editName").value,
+          phone: document.getElementById("editPhone").value,
+          location: document.getElementById("editLocation").value,
+        };
+    
+        showLoader();
+        saveSettings.disabled = true;
+    
+        try {
+          const res = await fetch(`${API_URL}/api/users/me`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify(updatedData),
+          });
+    
+          if (!res.ok) throw new Error("Update failed");
+    
+          const data = await res.json();
+    
+          // Update UI immediately
+          document.querySelector(".welcome-section h1").innerText =
+            `Welcome back, ${data.fullName}!`;
+    
+          document.querySelector(".profile-info-list").innerHTML = `
+            <li><i class="fa-solid fa-user"></i> ${data.fullName}</li>
+            <li><i class="fa-solid fa-envelope"></i> ${data.email}</li>
+            <li><i class="fa-solid fa-phone"></i> ${data.phone || "-"}</li>
+            <li><i class="fa-solid fa-location-dot"></i> ${data.location || "-"}</li>
+          `;
+    
+          // Button success animation
+          saveSettings.innerHTML =
+            '<i class="fa-solid fa-circle-check"></i> Saved!';
+          
+          showToast("Profile updated successfully!", "success");
+    
+          setTimeout(() => {
+            saveSettings.innerHTML = "Save Changes";
+            saveSettings.disabled = false;
+          }, 1000);
+    
+        } catch (error) {
+          showToast("Failed to update profile.", "error");
+          saveSettings.disabled = false;
+        } finally {
+          hideLoader();
+        }
+    
+      });
+    }
+    
+    // ===============================
+    // LOGOUT
+    // ===============================
+    
+    const logoutBtn = document.querySelector(".fa-right-from-bracket");
+    
+    if (logoutBtn) {
+      logoutBtn.parentElement.addEventListener("click", () => {
+        localStorage.removeItem("token");
+        window.location.href = "/login/";
+      });
+    }
+    </script> </html>
