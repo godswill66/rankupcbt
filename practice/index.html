@@ -400,12 +400,32 @@
         const modal = document.getElementById('calc-modal');
         modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
       }
+      async function submitTest() {
+  if (!confirm("Are you sure you want to submit?")) return;
 
-      function submitTest() {
-        if(confirm("Are you sure you want to submit?")) {
-            alert("Examination Submitted Successfully.");
-        }
-      }
+  const answers = [
+    {
+      questionId: "QUESTION_ID",
+      selected: "A",
+    },
+  ];
+
+  const res = await fetch(`${API_URL}/api/practice/submit`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    body: JSON.stringify({
+      subject: "bio",
+      answers,
+      duration: 60,
+    }),
+  });
+
+  const data = await res.json();
+  alert("Score: " + data.score);
+}
     </script>
   </body>
 </html>

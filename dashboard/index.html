@@ -1370,5 +1370,33 @@
         localStorage.removeItem("token");
         window.location.href = "/login/";
       });
+
+      document.addEventListener("DOMContentLoaded", () => {
+  loadUser();
+  loadDashboard();
+});
+
+async function loadDashboard() {
+  try {
+    const res = await fetch(`http://127.0.0.1:3001/api/dashboard`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    if (!res.ok) throw new Error("Failed");
+
+    const data = await res.json();
+
+    console.log("Dashboard data:", data);
+
+    // Example:
+    document.getElementById("recentScore").innerText =
+      data.recentScore || 0;
+
+  } catch (err) {
+    console.error(err);
+  }
+}
     }
     </script> </html>
