@@ -1,1403 +1,467 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head><meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <title>RankUp CBT | The #1 JAMB Ranker & Practice Portal</title>
-    <meta name="description" content="RankUp CBT is the ultimate JAMB Ranker. Practice past questions, track your performance against thousands of students, and boost your JAMB score for free.">
-    <meta name="keywords" content="JAMB Ranker, JAMB CBT Practice, RankUp CBT, Nigeria exam preparation, UTME ranking, JAMB score tracker">
-    <meta name="author" content="RankUp CBT">
-
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.rankupcbt.com/">
-    <meta property="og:title" content="RankUp CBT | The Best JAMB Ranker for 2026">
-    <meta property="og:description" content="See where you stand among thousands of candidates. Use our JAMB Ranker tool to predict your admission chances.">
-    <meta property="og:image" content="/assets/logo.png">
-
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="RankUp CBT - Official JAMB Ranker">
-    
-    <link rel="icon" type="image/png" href="/assets/logo.png">
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | RankUp CBT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: "Inter", sans-serif;
-        color: #333;
-        background-color: #fcfcfd;
-      }
-
-      .dashboard-body {
-        display: flex;
-        min-height: 100vh;
-      }
-
-      /* Sidebar - Fixed/Sticky */
-      .dashboard-sidebar {
-        width: 260px;
-        background: white;
-        border-right: 1px solid #eee;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 20px 0;
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        flex-shrink: 0;
-      }
-
-      .logo {
-        font-weight: 700;
-        color: #5d5fef;
-        font-size: 1.1rem;
-        padding: 0 25px 30px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .side-item {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 12px 25px;
-        text-decoration: none;
-        color: #64748b;
-        font-size: 0.9rem;
-        font-weight: 500;
-        transition: 0.3s;
-      }
-
-      .side-item.active {
-        background: #f1f5ff;
-        color: #5d5fef;
-        border-right: 3px solid #5d5fef;
-      }
-
-      .side-item:hover:not(.active) {
-        background: #f8fafc;
-        color: #5d5fef;
-      }
-      /* Notification Container */
-      .notification-wrapper {
-        position: relative;
-      }
-
-      .notification-badge {
-        position: absolute;
-        top: -5px;
-        right: -5px;
-        background: #ff4d4d;
-        color: white;
-        font-size: 0.65rem;
-        font-weight: 700;
-        padding: 2px 5px;
-        border-radius: 10px;
-        border: 2px solid white;
-      }
-      /* Better Dropdown Positioning & Design */
-      .notification-dropdown {
-        position: absolute;
-        top: 60px; /* Space from the header */
-        right: -10px;
-        width: 360px; /* Wider for "wilder" look */
-        background: white;
-        border-radius: 16px; /* Curvier corners */
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); /* Deep shadow for pop-up effect */
-        border: 1px solid rgba(93, 95, 239, 0.1); /* Subtle blue border */
-        display: none;
-        z-index: 1000;
-        overflow: hidden;
-        transform-origin: top right;
-        animation: popupAnim 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)
-          forwards;
-      }
-
-      /* New "Pop" Animation */
-      @keyframes popupAnim {
-        from {
-          opacity: 0;
-          transform: translateY(15px) scale(0.9);
+        :root {
+            --primary: #5d5fef;
+            --primary-light: #f1f5ff;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --success: #10b981;
         }
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-      }
 
-      .notification-dropdown.active {
-        display: block;
-      }
-
-      /* Unread state: Light blue background with a side indicator */
-      .notif-item.unread {
-        background: #f4f7ff;
-        position: relative;
-      }
-
-      .notif-item.unread::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 15%;
-        height: 70%;
-        width: 4px;
-        background: #5d5fef; /* Solid blue bar for unread */
-        border-radius: 0 4px 4px 0;
-      }
-
-      /* Icon backgrounds */
-      .notif-icon {
-        width: 45px; /* Larger icons */
-        height: 45px;
-        border-radius: 12px; /* Squircle style */
-      }
-
-      /* Badge Pulse Animation */
-      .notification-badge {
-        animation: pulse 2s infinite;
-      }
-
-      @keyframes pulse {
-        0% {
-          box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.7);
+        /* --- NAVIGATION --- */
+        .navbar {
+            background: var(--white);
+            height: 70px;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        70% {
-          box-shadow: 0 0 0 10px rgba(255, 77, 77, 0);
+
+        .nav-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        100% {
-          box-shadow: 0 0 0 0 rgba(255, 77, 77, 0);
+
+        .logo {
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-      }
-      .notif-header {
-        padding: 15px 20px;
-        border-bottom: 1px solid #f1f5f9;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
 
-      .notif-header span {
-        font-weight: 700;
-        font-size: 0.9rem;
-      }
-      .mark-read {
-        background: none;
-        border: none;
-        color: #5d5fef;
-        font-size: 0.75rem;
-        cursor: pointer;
-        font-weight: 600;
-      }
+        .nav-right { display: flex; align-items: center; gap: 20px; }
 
-      .notif-body {
-        max-height: 350px;
-        overflow-y: auto;
-      }
-
-      .notif-item {
-        display: flex;
-        gap: 15px;
-        padding: 15px 20px;
-        transition: 0.2s;
-        cursor: pointer;
-        border-bottom: 1px solid #fafafa;
-      }
-
-      .notif-item:hover {
-        background: #f8fafc;
-      }
-      .notif-item.unread {
-        background: #f1f5ff;
-      }
-
-      .notif-icon {
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-      }
-
-      .notif-icon.primary {
-        background: #e0e1ff;
-        color: #5d5fef;
-      }
-      .notif-icon.success {
-        background: #dcfce7;
-        color: #10b981;
-      }
-      .notif-icon.warning {
-        background: #fef9c3;
-        color: #ca8a04;
-      }
-
-      .notif-text p {
-        font-size: 0.85rem;
-        line-height: 1.4;
-        margin-bottom: 4px;
-        color: #1e293b;
-      }
-      .notif-text span {
-        font-size: 0.75rem;
-        color: #94a3b8;
-      }
-
-      .notif-footer {
-        padding: 12px;
-        text-align: center;
-        background: #f8fafc;
-        border-top: 1px solid #eee;
-      }
-
-      .notif-footer a {
-        text-decoration: none;
-        color: #64748b;
-        font-size: 0.8rem;
-        font-weight: 600;
-      }
-      /* Main Content Wrapper */
-      .main-wrapper {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        min-width: 0; /* Prevents flex items from overflowing */
-      }
-
-      .main-header {
-        height: 70px;
-        background: white;
-        border-bottom: 1px solid #eee;
-        padding: 0 40px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-      }
-
-      .header-left {
-        display: flex;
-        gap: 40px;
-        align-items: center;
-      }
-      .top-nav-links {
-        display: flex;
-        gap: 20px;
-      }
-      .top-nav-links a {
-        text-decoration: none;
-        color: #64748b;
-        font-size: 0.85rem;
-        font-weight: 500;
-      }
-      .top-nav-links a.active {
-        color: #333;
-        font-weight: 600;
-      }
-
-      .header-right {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-      }
-      .header-avatar {
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-        border: 2px solid #f1f5ff;
-      }
-      .notification-btn {
-        background: none;
-        border: none;
-        font-size: 1.2rem;
-        color: #64748b;
-        cursor: pointer;
-      }
-
-      /* Content Section */
-      .dashboard-content {
-        padding: 40px;
-        flex: 1;
-      }
-
-      .welcome-section h1 {
-        font-size: 1.6rem;
-        margin-bottom: 5px;
-        font-weight: 700;
-      }
-      .welcome-section p {
-        color: #64748b;
-        font-size: 0.9rem;
-        margin-bottom: 30px;
-      }
-
-      /* Cards and Grids */
-      .card {
-        background: white;
-        border: 1px solid #eee;
-        border-radius: 12px;
-        padding: 25px;
-      }
-
-      .action-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        margin-bottom: 30px;
-      }
-
-      .action-card {
-        position: relative;
-        overflow: hidden;
-        transition: 0.3s;
-      }
-      .action-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-      }
-
-      .primary-bg {
-        background-color: #5d5fef;
-        color: white;
-        border: none;
-      }
-      .background-icon {
-        position: absolute;
-        right: -10px;
-        bottom: -10px;
-        font-size: 5rem;
-        opacity: 0.15;
-      }
-
-      .btn-white,
-      .btn-outline {
-        display: inline-block;
-        padding: 10px 24px;
-        border-radius: 8px;
-        font-weight: 600;
-        margin-top: 15px;
-        cursor: pointer;
-        text-decoration: none;
-        font-size: 0.85rem;
-      }
-      .btn-white {
-        background: white;
-        color: #5d5fef;
-        border: none;
-      }
-      .btn-outline {
-        background: transparent;
-        color: #5d5fef;
-        border: 1px solid #5d5fef;
-      }
-
-      .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-      }
-
-      .stat-card h3 {
-        font-size: 0.95rem;
-        margin-bottom: 20px;
-        color: #1e293b;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .summary-details {
-        display: flex;
-        gap: 40px;
-        margin-bottom: 20px;
-      }
-      .summary-item .label,
-      .recent-score .label {
-        display: block;
-        font-size: 0.75rem;
-        color: #64748b;
-        margin-bottom: 4px;
-      }
-      .summary-item .value {
-        font-size: 1.2rem;
-        font-weight: 700;
-      }
-
-      .progress-bar-container {
-        background: #f1f5f9;
-        height: 8px;
-        border-radius: 4px;
-        margin: 15px 0 5px;
-      }
-      .progress-bar {
-        background: #5d5fef;
-        height: 100%;
-        border-radius: 4px;
-      }
-      .progress-note {
-        font-size: 0.7rem;
-        color: #94a3b8;
-      }
-
-      .chart-placeholder {
-        height: 150px;
-        background: #f8fafc;
-        border-radius: 8px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: #cbd5e1;
-        text-align: center;
-        padding: 20px;
-      }
-      .chart-placeholder i {
-        font-size: 2.5rem;
-        margin-bottom: 10px;
-      }
-
-      .skills-list {
-        list-style: none;
-      }
-      .skills-list li {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px 0;
-        border-bottom: 1px solid #f1f5f9;
-        font-size: 0.85rem;
-      }
-
-      .card-header-flex {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-      .btn-text-icon {
-        background: none;
-        border: none;
-        color: #5d5fef;
-        font-size: 0.8rem;
-        font-weight: 600;
-        cursor: pointer;
-      }
-
-      .profile-info-list {
-        list-style: none;
-      }
-      .profile-info-list li {
-        font-size: 0.85rem;
-        color: #475569;
-        margin-bottom: 12px;
-        display: flex;
-        gap: 12px;
-        align-items: center;
-      }
-
-      .pink-bg {
-        background-color: #fff1f2;
-        border: 1px solid #ffe4e6;
-      }
-      .quote-text {
-        font-style: italic;
-        font-size: 0.9rem;
-        color: #444;
-        margin-bottom: 10px;
-        line-height: 1.5;
-      }
-      cite {
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: #64748b;
-      }
-
-      /* FOOTER FIX - Contained in main-wrapper */
-      .footer {
-        background-color: #fff;
-        padding: 60px 40px 30px;
-        border-top: 1px solid #eee;
-        margin-top: auto; /* Pushes to bottom */
-      }
-
-      .footer-grid {
-        display: grid;
-        grid-template-columns: 2fr 1fr 1.5fr;
-        gap: 40px;
-        margin-bottom: 40px;
-        max-width: 1200px;
-      }
-
-      .footer-col h4 {
-        margin-bottom: 20px;
-        font-size: 1rem;
-        font-weight: 700;
-        color: #333;
-      }
-      .footer-col p {
-        font-size: 0.85rem;
-        color: #666;
-        line-height: 1.6;
-      }
-      .footer-col ul {
-        list-style: none;
-      }
-      .footer-col ul li {
-        margin-bottom: 10px;
-      }
-      .footer-col ul li a {
-        font-size: 0.85rem;
-        color: #666;
-        text-decoration: none;
-        transition: 0.3s;
-      }
-      .footer-col ul li a:hover {
-        color: #5d5fef;
-      }
-
-      .whatsapp-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        background-color: #25d366;
-        color: white !important;
-        padding: 10px 18px;
-        border-radius: 8px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        text-decoration: none;
-        transition: 0.3s;
-      }
-      .whatsapp-link:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-      }
-
-      .footer-bottom {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-top: 30px;
-        border-top: 1px solid #f0f0f0;
-        max-width: 1200px;
-      }
-
-      .footer-bottom p {
-        font-size: 0.8rem;
-        color: #999;
-      }
-      .socials {
-        display: flex;
-        gap: 20px;
-      }
-      .socials a {
-        color: #999;
-        font-size: 1.1rem;
-        transition: 0.3s;
-      }
-      .socials a:hover {
-        color: #5d5fef;
-      }
-
-      /* Responsive */
-      @media (max-width: 1100px) {
-        .stats-grid {
-          grid-template-columns: 1fr 1fr;
+        /* --- PROFILE LAYOUT --- */
+        .profile-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            flex: 1;
         }
-      }
-      @media (max-width: 850px) {
-        .dashboard-sidebar {
-          display: none;
+
+        /* Sidebar Card */
+        .profile-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid var(--border);
+            height: fit-content;
+            position: sticky;
+            top: 90px;
         }
-        .action-grid,
-        .stats-grid {
-          grid-template-columns: 1fr;
+
+        .avatar-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
         }
-        .main-header,
-        .dashboard-content,
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .rank-badge {
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        /* Main Content */
+        .settings-panel {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid var(--border);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group.full { grid-column: span 2; }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .btn-save {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .btn-save:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        /* Subject Badges */
+        .subject-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 850px) {
+            .profile-container { grid-template-columns: 1fr; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full { grid-column: span 1; }
+            .profile-card { position: static; }
+        }
+
+        /* Calculator Overlay */
+        #calc-modal {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 16px;
+            z-index: 2000;
+            width: 260px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Footer (same as other pages) */
         .footer {
-          padding-left: 20px;
-          padding-right: 20px;
+            background-color: white;
+            padding: 80px 5% 40px;
+            border-top: 1px solid #eee;
+            margin-top: auto;
         }
+
         .footer-grid {
-          grid-template-columns: 1fr;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1.5fr;
+            gap: 60px;
+            max-width: 1280px;
+            margin: 0 auto 60px;
         }
+
+        @media (max-width: 768px) {
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+            .footer-bottom { flex-direction: column; gap: 20px; }
+        }
+
+        .footer-col h4 {
+            margin-bottom: 24px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .footer-col p {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        .footer-col ul { list-style: none; }
+
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col ul li a {
+            font-size: 0.95rem;
+            color: #666;
+            text-decoration: none;
+            transition: 0.25s;
+        }
+
+        .footer-col ul li a:hover { color: var(--primary); }
+
+        .whatsapp-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background-color: #25d366;
+            color: white;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(37,211,102,0.3);
+        }
+
         .footer-bottom {
-          flex-direction: column;
-          gap: 20px;
-          text-align: center;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding-top: 40px;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #999;
         }
-      }
-      /* Modal Overlay Background */
-      .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(15, 23, 42, 0.6);
-        backdrop-filter: blur(8px);
-        display: none; /* Hidden by default */
-        justify-content: center;
-        align-items: center;
-        z-index: 2000;
-        padding: 20px;
-      }
 
-      /* The Settings Card */
-      .settings-card {
-        background: white;
-        width: 100%;
-        max-width: 550px;
-        border-radius: 24px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        overflow: hidden;
-        animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      }
+        .socials { display: flex; gap: 24px; }
 
-      @keyframes modalPop {
-        from {
-          opacity: 0;
-          transform: scale(0.9) translateY(20px);
+        .socials a {
+            color: #999;
+            font-size: 1.4rem;
+            transition: 0.25s;
         }
-        to {
-          opacity: 1;
-          transform: scale(1) translateY(0);
-        }
-      }
 
-      .settings-header {
-        background: linear-gradient(135deg, #5d5fef 0%, #3f41d3 100%);
-        padding: 30px;
-        color: white;
-        position: relative;
-        display: flex;
-        justify-content: space-between;
-      }
-
-      .avatar-edit {
-        position: relative;
-        width: 80px;
-        height: 80px;
-      }
-
-      .avatar-edit img {
-        width: 100%;
-        height: 100%;
-        border-radius: 20px;
-        border: 3px solid rgba(255, 255, 255, 0.3);
-        object-fit: cover;
-      }
-
-      .change-photo {
-        position: absolute;
-        bottom: -5px;
-        right: -5px;
-        background: white;
-        color: #5d5fef;
-        border: none;
-        width: 28px;
-        height: 28px;
-        border-radius: 8px;
-        cursor: pointer;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      }
-
-      .header-text h2 {
-        font-size: 1.5rem;
-        margin-bottom: 5px;
-      }
-      .header-text p {
-        font-size: 0.85rem;
-        opacity: 0.8;
-      }
-
-      .close-modal {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 2rem;
-        cursor: pointer;
-        opacity: 0.7;
-      }
-
-      .settings-body {
-        padding: 30px;
-      }
-
-      .input-group {
-        margin-bottom: 20px;
-        flex: 1;
-      }
-      .input-row {
-        display: flex;
-        gap: 20px;
-      }
-
-      .input-group label {
-        display: block;
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: #64748b;
-        margin-bottom: 8px;
-      }
-
-      .input-wrapper {
-        display: flex;
-        align-items: center;
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 0 15px;
-        transition: 0.3s;
-      }
-
-      .input-wrapper:focus-within {
-        border-color: #5d5fef;
-        background: white;
-        box-shadow: 0 0 0 4px rgba(93, 95, 239, 0.1);
-      }
-
-      .input-wrapper i {
-        color: #94a3b8;
-        font-size: 0.9rem;
-        margin-right: 12px;
-      }
-
-      .input-wrapper input {
-        border: none;
-        background: none;
-        width: 100%;
-        padding: 12px 0;
-        font-size: 0.9rem;
-        color: #1e293b;
-        outline: none;
-      }
-
-      .settings-footer {
-        padding: 20px 30px;
-        background: #f8fafc;
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-      }
-
-      .btn-cancel {
-        padding: 12px 20px;
-        border: none;
-        background: none;
-        color: #64748b;
-        font-weight: 600;
-        cursor: pointer;
-      }
-
-      .btn-save {
-        background: #5d5fef;
-        color: white;
-        border: none;
-        padding: 12px 25px;
-        border-radius: 12px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: 0.3s;
-      }
-
-      .btn-save:hover {
-        background: #4a4cd8;
-        transform: translateY(-2px);
-      }
-      /* ===============================
-   LOADING SPINNER
-=============================== */
-
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.hidden {
-  display: none;
-}
-
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid #eee;
-  border-top: 5px solid #4f46e5;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* ===============================
-   TOAST NOTIFICATIONS
-=============================== */
-
-.toast-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 10000;
-}
-
-.toast {
-  background: #111827;
-  color: white;
-  padding: 12px 18px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  font-size: 14px;
-  opacity: 0;
-  transform: translateX(100%);
-  transition: all 0.3s ease;
-}
-
-.toast.show {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.toast.success {
-  background: #16a34a;
-}
-
-.toast.error {
-  background: #dc2626;
-}
-  </style>
-  </head>
-  <body class="dashboard-body">
-    <aside class="dashboard-sidebar">
-      <div class="sidebar-top">
-        <div class="logo">
-          <i class="fa-solid fa-square-poll-vertical"></i> RankUp
-        </div>
-        <nav class="side-menu">
-          <a href="/dashboard/" class="side-item active"
-            ><i class="fa-solid fa-house"></i> Dashboard</a
-          >
-          <a href="/practice/" class="side-item"
-            ><i class="fa-solid fa-book-open"></i> Practice</a
-          >
-          <a href="/rankings/" class="side-item"
-          ><i class="fa-solid fa-book-open"></i>Ranking</a
-        >
-        </nav>
-      </div>
-      <div class="sidebar-bottom">
-        <a href="#" class="side-item"
-          ><i class="fa-solid fa-gear"></i>Update</a
-        >
-        <a href="/login/" class="side-item"
-          ><i class="fa-solid fa-right-from-bracket"></i> Logout</a
-        >
-      </div>
-    </aside>
-    <div class="main-wrapper">
-      <header class="main-header">
-        <div class="header-left">
-          <nav class="top-nav-links">
-            <a href="/dashboard/" class="active">Dashboard</a>
-            <a href="/practice/">Practice</a>
-            <a href="/profile">profile</a>
-          </nav>
-        </div>
-        <div class="header-right">
-          <div class="notification-wrapper">
-            <button class="notification-btn" id="notificationBtn">
-              <i class="fa-regular fa-bell"></i>
-              <span class="notification-badge">3</span>
-            </button>
-
-            <div class="notification-dropdown" id="notificationDropdown">
-              <div class="notif-header">
-                <span>Notifications</span>
-                <button class="mark-read">Mark all as read</button>
-              </div>
-              <div class="notif-body">
-                <div class="notif-item unread">
-                  <div class="notif-icon primary">
-                    <i class="fa-solid fa-trophy"></i>
-                  </div>
-                  <div class="notif-text">
-                    <p>
-                      <strong>Rank Updated!</strong> You moved up 50 spots in
-                      Biology.
-                    </p>
-                    <span>2 mins ago</span>
-                  </div>
-                </div>
-                <div class="notif-item unread">
-                  <div class="notif-icon success">
-                    <i class="fa-solid fa-circle-check"></i>
-                  </div>
-                  <div class="notif-text">
-                    <p>
-                      <strong>Practice Complete:</strong> You scored 85% in
-                      English.
-                    </p>
-                    <span>1 hour ago</span>
-                  </div>
-                </div>
-                <div class="notif-item unread">
-                  <div class="notif-icon warning">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                  </div>
-                  <div class="notif-text">
-                    <p>
-                      <strong>Daily Goal:</strong> You haven't practiced Physics
-                      today.
-                    </p>
-                    <span>5 hours ago</span>
-                  </div>
-                </div>
-              </div>
-              <div class="notif-footer">
-                <a href="#">View all notifications</a>
-              </div>
-            </div>
-          </div>
-          <img
-            src="https://i.pravatar.cc/150?u=john"
-            alt="User Avatar"
-            class="header-avatar"
-          />
-        </div>
-      </header>
-
-      <main class="dashboard-content">
-        <div class="welcome-section">
-          <h1>Welcome back, John Doe!</h1>
-          <p>Here's a quick overview of your progress and what's new.</p>
-        </div>
-
-        <div class="action-grid">
-          <div class="card action-card primary-bg">
-            <h3>Start New Test</h3>
-            <p>Begin your JAMB practice with a fresh set of questions.</p>
-            <a href="/practice/" class="btn-white">Start Now</a>
-            <i class="fa-solid fa-clock-rotate-left background-icon"></i>
-          </div>
-          <div class="card action-card">
-            <h3>Review Past Tests</h3>
-            <p>Correct mistakes and learn from your previous performances.</p>
-            <button class="btn-outline">View</button>
-            <i
-              class="fa-solid fa-clipboard-check background-icon purple-text"
-              style="color: #5d5fef; opacity: 0.1"
-            ></i>
-          </div>
-        </div>
-
-        <div class="stats-grid">
-          <div class="card stat-card">
-            <h3>Your Performance Summary</h3>
-            <div class="summary-details">
-              <div class="summary-item">
-                <span class="label">Current Rank</span>
-                <span class="value">2,342th</span>
-              </div>
-              <div class="summary-item">
-                <span class="label">Overall Progress</span>
-                <span class="value">75%</span>
-              </div>
-            </div>
-            <div class="recent-score">
-              <span class="label">Recent Score</span>
-              <span class="value">285/400</span>
-            </div>
-            <div class="progress-bar-container">
-              <div class="progress-bar" style="width: 75%"></div>
-            </div>
-            <p class="progress-note">Progress towards next rank</p>
-          </div>
-
-          <div class="card stat-card">
-            <h3><i class="fa-solid fa-chart-line"></i> Subject Performance</h3>
-            <div class="chart-placeholder">
-              <i class="fa-solid fa-chart-column"></i>
-              <p>Subject Performance Overview (Data visualization goes here)</p>
-            </div>
-          </div>
-
-          <div class="card stat-card">
-            <h3>
-              <i class="fa-solid fa-wand-magic-sparkles"></i> Weekly Practice
-              Hours
-            </h3>
-            <div class="chart-placeholder">
-              <i class="fa-solid fa-chart-area"></i>
-              <p>Weekly Practice Trends (Data visualization goes here)</p>
-            </div>
-          </div>
-
-          <div class="card stat-card">
-            <h3>Skills & Subjects Mastered</h3>
-            <ul class="skills-list">
-              <li><span>English Language</span> <span>85%</span></li>
-              <li><span>Mathematics</span> <span>78%</span></li>
-              <li><span>Physics</span> <span>60%</span></li>
-              <li><span>Chemistry</span> <span>72%</span></li>
-            </ul>
-          </div>
-
-          <div class="card stat-card">
-            <div class="card-header-flex">
-              <h3>Personal Profile</h3>
-              <button class="btn-text-icon">
-                <i class="fa-solid fa-pen"></i> Edit Profile
-              </button>
-            </div>
-            <ul class="profile-info-list">
-              <li><i class="fa-solid fa-user"></i> John Doe</li>
-              <li><i class="fa-solid fa-envelope"></i> john.doe@example.com</li>
-              <li><i class="fa-solid fa-phone"></i> +234 801 234 5678</li>
-              <li><i class="fa-solid fa-location-dot"></i> Lagos, Nigeria</li>
-            </ul>
-          </div>
-
-          <div class="card stat-card pink-bg">
-            <h3>Keep Going!</h3>
-            <blockquote class="quote-text">
-              "The only way to do great work is to love what you do. Keep
-              pushing your limits!"
-            </blockquote>
-            <cite>- Steve Jobs</cite>
-          </div>
-        </div>
-      </main>
-
-      <footer class="footer">
-        <div class="footer-grid">
-          <div class="footer-col">
-            <div class="logo" style="padding: 0; margin-bottom: 15px">
-              <i class="fa-solid fa-square-poll-vertical"></i> RankUp
-            </div>
-            <p>
-              Empowering JAMB candidates with real-time rankings and academic
-              insights to reach their dream institutions.
-            </p>
-          </div>
-
-          <div class="footer-col">
-            <h4>Platform</h4>
-            <ul>
-              <li><a href="/">Home</a></li>
-              <li><a href="/rankings/">Rankings</a></li>
-              <li><a href="/about/">About Us</a></li>
-            </ul>
-          </div>
-          <div class="footer-col">
-            <h4>Join the Conversation</h4>
-            <p style="margin-bottom: 15px">
-              Get updates and study tips directly in our community.
-            </p>
-            <a
-              href="https://chat.whatsapp.com/EdRuXNAiECzHCBJZYIb2WN"
-              class="whatsapp-link"><i class="fa-brands fa-whatsapp"></i> Join WhatsApp Community
+        .socials a:hover { color: var(--primary); }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="dashboard.html" class="logo">
+                <i class="fa-solid fa-square-poll-vertical"></i> RankUp
             </a>
-          </div>
+            <div class="nav-right">
+                <button onclick="toggleCalc()" style="background:none; border:none; cursor:pointer; font-size: 1.2rem; color: var(--text-light);">
+                    <i class="fa-solid fa-calculator"></i>
+                </button>
+                <a href="dashboard.html" style="text-decoration:none; color: var(--text-main); font-weight:600;">Dashboard</a>
+            </div>
         </div>
-        <div class="footer-bottom">
-          <p>&copy; 2024 RankUp. All rights reserved.</p>
-          <div class="socials">
-            <a href="#"><i class="fa-brands fa-twitter"></i></a>
-            <a href="#"><i class="fa-brands fa-facebook"></i></a>
-            <a href="#"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-          </div>
-        </div>
-      </footer>
+    </nav>
+
+    <div class="profile-container">
+        <aside class="profile-card">
+            <div class="avatar-wrapper">
+                <img src="/assets/DEV_GODSWILL.jpg" 
+ alt="User Avatar" class="avatar-img">
+            </div>
+            <div class="rank-badge">RANK #2,342</div>
+            <h2 style="font-size: 1.2rem; margin-bottom: 5px;">Valentinavalee Valee</h2>
+            <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px;">valentinavalee@gmail.com</p>
+            
+            <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
+            
+            <div style="text-align: left;">
+                <label>MY SUBJECTS</label>
+                <div class="subject-tags">
+                    <span class="tag">English</span>
+                    <span class="tag">Biology</span>
+                    <span class="tag">Chemistry</span>
+                    <span class="tag">Physics</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="settings-panel">
+            <h1 class="section-title"><i class="fa-solid fa-user-gear" style="color: var(--primary);"></i> Profile Settings</h1>
+            <form id="profileForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="fname">Full Name</label>
+                        <input type="text" id="fname" value="Valentinavalee Valee">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" value="valentinavalee@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" value="+234 812 345 6789">
+                    </div>
+                    <div class="form-group">
+                        <label for="uni">Target University</label>
+                        <select id="uni">
+                            <option value="unilag">University of Lagos (UNILAG)</option>
+                            <option value="ui">University of Ibadan (UI)</option>
+                            <option value="unilorin">University of Ilorin</option>
+                        </select>
+                    </div>
+                    <div class="form-group full">
+                        <label for="bio">Short Bio</label>
+                        <input type="text" id="bio" placeholder="Aspiring Medical Student | JAMB 2026 Focus">
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <h3 style="font-size: 1rem; margin-bottom: 15px;">Security</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <input type="password" placeholder="Leave blank to keep current">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" placeholder="Confirm new password">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-save">Update Profile Information</button>
+            </form>
+        </main>
     </div>
-    <div class="modal-overlay" id="settingsModal">
-      <div class="settings-card">
-        <div class="settings-header">
-          <div class="header-content">
-            <div class="avatar-edit">
-              <img src="https://i.pravatar.cc/150?u=john" alt="Avatar" />
-              <button class="change-photo">
-                <i class="fa-solid fa-camera"></i>
-              </button>
-            </div>
-            <div class="header-text">
-              <h2>Account Settings</h2>
-              <p>Update your personal information and preferences</p>
-            </div>
+
+    <!-- Calculator Modal (same as before) -->
+    <div id="calc-modal">
+        <div style="display:flex; justify-content:space-between; color:white; margin-bottom:10px; font-size: 0.8rem;">
+            <span>RankUp Calculator</span>
+            <span onclick="toggleCalc()" style="cursor:pointer;">×</span>
+        </div>
+        <input type="text" id="calc-display" style="width:100%; background:#0f172a; color:#38bdf8; border:none; padding:10px; text-align:right; margin-bottom:10px; border-radius:5px;" value="0" disabled>
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 5px;">
+            <button style="padding:10px; border-radius:5px; border:none; background:#334155; color:white;">7</button>
+            <button style="padding:10px; border-radius:5px; border:none; background:#334155; color:white;">8</button>
+            <button style="padding:10px; border-radius:5px; border:none; background:#334155; color:white;">9</button>
+            <button style="padding:10px; border-radius:5px; border:none; background:var(--primary); color:white;">/</button>
+            <!-- Add more buttons as needed -->
+        </div>
+    </div>
+
+    <!-- RankUp Footer (exact same as your other pages) -->
+    <footer class="footer">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="logo" style="padding:0; margin-bottom:20px; font-size:1.5rem; justify-content:flex-start;">
+            <i class="fa-solid fa-square-poll-vertical"></i> RankUp
           </div>
-          <button class="close-modal" id="closeSettings">&times;</button>
+          <p>
+            Empowering JAMB candidates with real-time rankings and academic insights to reach their dream institutions.
+          </p>
         </div>
 
-        <div class="settings-body">
-          <div class="input-group">
-            <label>Full Name</label>
-            <div class="input-wrapper">
-              <i class="fa-solid fa-user"></i>
-              <input type="text" id="editName" value="John Doe" />
-            </div>
-          </div>
-
-          <div class="input-group">
-            <label>Email Address</label>
-            <div class="input-wrapper">
-              <i class="fa-solid fa-envelope"></i>
-              <input type="email" id="editEmail" value="john.doe@example.com" />
-            </div>
-          </div>
-
-          <div class="input-row">
-            <div class="input-group">
-              <label>Phone Number</label>
-              <div class="input-wrapper">
-                <i class="fa-solid fa-phone"></i>
-                <input type="text" id="editPhone" value="+234 801 234 5678" />
-              </div>
-            </div>
-            <div class="input-group">
-              <label>Location</label>
-              <div class="input-wrapper">
-                <i class="fa-solid fa-location-dot"></i>
-                <input type="text" id="editLocation" value="Lagos, Nigeria" />
-              </div>
-            </div>
-          </div>
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/rankings/">Rankings</a></li>
+            <li><a href="/about/">About Us</a></li>
+          </ul>
         </div>
 
-        <div class="settings-footer">
-          <button class="btn-cancel" id="cancelBtn">Cancel</button>
-          <button class="btn-save" id="saveSettings">Save Changes</button>
+        <div class="footer-col">
+          <h4>Join the Conversation</h4>
+          <p style="margin-bottom:20px;">
+            Get updates and study tips directly in our community.
+          </p>
+          <a href="https://chat.whatsapp.com/EdRuXNAiECzHCBJZYIb2WN" class="whatsapp-link">
+            <i class="fa-brands fa-whatsapp"></i> Join WhatsApp Community
+          </a>
         </div>
       </div>
-    </div>
-    <!-- Loading Spinner -->
-<div id="loadingOverlay" class="loading-overlay hidden">
-  <div class="spinner"></div>
-</div>
 
-<!-- Toast Container -->
-<div id="toastContainer" class="toast-container"></div>
-  </body><script>
-    // ===============================
-    // GLOBAL CONFIG
-    // ===============================
-    
-    const API_URL = "http://localhost:3001";
-    const token = localStorage.getItem("token");
-    
-    // Protect dashboard
-    if (!token) {
-      window.location.href = "/login/";
-    }
-    
-    // ===============================
-    // SPINNER CONTROL
-    // ===============================
-    
-    function showLoader() {
-      document.getElementById("loadingOverlay").classList.remove("hidden");
-    }
-    
-    function hideLoader() {
-      document.getElementById("loadingOverlay").classList.add("hidden");
-    }
-    
-    // ===============================
-    // TOAST SYSTEM
-    // ===============================
-    
-    function showToast(message, type = "success") {
-      const container = document.getElementById("toastContainer");
-    
-      const toast = document.createElement("div");
-      toast.className = `toast ${type}`;
-      toast.innerText = message;
-    
-      container.appendChild(toast);
-    
-      setTimeout(() => toast.classList.add("show"), 10);
-    
-      setTimeout(() => {
-        toast.classList.remove("show");
-        setTimeout(() => toast.remove(), 300);
-      }, 3000);
-    }
-    
-    // ===============================
-    // LOAD USER
-    // ===============================
-    
-    document.addEventListener("DOMContentLoaded", loadUser);
-    
-    async function loadUser() {
-      showLoader();
-    
-      try {
-        const res = await fetch(`${API_URL}/api/users/me`, {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        });
-    
-        if (!res.ok) throw new Error("Unauthorized");
-    
-        const user = await res.json();
-    
-        // Update welcome text
-        document.querySelector(".welcome-section h1").innerText =
-          `Welcome back, ${user.fullName}!`;
-    
-        // Update profile card
-        document.querySelector(".profile-info-list").innerHTML = `
-          <li><i class="fa-solid fa-user"></i> ${user.fullName}</li>
-          <li><i class="fa-solid fa-envelope"></i> ${user.email}</li>
-          <li><i class="fa-solid fa-phone"></i> ${user.phone || "-"}</li>
-          <li><i class="fa-solid fa-location-dot"></i> ${user.location || "-"}</li>
-        `;
-    
-        // Prefill modal
-        document.getElementById("editName").value = user.fullName || "";
-        document.getElementById("editEmail").value = user.email || "";
-        document.getElementById("editPhone").value = user.phone || "";
-        document.getElementById("editLocation").value = user.location || "";
-    
-      } catch (error) {
-        localStorage.removeItem("token");
-        window.location.href = "/login/";
-      } finally {
-        hideLoader();
-      }
-    }
-    
-    // ===============================
-    // UPDATE PROFILE
-    // ===============================
-    
-    const saveSettings = document.getElementById("saveSettings");
-    
-    if (saveSettings) {
-      saveSettings.addEventListener("click", async () => {
-    
-        const updatedData = {
-          fullName: document.getElementById("editName").value,
-          phone: document.getElementById("editPhone").value,
-          location: document.getElementById("editLocation").value,
-        };
-    
-        showLoader();
-        saveSettings.disabled = true;
-    
-        try {
-          const res = await fetch(`${API_URL}/api/users/me`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + token,
-            },
-            body: JSON.stringify(updatedData),
-          });
-    
-          if (!res.ok) throw new Error("Update failed");
-    
-          const data = await res.json();
-    
-          // Update UI immediately
-          document.querySelector(".welcome-section h1").innerText =
-            `Welcome back, ${data.fullName}!`;
-    
-          document.querySelector(".profile-info-list").innerHTML = `
-            <li><i class="fa-solid fa-user"></i> ${data.fullName}</li>
-            <li><i class="fa-solid fa-envelope"></i> ${data.email}</li>
-            <li><i class="fa-solid fa-phone"></i> ${data.phone || "-"}</li>
-            <li><i class="fa-solid fa-location-dot"></i> ${data.location || "-"}</li>
-          `;
-    
-          // Button success animation
-          saveSettings.innerHTML =
-            '<i class="fa-solid fa-circle-check"></i> Saved!';
-          
-          showToast("Profile updated successfully!", "success");
-    
-          setTimeout(() => {
-            saveSettings.innerHTML = "Save Changes";
-            saveSettings.disabled = false;
-          }, 1000);
-    
-        } catch (error) {
-          showToast("Failed to update profile.", "error");
-          saveSettings.disabled = false;
-        } finally {
-          hideLoader();
+      <div class="footer-bottom">
+        <p>© 2025–2026 RankUp. All rights reserved.</p>
+        <div class="socials">
+          <a href="#"><i class="fa-brands fa-twitter"></i></a>
+          <a href="#"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+        function toggleCalc() {
+            const m = document.getElementById('calc-modal');
+            m.style.display = (m.style.display === 'block') ? 'none' : 'block';
         }
-    
-      });
-    }
-    
-    // ===============================
-    // LOGOUT
-    // ===============================
-    
-    const logoutBtn = document.querySelector(".fa-right-from-bracket");
-    
-    if (logoutBtn) {
-      logoutBtn.parentElement.addEventListener("click", () => {
-        localStorage.removeItem("token");
-        window.location.href = "/login/";
-      });
 
-      document.addEventListener("DOMContentLoaded", () => {
-  loadUser();
-  loadDashboard();
-});
-
-async function loadDashboard() {
-  try {
-    const res = await fetch(`http://127.0.0.1:3001/api/dashboard`, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
-
-    if (!res.ok) throw new Error("Failed");
-
-    const data = await res.json();
-
-    console.log("Dashboard data:", data);
-
-    // Example:
-    document.getElementById("recentScore").innerText =
-      data.recentScore || 0;
-
-  } catch (err) {
-    console.error(err);
-  }
-}
-    }
-    </script> </html>
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert("Profile successfully updated! Your changes are now live.");
+        });
+    </script>
+</body>
+</html>

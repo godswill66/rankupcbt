@@ -9,13 +9,16 @@
     <style>
         :root {
             --primary: #5d5fef;
-            --primary-light: #f1f5ff;
-            --text-main: #1e293b;
+            --primary-dark: #4338ca;
+            --primary-light: #eef2ff;
+            --accent-gold: #f59e0b;
+            --text-main: #0f172a;
             --text-light: #64748b;
             --bg: #f8fafc;
             --white: #ffffff;
             --border: #e2e8f0;
             --success: #10b981;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -65,32 +68,41 @@
 
         /* --- PROFILE LAYOUT --- */
         .profile-container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 40px auto;
             padding: 0 20px;
             display: grid;
-            grid-template-columns: 300px 1fr;
+            grid-template-columns: 320px 1fr;
             gap: 30px;
             flex: 1;
         }
 
-        /* Sidebar Card */
         .profile-card {
             background: var(--white);
-            border-radius: 20px;
-            padding: 30px;
+            border-radius: 24px;
+            padding: 40px 30px;
             text-align: center;
             border: 1px solid var(--border);
             height: fit-content;
             position: sticky;
             top: 90px;
+            box-shadow: var(--shadow);
         }
 
+        /* CLICKABLE AVATAR STYLES */
         .avatar-wrapper {
             position: relative;
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 20px;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 25px;
+            cursor: pointer;
+            border-radius: 50%;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .avatar-wrapper:hover {
+            transform: scale(1.02);
         }
 
         .avatar-img {
@@ -98,129 +110,132 @@
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
+            border: 5px solid var(--primary-light);
         }
+
+        .avatar-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .avatar-wrapper:hover .avatar-overlay {
+            opacity: 1;
+        }
+
+        #imageUpload { display: none; }
 
         .rank-badge {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
             color: white;
-            padding: 5px 15px;
+            padding: 6px 18px;
             border-radius: 50px;
             font-size: 0.8rem;
-            font-weight: 700;
-            display: inline-block;
-            margin-bottom: 10px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(93, 95, 239, 0.3);
         }
 
-        /* Main Content */
         .settings-panel {
             background: var(--white);
-            border-radius: 20px;
-            padding: 40px;
+            border-radius: 24px;
+            padding: 45px;
             border: 1px solid var(--border);
+            box-shadow: var(--shadow);
         }
 
         .section-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 30px;
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 35px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 25px;
         }
 
-        .form-group { margin-bottom: 20px; }
+        .form-group { margin-bottom: 10px; }
         .form-group.full { grid-column: span 2; }
 
         label {
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-light);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
         }
+
+        label i { color: var(--primary); width: 20px; }
 
         input, select {
             width: 100%;
-            padding: 12px 15px;
-            border-radius: 10px;
+            padding: 14px 18px;
+            border-radius: 12px;
             border: 1.5px solid var(--border);
-            font-family: inherit;
-            font-size: 0.95rem;
-            transition: 0.2s;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: #fcfdfe;
         }
 
         input:focus {
             outline: none;
             border-color: var(--primary);
-            background: var(--primary-light);
+            box-shadow: 0 0 0 4px var(--primary-light);
         }
 
         .btn-save {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
+            padding: 18px 30px;
+            border-radius: 14px;
             font-weight: 700;
             cursor: pointer;
-            margin-top: 10px;
             width: 100%;
             transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
         }
 
         .btn-save:hover { background: var(--primary-dark); transform: translateY(-2px); }
 
-        /* Subject Badges */
-        .subject-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
         .tag {
             background: var(--primary-light);
             color: var(--primary);
-            padding: 6px 14px;
-            border-radius: 8px;
+            padding: 8px 16px;
+            border-radius: 10px;
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: 700;
         }
 
-        /* --- MOBILE RESPONSIVENESS --- */
-        @media (max-width: 850px) {
-            .profile-container { grid-template-columns: 1fr; }
-            .form-grid { grid-template-columns: 1fr; }
-            .form-group.full { grid-column: span 1; }
-            .profile-card { position: static; }
-        }
-
-        /* Calculator Overlay */
-        #calc-modal {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #1e293b;
-            padding: 15px;
-            border-radius: 16px;
-            z-index: 2000;
-            width: 260px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        /* Footer (same as other pages) */
+        /* --- DASHBOARD ORIGINAL FOOTER STYLES --- */
         .footer {
             background-color: white;
             padding: 80px 5% 40px;
             border-top: 1px solid #eee;
-            margin-top: auto;
+            margin-top: 60px;
         }
 
         .footer-grid {
@@ -229,11 +244,6 @@
             gap: 60px;
             max-width: 1280px;
             margin: 0 auto 60px;
-        }
-
-        @media (max-width: 768px) {
-            .footer-grid { grid-template-columns: 1fr; text-align: center; }
-            .footer-bottom { flex-direction: column; gap: 20px; }
         }
 
         .footer-col h4 {
@@ -250,18 +260,13 @@
         }
 
         .footer-col ul { list-style: none; }
-
-        .footer-col ul li {
-            margin-bottom: 12px;
-        }
-
+        .footer-col ul li { margin-bottom: 12px; }
         .footer-col ul li a {
             font-size: 0.95rem;
             color: #666;
             text-decoration: none;
             transition: 0.25s;
         }
-
         .footer-col ul li a:hover { color: var(--primary); }
 
         .whatsapp-link {
@@ -275,12 +280,7 @@
             font-size: 0.95rem;
             font-weight: 600;
             text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .whatsapp-link:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(37,211,102,0.3);
+            transition: 0.3s;
         }
 
         .footer-bottom {
@@ -291,130 +291,172 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
             color: #999;
+            font-size: 0.9rem;
         }
 
         .socials { display: flex; gap: 24px; }
-
-        .socials a {
-            color: #999;
-            font-size: 1.4rem;
-            transition: 0.25s;
-        }
-
+        .socials a { color: #999; font-size: 1.4rem; transition: 0.25s; }
         .socials a:hover { color: var(--primary); }
+
+        @media (max-width: 900px) {
+            .profile-container { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+            .footer-bottom { flex-direction: column; gap: 20px; }
+        }
+        /* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 900px) {
+    .profile-container {
+        grid-template-columns: 1fr; /* Stack the sidebar and main form */
+        margin: 20px auto;
+        padding: 0 15px;
+        gap: 20px;
+    }
+
+    .profile-card {
+        position: relative; /* Remove sticky on mobile */
+        top: 0;
+        padding: 30px 20px;
+    }
+
+    .settings-panel {
+        padding: 30px 20px;
+        border-radius: 20px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr; /* Form inputs stack vertically */
+        gap: 15px;
+    }
+
+    .form-group.full {
+        grid-column: span 1;
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+        margin-bottom: 25px;
+    }
+
+    .avatar-wrapper {
+        width: 110px;
+        height: 110px;
+    }
+
+    /* Show camera icon by default on mobile since there is no hover */
+    .avatar-overlay {
+        opacity: 0.6;
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Footer Adjustments */
+    .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 40px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .logo {
+        justify-content: center;
+    }
+}
     </style>
 </head>
 <body>
-
     <nav class="navbar">
         <div class="nav-container">
-            <a href="dashboard.html" class="logo">
+            <a href="/dashboard" class="logo">
                 <i class="fa-solid fa-square-poll-vertical"></i> RankUp
             </a>
             <div class="nav-right">
-                <button onclick="toggleCalc()" style="background:none; border:none; cursor:pointer; font-size: 1.2rem; color: var(--text-light);">
-                    <i class="fa-solid fa-calculator"></i>
-                </button>
-                <a href="dashboard.html" style="text-decoration:none; color: var(--text-main); font-weight:600;">Dashboard</a>
+                <a href="/dashboard" style="text-decoration:none; color: var(--text-main); font-weight:700; display:flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-house-user"></i> Dashboard
+                </a>
             </div>
         </div>
     </nav>
 
     <div class="profile-container">
         <aside class="profile-card">
-            <div class="avatar-wrapper">
-                <img src="https://i.pravatar.cc/150?u=valentinavalee" alt="User Avatar" class="avatar-img">
+            <input type="file" id="imageUpload" accept="image/*">
+            <div class="avatar-wrapper" onclick="document.getElementById('imageUpload').click()">
+                <img src="/assets/DEV_GODSWILL.jpg" alt="User Avatar" class="avatar-img" id="profileDisplay">
+                <div class="avatar-overlay">
+                    <i class="fa-solid fa-camera"></i>
+                </div>
             </div>
-            <div class="rank-badge">RANK #2,342</div>
-            <h2 style="font-size: 1.2rem; margin-bottom: 5px;">Valentinavalee Valee</h2>
-            <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px;">valentinavalee@gmail.com</p>
-            
-            <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
-            
+
+            <div class="rank-badge">
+                <i class="fa-solid fa-crown" style="color: var(--accent-gold);"></i> RANK #2,342
+            </div>
+            <h2>Valentinavalee Valee</h2>
+            <p style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 25px;">
+                <i class="fa-solid fa-circle-check" style="color:var(--success);"></i> Verified Candidate
+            </p>
+            <hr style="border: 0; border-top: 2px solid var(--bg); margin: 25px 0;">
             <div style="text-align: left;">
-                <label>MY SUBJECTS</label>
-                <div class="subject-tags">
-                    <span class="tag">English</span>
-                    <span class="tag">Biology</span>
-                    <span class="tag">Chemistry</span>
-                    <span class="tag">Physics</span>
+                <label style="color:var(--primary); font-size:0.75rem;"><i class="fa-solid fa-tags"></i> Exam Combination</label>
+                <div class="subject-tags" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                    <span class="tag">Eng</span><span class="tag">Bio</span><span class="tag">Che</span><span class="tag">Phy</span>
                 </div>
             </div>
         </aside>
 
         <main class="settings-panel">
-            <h1 class="section-title"><i class="fa-solid fa-user-gear" style="color: var(--primary);"></i> Profile Settings</h1>
-            
+            <h1 class="section-title"><i class="fa-solid fa-sliders" style="color: var(--primary);"></i> Account Settings</h1>
             <form id="profileForm">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="fname">Full Name</label>
+                        <label for="fname"><i class="fa-solid fa-user-tag"></i> Real Name</label>
                         <input type="text" id="fname" value="Valentinavalee Valee">
                     </div>
                     <div class="form-group">
-                        <label for="email">Email Address</label>
+                        <label for="email"><i class="fa-solid fa-envelope"></i> Email</label>
                         <input type="email" id="email" value="valentinavalee@gmail.com">
                     </div>
                     <div class="form-group">
-                        <label for="phone">Phone Number</label>
+                        <label for="phone"><i class="fa-solid fa-mobile-retro"></i> Phone</label>
                         <input type="tel" id="phone" value="+234 812 345 6789">
                     </div>
                     <div class="form-group">
-                        <label for="uni">Target University</label>
+                        <label for="uni"><i class="fa-solid fa-building-columns"></i> Institution Choice</label>
                         <select id="uni">
                             <option value="unilag">University of Lagos (UNILAG)</option>
                             <option value="ui">University of Ibadan (UI)</option>
-                            <option value="unilorin">University of Ilorin</option>
                         </select>
                     </div>
                     <div class="form-group full">
-                        <label for="bio">Short Bio</label>
-                        <input type="text" id="bio" placeholder="Aspiring Medical Student | JAMB 2026 Focus">
+                        <label for="bio"><i class="fa-solid fa-quote-left"></i> My Aspirations</label>
+                        <input type="text" id="bio" placeholder="Ex: Future Medical Surgeon">
                     </div>
                 </div>
 
-                <div style="margin-top: 20px;">
-                    <h3 style="font-size: 1rem; margin-bottom: 15px;">Security</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>New Password</label>
-                            <input type="password" placeholder="Leave blank to keep current">
-                        </div>
-                        <div class="form-group">
-                            <label>Confirm Password</label>
-                            <input type="password" placeholder="Confirm new password">
-                        </div>
-                    </div>
+                <div class="security-header" style="margin: 30px 0 20px; font-weight:800; display:flex; align-items:center; gap:10px;">
+                    <i class="fa-solid fa-shield-halved" style="color:var(--accent-gold);"></i> Login & Security
                 </div>
 
-                <button type="submit" class="btn-save">Update Profile Information</button>
+                <div class="form-grid">
+                    <div class="form-group"><label>New Password</label><input type="password" placeholder="New Password"></div>
+                    <div class="form-group"><label>Confirm</label><input type="password" placeholder="Confirm password"></div>
+                </div>
+                
+                <button type="submit" class="btn-save">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes
+                </button>
             </form>
         </main>
     </div>
 
-    <!-- Calculator Modal (same as before) -->
-    <div id="calc-modal">
-        <div style="display:flex; justify-content:space-between; color:white; margin-bottom:10px; font-size: 0.8rem;">
-            <span>RankUp Calculator</span>
-            <span onclick="toggleCalc()" style="cursor:pointer;">×</span>
-        </div>
-        <input type="text" id="calc-display" style="width:100%; background:#0f172a; color:#38bdf8; border:none; padding:10px; text-align:right; margin-bottom:10px; border-radius:5px;" value="0" disabled>
-        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 5px;">
-            <button style="padding:10px; border-radius:5px; border:none; background:#334155; color:white;">7</button>
-            <button style="padding:10px; border-radius:5px; border:none; background:#334155; color:white;">8</button>
-            <button style="padding:10px; border-radius:5px; border:none; background:#334155; color:white;">9</button>
-            <button style="padding:10px; border-radius:5px; border:none; background:var(--primary); color:white;">/</button>
-            <!-- Add more buttons as needed -->
-        </div>
-    </div>
-
-    <!-- RankUp Footer (exact same as your other pages) -->
     <footer class="footer">
       <div class="footer-grid">
         <div class="footer-col">
-          <div class="logo" style="padding:0; margin-bottom:20px; font-size:1.5rem; justify-content:flex-start;">
+          <div class="logo" style="margin-bottom:20px; font-size:1.5rem;">
             <i class="fa-solid fa-square-poll-vertical"></i> RankUp
           </div>
           <p>
@@ -445,23 +487,33 @@
       <div class="footer-bottom">
         <p>© 2025–2026 RankUp. All rights reserved.</p>
         <div class="socials">
-          <a href="#"><i class="fa-brands fa-twitter"></i></a>
-          <a href="#"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
           <a href="#"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+          <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
         </div>
       </div>
     </footer>
 
     <script>
-        function toggleCalc() {
-            const m = document.getElementById('calc-modal');
-            m.style.display = (m.style.display === 'block') ? 'none' : 'block';
-        }
+        // IMAGE PREVIEW LOGIC
+        const imageUpload = document.getElementById('imageUpload');
+        const profileDisplay = document.getElementById('profileDisplay');
+
+        imageUpload.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileDisplay.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
 
         document.getElementById('profileForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert("Profile successfully updated! Your changes are now live.");
+            alert("✅ Profile updated successfully!");
         });
     </script>
 </body>
