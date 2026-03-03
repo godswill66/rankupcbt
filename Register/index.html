@@ -1,22 +1,38 @@
 <!doctype html>
 <html lang="en">
-  <head><meta charset="UTF-8" />
+  <head>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
     <title>RankUp CBT | The #1 JAMB Ranker & Practice Portal</title>
-    <meta name="description" content="RankUp CBT is the ultimate JAMB Ranker. Practice past questions, track your performance against thousands of students, and boost your JAMB score for free.">
-    <meta name="keywords" content="JAMB Ranker, JAMB CBT Practice, RankUp CBT, Nigeria exam preparation, UTME ranking, JAMB score tracker">
-    <meta name="author" content="RankUp CBT">
+    <meta
+      name="description"
+      content="RankUp CBT is the ultimate JAMB Ranker. Practice past questions, track your performance against thousands of students, and boost your JAMB score for free."
+    />
+    <meta
+      name="keywords"
+      content="JAMB Ranker, JAMB CBT Practice, RankUp CBT, Nigeria exam preparation, UTME ranking, JAMB score tracker"
+    />
+    <meta name="author" content="RankUp CBT" />
 
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.rankupcbt.com/">
-    <meta property="og:title" content="RankUp CBT | The Best JAMB Ranker for 2026">
-    <meta property="og:description" content="See where you stand among thousands of candidates. Use our JAMB Ranker tool to predict your admission chances.">
-    <meta property="og:image" content="/assets/logo.png">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.rankupcbt.com/" />
+    <meta
+      property="og:title"
+      content="RankUp CBT | The Best JAMB Ranker for 2026"
+    />
+    <meta
+      property="og:description"
+      content="See where you stand among thousands of candidates. Use our JAMB Ranker tool to predict your admission chances."
+    />
+    <meta property="og:image" content="/assets/logo.png" />
 
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="RankUp CBT - Official JAMB Ranker">
-    <link rel="icon" type="image/x-icon" href="/assets/logo.png">
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta
+      property="twitter:title"
+      content="RankUp CBT - Official JAMB Ranker"
+    />
+    <link rel="icon" type="image/x-icon" href="/assets/logo.png" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -102,7 +118,7 @@
         width: 20px;
         color: #5d5fef;
       }
-      .fa-brands fa-whatsapp{
+      .fa-brands fa-whatsapp {
         color: black;
         text-decoration: none;
       }
@@ -115,9 +131,13 @@
         text-decoration: none;
         font-weight: 600;
       }
-      .btn-text{
-        color:black;
-        text-decoration:none;
+      .btn-text {
+        color: black;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px; /* This creates perfect spacing between icon and text */
+        font-size: 0.85rem;
       }
       /* --- Layout --- */
       .signup-layout {
@@ -345,18 +365,17 @@
           <i class="fa-solid fa-square-poll-vertical"></i> RankUp
         </a>
         <div class="nav-auth">
-
           <a
             href="https://chat.whatsapp.com/EdRuXNAiECzHCBJZYIb2WN"
             class="btn-text"
-          >              
+          >
             <img
-              class="whatsapp-icon"
-              src="/asssts/whatsapp-icon.png"
-              alt="whatsapp icon"
+              src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+              alt="WhatsApp"
+              style="width: 20px; vertical-align: middle; margin-right: 8px"
             />
-        Join Rankup group on Whatsapp for more update
-            </a>
+            Join Rankup group on WhatsApp for updates
+          </a>
           <a href="/login/" class="btn-text-login">Login</a>
         </div>
       </div>
@@ -370,42 +389,55 @@
             Create your account to start practicing for JAMB.
           </p>
           <form id="signupForm">
-
             <div class="form-grid">
               <div class="input-group">
                 <label>First Name</label>
                 <input type="text" id="firstName" placeholder="John" required />
               </div>
-          
+
               <div class="input-group">
                 <label>Last Name</label>
                 <input type="text" id="lastName" placeholder="Doe" required />
               </div>
             </div>
-          
+
             <div class="input-group">
               <label>Email</label>
-              <input type="email" id="email" placeholder="john@example.com" required />
+              <input
+                type="email"
+                id="email"
+                placeholder="john@example.com"
+                required
+              />
             </div>
-          
+
             <div class="form-grid">
               <div class="input-group">
                 <label>Password</label>
-                <input type="password" id="password" placeholder="••••••••" required />
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="••••••••"
+                  required
+                />
               </div>
-          
+
               <div class="input-group">
                 <label>Confirm Password</label>
-                <input type="password" id="confirmPassword" placeholder="••••••••" required />
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  placeholder="••••••••"
+                  required
+                />
               </div>
             </div>
-          
+
             <button type="submit" class="btn-primary btn-block">
               Create Account
             </button>
-          
           </form>
-                  </div>
+        </div>
       </section>
 
       <aside class="signup-sidebar">
@@ -476,64 +508,72 @@
     </footer>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-      
         const form = document.getElementById("signupForm");
-      
+
         form.addEventListener("submit", async (e) => {
           e.preventDefault();
-      
+
           const firstName = document.getElementById("firstName").value.trim();
           const lastName = document.getElementById("lastName").value.trim();
           const email = document.getElementById("email").value.trim();
           const password = document.getElementById("password").value;
-          const confirmPassword = document.getElementById("confirmPassword").value;
-      
-          if (!firstName || !lastName || !email || !password || !confirmPassword) {
+          const confirmPassword =
+            document.getElementById("confirmPassword").value;
+
+          if (
+            !firstName ||
+            !lastName ||
+            !email ||
+            !password ||
+            !confirmPassword
+          ) {
             alert("Please fill all fields");
             return;
           }
-      
+
           if (password !== confirmPassword) {
             alert("Passwords do not match");
             return;
           }
-      
+
           try {
-            const response = await fetch("http://127.0.0.1:3001/api/auth/register", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
+            const response = await fetch(
+              "http://127.0.0.1:3001/api/auth/register",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  fullName: firstName + " " + lastName,
+                  email,
+                  password,
+                }),
               },
-              body: JSON.stringify({
-                fullName: firstName + " " + lastName,
-                email,
-                password,
-              }),
-            });
-      
+            );
+
             const data = await response.json();
-      
+
             if (!response.ok) {
               alert(data.message || "Registration failed");
               return;
             }
-      
+
             // Save JWT token
             if (data.token) {
               localStorage.setItem("token", data.token);
             }
-      
+
             // Redirect to dashboard
             window.location.href = "/dashboard/";
-      
           } catch (error) {
             console.error(error);
-            alert("Cannot connect to backend. Check if server is running on port 3001.");
+            alert(
+              "Cannot connect to backend. Check if server is running on port 3001.",
+            );
           }
-      
         });
-      
       });
-      </script>
-      </body>
-    </html>
+    </script>
+  </body>
+</html>

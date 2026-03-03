@@ -1,34 +1,35 @@
 <!doctype html>
 <html lang="en">
-  <head><meta charset="UTF-8" />
+  <head>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
     <title>RankUp CBT | The #1 JAMB Ranker & Practice Portal</title>
-    <meta name="description" content="RankUp CBT is the ultimate JAMB Ranker. Practice past questions, track your performance against thousands of students, and boost your JAMB score for free.">
-    <meta name="keywords" content="JAMB Ranker, JAMB CBT Practice, RankUp CBT, Nigeria exam preparation, UTME ranking, JAMB score tracker">
-    <meta name="author" content="RankUp CBT">
+    <meta name="description" content="RankUp CBT is the ultimate JAMB Ranker. Practice past questions, track your performance against thousands of students, and boost your JAMB score for free." />
+    <meta name="keywords" content="JAMB Ranker, JAMB CBT Practice, RankUp CBT, Nigeria exam preparation, UTME ranking, JAMB score tracker" />
+    <meta name="author" content="RankUp CBT" />
 
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.rankupcbt.com/">
-    <meta property="og:title" content="RankUp CBT | The Best JAMB Ranker for 2026">
-    <meta property="og:description" content="See where you stand among thousands of candidates. Use our JAMB Ranker tool to predict your admission chances.">
-    <meta property="og:image" content="/assets/logo.png">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.rankupcbt.com/" />
+    <meta property="og:title" content="RankUp CBT | The Best JAMB Ranker for 2026" />
+    <meta property="og:description" content="See where you stand among thousands of candidates. Use our JAMB Ranker tool to predict your admission chances." />
+    <meta property="og:image" content="/assets/logo.png" />
 
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="RankUp CBT - Official JAMB Ranker">
-    
-    <link rel="icon" type="image/png" href="/assets/logo.png">
+    <link rel="icon" type="image/png" href="/assets/logo.png" />
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
     <style>
-      /* Core Styling */
+      /* --- Core Styling --- */
+      :root {
+        --primary: #5d5fef;
+        --text-main: #333;
+        --text-muted: #666;
+        --bg-body: #fcfcfd;
+        --border: #e1e4e8;
+      }
+
       * {
         margin: 0;
         padding: 0;
@@ -36,9 +37,10 @@
       }
 
       body {
-        font-family: "Inter", sans-serif;
-        color: #333;
-        background-color: #f8fafc;
+        font-family: "Inter", sans-serif; /* Consistent font from Register page */
+        color: var(--text-main);
+        line-height: 1.6;
+        background-color: var(--bg-body);
         min-height: 100vh;
         display: flex;
         flex-direction: column;
@@ -50,81 +52,104 @@
         padding: 0 20px;
       }
 
-      /* Navbar */
+      /* --- Navbar --- */
       .navbar {
         background: white;
         height: 70px;
         display: flex;
         align-items: center;
         border-bottom: 1px solid #eee;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
       }
 
       .nav-content {
         display: flex;
         justify-content: space-between;
-        width: 100%;
         align-items: center;
+        width: 100%;
       }
 
       .logo {
         font-weight: 700;
-        color: #5d5fef;
-        font-size: 1.2rem;
+        color: var(--primary);
+        font-size: 1.3rem;
         display: flex;
         align-items: center;
         gap: 10px;
-      }
-      .whatsapp-icon {
-        width: 20px;
-        color: #5d5fef;
-      }
-      .btn-text {
         text-decoration: none;
-        color: #555;
-        font-size: 0.85rem;
-        font-weight: 500;
-        margin-right: 20px;
       }
 
-      /* Centered Card Layout */
+      .nav-auth {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .btn-text {
+        text-decoration: none;
+        color: #444;
+        font-size: 0.85rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-primary.btn-small {
+        padding: 8px 20px;
+        font-size: 0.85rem;
+        background-color: var(--primary);
+        border-radius: 8px;
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+      }
+
+      /* --- Login Layout --- */
       .auth-center-wrapper {
         flex: 1;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 40px 20px;
+        padding: 50px 20px;
       }
 
       .card {
         background: white;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
       }
 
       .login-card {
         width: 100%;
-        max-width: 480px;
+        max-width: 450px;
         padding: 40px;
-        text-align: center;
       }
 
       .auth-title {
-        font-size: 1.5rem;
-        margin-bottom: 8px;
-        font-weight: 700;
-      }
-      .auth-subtitle {
-        color: #64748b;
-        font-size: 0.9rem;
-        margin-bottom: 30px;
+        font-size: 2rem; /* Matched Register title size */
+        margin-bottom: 10px;
+        font-weight: 800;
+        text-align: center;
       }
 
-      /* Input Styling */
+      .auth-subtitle {
+        color: var(--text-muted);
+        margin-bottom: 30px;
+        font-size: 0.95rem;
+        text-align: center;
+      }
+
+      /* --- Form Elements --- */
       .input-group {
-        text-align: left;
         margin-bottom: 20px;
       }
+
       .input-group label {
         display: block;
         font-size: 0.85rem;
@@ -134,26 +159,30 @@
 
       .input-with-icon {
         position: relative;
-        display: flex;
-        align-items: center;
       }
 
       .input-with-icon i {
         position: absolute;
         left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
         color: #94a3b8;
       }
 
       .input-with-icon input {
         width: 100%;
         padding: 12px 15px 12px 45px;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        font-family: inherit;
+        border: 1.5px solid #eee;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
       }
 
-      /* Form Options (Checkbox & Forgot Link) */
+      .input-with-icon input:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+
       .form-options {
         display: flex;
         justify-content: space-between;
@@ -163,101 +192,73 @@
       }
 
       .forgot-link {
-        color: #5d5fef;
+        color: var(--primary);
         text-decoration: none;
-        font-weight: 500;
-      }
-
-      .checkbox-container {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        color: #64748b;
-      }
-
-      /* Buttons */
-      .btn-primary {
-        background-color: #5d5fef;
-        color: white;
-        border: none;
-        border-radius: 8px;
         font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s;
       }
 
-      .btn-small {
-        padding: 8px 18px;
-        font-size: 0.85rem;
-        text-decoration: none;
-      }
       .btn-block {
         width: 100%;
-        padding: 14px;
+        padding: 15px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
         font-size: 1rem;
+        cursor: pointer;
       }
 
-      /* Separator */
       .separator {
         text-align: center;
-        border-bottom: 1px solid #e2e8f0;
+        border-bottom: 1px solid #eee;
         line-height: 0.1em;
         margin: 30px 0;
       }
 
       .separator span {
         background: #fff;
-        padding: 0 10px;
-        color: #94a3b8;
-        font-size: 0.75rem;
-        font-weight: 600;
+        padding: 0 15px;
+        color: #999;
+        font-size: 0.8rem;
       }
 
-      /* Social Buttons */
-
       .btn-social-outline {
+        width: 100%;
+        padding: 12px;
         background: white;
-        border: 1px solid #e2e8f0;
-        padding: 10px;
-        border-radius: 8px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
-        font-size: 0.8rem;
-        font-weight: 500;
+        gap: 10px;
+        font-weight: 600;
         cursor: pointer;
-      }
-
-      .btn-social-outline img {
-        width: 16px;
-        text-align: center;
-      }
-      .btn-social-outline {
-        position: relative;
-        left: 120px;
+        font-family: inherit;
         margin-bottom: 20px;
       }
 
-      /* Responsive */
-      @media (max-width: 640px) {
-        .social-grid {
-          grid-template-columns: 1fr;
-        }
-        .login-card {
-          padding: 30px 20px;
-        }
+      .auth-footer {
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--text-muted);
       }
-      /* Enhanced Footer Styles */
-      .footer {
-        background-color: #fff;
-        padding: 60px 0 30px;
-        border-top: 1px solid #eee;
-        margin-top: 50px;
+
+      .auth-footer a {
+        color: var(--primary);
+        font-weight: 600;
         text-decoration: none;
       }
-      
+
+      /* --- Footer --- */
+      .footer {
+        background: white;
+        padding: 60px 0 30px;
+        border-top: 1px solid #eee;
+        margin-top: auto;
+      }
+
       .footer-grid {
         display: grid;
         grid-template-columns: 2fr 1fr 1.5fr;
@@ -267,15 +268,8 @@
 
       .footer-col h4 {
         margin-bottom: 20px;
-        font-size: 1rem;
         font-weight: 700;
-        color: #333;
-      }
-
-      .footer-col p {
-        font-size: 0.85rem;
-        color: #666;
-        line-height: 1.6;
+        font-size: 1rem;
       }
 
       .footer-col ul {
@@ -287,32 +281,27 @@
       }
 
       .footer-col ul li a {
-        font-size: 0.85rem;
-        color: #666;
+        text-decoration: none;
+        color: var(--text-muted);
+        font-size: 0.9rem;
         transition: color 0.3s;
       }
 
       .footer-col ul li a:hover {
-        color: #5d5fef;
+        color: var(--primary);
       }
 
-      /* WhatsApp Button */
       .whatsapp-link {
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        background-color: #25d366; /* Official WhatsApp Green */
+        background-color: #25d366;
         color: white !important;
-        padding: 10px 18px;
-        border-radius: 8px;
-        font-size: 0.85rem;
+        padding: 12px 20px;
+        border-radius: 10px;
         font-weight: 600;
-        transition: transform 0.3s ease;
-      }
-
-      .whatsapp-link:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        text-decoration: none;
+        font-size: 0.85rem;
       }
 
       .footer-bottom {
@@ -324,7 +313,7 @@
       }
 
       .footer-bottom p {
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         color: #999;
       }
 
@@ -335,124 +324,45 @@
 
       .socials a {
         color: #999;
-        font-size: 1.1rem;
-        transition: color 0.3s;
+        font-size: 1.2rem;
       }
 
-      .socials a:hover {
-        color: #5d5fef;
-      }
-
-      /* Mobile Responsive Footer */
+      /* --- Responsive --- */
       @media (max-width: 768px) {
-        .footer-grid {
-          grid-template-columns: 1fr;
-          gap: 30px;
-        }
-
-        .footer-bottom {
-          flex-direction: column;
-          gap: 20px;
-          text-align: center;
-        }
-      }
-      /* --- RESPONSIVE UPDATES --- */
-
-      /* Tablet and below */
-      @media (max-width: 768px) {
-        .nav-content {
-          flex-wrap: wrap;
-          gap: 10px;
-          justify-content: center; /* Center logo and button on small screens */
-        }
-
-        /* Hide the long WhatsApp text on mobile, keep the icon or shorten it */
-        .btn-text {
-          display: none;
-        }
-
+        .btn-text { display: none; } /* Match Register page mobile behavior */
         .footer-grid {
           grid-template-columns: 1fr;
           text-align: center;
-          gap: 30px;
-          font-weight: bolder;
         }
-
         .footer-col {
           display: flex;
           flex-direction: column;
           align-items: center;
         }
-
         .footer-bottom {
-          flex-direction: column-reverse;
-          gap: 20px;
-          text-align: center;
-        }
-      }
-
-      /* Mobile Phones */
-      @media (max-width: 480px) {
-        .auth-center-wrapper {
-          padding: 20px 15px; /* Less padding to give form more room */
-        }
-
-        .login-card {
-          padding: 30px 20px;
-          border: none; /* Optional: Remove border on mobile for a flush look */
-          box-shadow: none;
-          background: transparent; /* Makes it feel more native on mobile */
-        }
-
-        .auth-title {
-          font-size: 1.3rem;
-        }
-
-        /* Fix the Google button positioning */
-        .btn-social-outline {
-          left: 0 !important; /* Resets the 'left: 120px' in your original CSS */
-          width: 100%;
-          margin-left: 0;
-        }
-
-        .form-options {
           flex-direction: column;
-          align-items: flex-start;
-          gap: 12px;
+          gap: 20px;
         }
-
-        .whatsapp-link {
-          width: 100%;
-          justify-content: center;
-        }
-      }
-      a{
-        text-decoration: none;
+        .auth-title { font-size: 1.6rem; }
       }
     </style>
   </head>
-  <body class="bg-light login-page">
+  <body>
     <nav class="navbar">
       <div class="container nav-content">
-        <div class="logo">
+        <a href="/" class="logo">
           <i class="fa-solid fa-square-poll-vertical"></i> RankUp
-        </div>
+        </a>
         <div class="nav-auth">
-          <a
-            href="https://chat.whatsapp.com/EdRuXNAiECzHCBJZYIb2WN"
-            class="btn-text"
-          >
-            <img
-              class="whatsapp-icon"
-              src="/asssts/whatsapp-icon.png"
-              alt="whatsapp icon"
-            />
-            Join Rankup group on Whatsapp for more update</a
-          >
+          <a href="https://chat.whatsapp.com/EdRuXNAiECzHCBJZYIb2WN" class="btn-text">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width: 20px" />
+            Join Rankup group on WhatsApp for updates
+          </a>
           <a href="/Register/" class="btn-primary btn-small">Register Now</a>
         </div>
       </div>
     </nav>
+
     <main class="auth-center-wrapper">
       <div class="card login-card">
         <h1 class="auth-title">Welcome Back</h1>
@@ -463,7 +373,7 @@
             <label>Email</label>
             <div class="input-with-icon">
               <i class="fa-regular fa-envelope"></i>
-              <input type="text" id="loginEmail" placeholder="Enter your email" />
+              <input type="email" id="loginEmail" placeholder="Enter your email" required />
             </div>
           </div>
 
@@ -471,35 +381,25 @@
             <label>Password</label>
             <div class="input-with-icon">
               <i class="fa-solid fa-lock"></i>
-              <input type="password" id="loginPassword" placeholder="Enter your password" />
+              <input type="password" id="loginPassword" placeholder="Enter your password" required />
             </div>
           </div>
 
           <div class="form-options">
-            <label class="checkbox-container">
-              <input type="checkbox" />
-              <span class="checkmark"></span>
-              Remember me
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text-muted);">
+              <input type="checkbox" /> Remember me
             </label>
             <a href="#" class="forgot-link">Forgot password?</a>
           </div>
-          <p id="loginMessage" style="color: red; margin-bottom: 10px;"></p>
 
-          <button type="submit" class="btn-primary btn-block">
-            Login
-          </button>
-          
+          <button type="submit" class="btn-block">Login</button>
+
           <div class="separator"><span>OR CONTINUE WITH</span></div>
 
-          <div class="social-grid">
-            <button type="button" class="btn-social-outline">
-              <img
-                src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                alt="Google"
-              />
-              Register Now with Google
-            </button>
-          </div>
+          <button type="button" class="btn-social-outline">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width: 18px" />
+            Continue with Google
+          </button>
 
           <div class="auth-footer">
             Don't have an account? <a href="/Register/">Register Now</a>
@@ -513,10 +413,7 @@
         <div class="footer-grid">
           <div class="footer-col">
             <div class="logo" style="margin-bottom: 15px">RankUp</div>
-            <p>
-              Empowering JAMB candidates with real-time rankings and academic
-              insights.
-            </p>
+            <p>Empowering JAMB candidates with real-time rankings and academic insights.</p>
           </div>
 
           <div class="footer-col">
@@ -530,10 +427,8 @@
 
           <div class="footer-col">
             <h4>Community</h4>
-            <p style="margin-bottom: 15px; font-size: 0.85rem">
-              Get updates and study tips directly.
-            </p>
-            <a href="#" class="whatsapp-link">
+            <p style="margin-bottom: 15px; font-size: 0.85rem">Get updates and study tips directly.</p>
+            <a href="https://chat.whatsapp.com/EdRuXNAiECzHCBJZYIb2WN" class="whatsapp-link">
               <i class="fa-brands fa-whatsapp"></i> Join Community
             </a>
           </div>
@@ -549,42 +444,37 @@
         </div>
       </div>
     </footer>
+
     <script>
       const loginForm = document.getElementById("loginForm");
-      
+
       loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-      
-        const email = document.getElementById("loginEmail").value;
+
+        const email = document.getElementById("loginEmail").value.trim();
         const password = document.getElementById("loginPassword").value;
-      
+
         try {
           const response = await fetch("http://127.0.0.1:3001/api/auth/login", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
           });
-      
+
           const data = await response.json();
-      
+
           if (!response.ok) {
-            alert(data.message);
+            alert(data.message || "Login failed");
             return;
           }
-      
-          // Save token
+
           localStorage.setItem("token", data.token);
-      
-          alert("Login successful!");
           window.location.href = "/dashboard/";
         } catch (error) {
           console.error(error);
-          alert("Login failed");
+          alert("Cannot connect to server. Ensure backend is running on port 3001.");
         }
       });
-      </script>
-      
+    </script>
   </body>
 </html>

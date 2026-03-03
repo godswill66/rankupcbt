@@ -493,75 +493,270 @@
         </div>
       </div>
     </footer>
+<script>
 
-    <script>
-      // 1. Generate Question Grid
-      const grid = document.getElementById('nav-grid');
-      for (let i = 1; i <= 40; i++) {
-        const item = document.createElement('div');
-        item.className = 'grid-item';
-        if (i === 14) item.classList.add('active');
-        if (i < 10) item.classList.add('done');
-        if (i === 5) item.classList.add('flagged');
-        item.innerText = i;
-        grid.appendChild(item);
-      }
+/* ===============================
+   GLOBAL STATE
+=================================*/
+let questions = [];
+let currentQuestionIndex = 0;
+let userAnswers = [];
+let selectedSubject = "bio";
+let token = localStorage.getItem("token");
 
-      // 2. Selection Logic
-      function handleSelect(el, choice) {
-        document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
-        el.classList.add('selected');
-      }
+/* ===============================
+   1. GENERATE QUESTION GRID
+=================================*/
+const grid = document.getElementById('nav-grid');
 
-      // 3. Flagging Logic
-      function toggleFlag() {
-        const flag = document.getElementById('flag-ui');
-        flag.style.color = flag.style.color === 'rgb(245, 158, 11)' ? '#64748b' : '#f59e0b';
-      }
+function generateGrid() {
+  grid.innerHTML = "";
 
-      // 4. Timer Logic
-      let seconds = 3600;
-      const timerEl = document.getElementById('timer');
-      setInterval(() => {
-        seconds--;
-        const m = Math.floor(seconds / 60);
-        const s = seconds % 60;
-        timerEl.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-      }, 2000);
+  questions.forEach((_, index) => {
+    const item = document.createElement('div');
+    item.className = 'grid-item';
+    item.innerText = index + 1;
 
-      // 5. Calculator Logic
-      const display = document.getElementById('display');
-      function toggleCalc() {
-        const modal = document.getElementById('calc-modal');
-        modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
-      }
-      function appendToDisplay(value) {
-        if (display.value === '0') display.value = value;
-        else display.value += value;
-      }
-      function clearCalc() { display.value = '0'; }
-      function deleteLast() {
-        display.value = display.value.slice(0, -1);
-        if (display.value === '') display.value = '0';
-      }
-      function calculateResult() {
-        try {
-          display.value = eval(display.value);
-        } catch (e) {
-          display.value = 'Error';
-          setTimeout(clearCalc, 1000);
-        }
-      }
+    if (index === currentQuestionIndex) {
+      item.classList.add('active');
+    }
 
-      // 6. Submit Logic
-      async function submitTest() {
-        if (!confirm("Are you sure you want to submit?")) return;
-        alert("Exam submitted successfully! Generating your Rank...");
-      }
+    const questionId = questions[index]._id;
+    const answered = userAnswers.find(a => a.qId === questionId);
+    if (answered) item.classList.add('done');
 
-      document.getElementById('subject-dropdown').addEventListener('change', (e) => {
-        alert("Switching to " + e.target.options[e.target.selectedIndex].text);
-      });
-    </script>
+    item.onclick = () => {
+      currentQuestionIndex = index;
+      renderQuestion();
+    };
+
+    grid.appendChild(item);
+  });
+}
+
+/* ===============================
+   2. FETCH QUESTIONS
+=================================*/
+async function loadQuestions(subject) {
+  try {
+    selectedSubject = subject;
+    userAnswers = [];
+    currentQuestionIndex = 0;
+
+    const res = await fetch(`http://localhost:5000/api/questions/${subject}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+    questions = data;
+
+    generateGrid();
+    renderQuestion();
+  } catch (err) {
+    console.error(err);
+    alert("Failed to load questions");
+  }
+}
+
+/* ===============================
+   3. RENDER QUESTION
+=================================*/
+function renderQuestion() {
+  if (!questions.length) return;
+
+  const question = questions[currentQuestionIndex];
+
+  document.querySelector(".question-text").innerText =
+    question.questionText;
+
+  document.querySelector(".q-meta span").innerText =
+    `QUESTION ${currentQuestionIndex + 1} OF ${questions.length}`;
+
+  const optionsContainer = document.querySelector(".options-container");
+  optionsContainer.innerHTML = "";
+
+  question.options.forEach((opt) => {
+    const div = document.createElement("div");
+    div.className = "option";
+
+    div.innerHTML = `
+      <div class="option-tag">${opt.label}</div>
+      <span>${opt.text}</span>
+    `;
+
+    div.onclick = () => handleSelect(div, opt.label);
+    optionsContainer.appendChild(div);
+  });
+
+  restoreSelectedAnswer();
+  generateGrid();
+}
+
+/* ===============================
+   4. SELECTION LOGIC
+=================================*/
+function handleSelect(el, choice) {
+  document.querySelectorAll('.option')
+    .forEach(opt => opt.classList.remove('selected'));
+
+  el.classList.add('selected');
+
+  const questionId = questions[currentQuestionIndex]._id;
+  const existing = userAnswers.find(a => a.qId === questionId);
+
+  if (existing) {
+    existing.choice = choice;
+  } else {
+    userAnswers.push({
+      qId: questionId,
+      choice: choice
+    });
+  }
+
+  generateGrid();
+}
+
+/* ===============================
+   RESTORE SELECTED OPTION
+=================================*/
+function restoreSelectedAnswer() {
+  const questionId = questions[currentQuestionIndex]._id;
+  const existing = userAnswers.find(a => a.qId === questionId);
+
+  if (!existing) return;
+
+  document.querySelectorAll('.option').forEach(opt => {
+    const label = opt.querySelector(".option-tag").innerText;
+    if (label === existing.choice) {
+      opt.classList.add('selected');
+    }
+  });
+}
+
+/* ===============================
+   5. FLAGGING LOGIC (UNCHANGED)
+=================================*/
+function toggleFlag() {
+  const flag = document.getElementById('flag-ui');
+  flag.style.color =
+    flag.style.color === 'rgb(245, 158, 11)'
+      ? '#64748b'
+      : '#f59e0b';
+}
+
+/* ===============================
+   6. NEXT / PREVIOUS
+=================================*/
+document.querySelector(".btn-next").onclick = () => {
+  if (currentQuestionIndex < questions.length - 1) {
+    currentQuestionIndex++;
+    renderQuestion();
+  }
+};
+
+document.querySelector(".btn-prev").onclick = () => {
+  if (currentQuestionIndex > 0) {
+    currentQuestionIndex--;
+    renderQuestion();
+  }
+};
+
+/* ===============================
+   7. TIMER LOGIC (FIXED SPEED)
+=================================*/
+let seconds = 3600;
+const timerEl = document.getElementById('timer');
+
+const timerInterval = setInterval(() => {
+  seconds--;
+
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+
+  timerEl.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+
+  if (seconds <= 0) {
+    clearInterval(timerInterval);
+    submitTest();
+  }
+}, 1000);
+
+/* ===============================
+   8. CALCULATOR (UNCHANGED)
+=================================*/
+const display = document.getElementById('display');
+
+function toggleCalc() {
+  const modal = document.getElementById('calc-modal');
+  modal.style.display =
+    modal.style.display === 'block' ? 'none' : 'block';
+}
+
+function appendToDisplay(value) {
+  if (display.value === '0') display.value = value;
+  else display.value += value;
+}
+
+function clearCalc() { display.value = '0'; }
+
+function deleteLast() {
+  display.value = display.value.slice(0, -1);
+  if (display.value === '') display.value = '0';
+}
+
+function calculateResult() {
+  try {
+    display.value = eval(display.value);
+  } catch (e) {
+    display.value = 'Error';
+    setTimeout(clearCalc, 1000);
+  }
+}
+
+/* ===============================
+   9. SUBMIT EXAM
+=================================*/
+async function submitTest() {
+  if (!confirm("Are you sure you want to submit?")) return;
+
+  try {
+    const res = await fetch("http://localhost:5000/api/exam/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        subject: selectedSubject,
+        userAnswers: userAnswers
+      })
+    });
+
+    const data = await res.json();
+
+    alert(`Score: ${data.score} / ${data.total}`);
+
+  } catch (err) {
+    console.error(err);
+    alert("Submission failed");
+  }
+}
+
+/* ===============================
+   10. SUBJECT SWITCH
+=================================*/
+document.getElementById('subject-dropdown')
+  .addEventListener('change', (e) => {
+    loadQuestions(e.target.value);
+  });
+
+/* ===============================
+   INITIAL LOAD
+=================================*/
+loadQuestions("bio");
+
+</script>
   </body>
 </html>
