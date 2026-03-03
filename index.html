@@ -430,6 +430,63 @@
       .nav-container { justify-content: center; }
       .footer-bottom { flex-direction: column; gap: 20px; text-align: center; }
     }
+    /* --- Mobile Quick Access (Phone Screen Only) --- */
+.mobile-auth-grid {
+  display: none; /* Hidden on desktop */
+  padding: 100px 5% 20px; /* Space for fixed navbar */
+  background: linear-gradient(135deg, #f0f4ff 0%, #e0e3ff 100%);
+  gap: 15px;
+}
+
+@media (max-width: 768px) {
+  .mobile-auth-grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .m-auth-card {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-radius: 18px;
+    text-decoration: none;
+    transition: transform 0.2s;
+    border: 1px solid rgba(255,255,255,0.4);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  }
+
+  .m-auth-card:active { transform: scale(0.97); }
+
+  .m-auth-card.m-register {
+    background: var(--primary);
+    color: white;
+  }
+
+  .m-auth-card.m-login {
+    background: white;
+    color: var(--text);
+  }
+
+  .m-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    margin-right: 15px;
+  }
+
+  .m-register .m-icon { background: rgba(255,255,255,0.2); }
+  .m-login .m-icon { background: rgba(93,95,239,0.1); color: var(--primary); }
+
+  .m-info h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 2px; }
+  .m-info p { font-size: 0.85rem; opacity: 0.8; }
+
+  /* Adjust Hero for mobile so it doesn't double-pad */
+  .hero { padding-top: 20px !important; min-height: auto !important; }
+}
   </style>
 </head>
 <body>
@@ -445,7 +502,25 @@
       </div>
     </div>
   </nav>
+<div class="mobile-auth-grid">
+  <a href="/register/" class="m-auth-card m-register">
+    <div class="m-icon"><i class="fas fa-user-plus"></i></div>
+    <div class="m-info">
+      <h3>Create Free Account</h3>
+      <p>Join 15,000+ students ranking up</p>
+    </div>
+    <i class="fas fa-chevron-right" style="margin-left: auto; opacity: 0.5;"></i>
+  </a>
 
+  <a href="/login/" class="m-auth-card m-login">
+    <div class="m-icon"><i class="fas fa-sign-in-alt"></i></div>
+    <div class="m-info">
+      <h3>Member Login</h3>
+      <p>Access your dashboard & scores</p>
+    </div>
+    <i class="fas fa-chevron-right" style="margin-left: auto; color: #cbd5e1;"></i>
+  </a>
+</div>
   <section class="hero">
     <div class="hero-container">
 
