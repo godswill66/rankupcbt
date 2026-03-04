@@ -1,25 +1,47 @@
 <!doctype html>
 <html lang="en">
-  <head><meta charset="UTF-8" />
+  <head>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
     <title>RankUp CBT | The #1 JAMB Ranker & Practice Portal</title>
-    <meta name="description" content="RankUp CBT is the ultimate JAMB Ranker. Practice past questions, track your performance against thousands of students, and boost your JAMB score for free.">
-    <meta name="keywords" content="JAMB Ranker, JAMB CBT Practice, RankUp CBT, Nigeria exam preparation, UTME ranking, JAMB score tracker">
-    <meta name="author" content="RankUp CBT">
+    <meta
+      name="description"
+      content="RankUp CBT is the ultimate JAMB Ranker. Practice past questions, track your performance against thousands of students, and boost your JAMB score for free."
+    />
+    <meta
+      name="keywords"
+      content="JAMB Ranker, JAMB CBT Practice, RankUp CBT, Nigeria exam preparation, UTME ranking, JAMB score tracker"
+    />
+    <meta name="author" content="RankUp CBT" />
 
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.rankupcbt.com/">
-    <meta property="og:title" content="RankUp CBT | The Best JAMB Ranker for 2026">
-    <meta property="og:description" content="See where you stand among thousands of candidates. Use our JAMB Ranker tool to predict your admission chances.">
-    <meta property="og:image" content="/assets/logo.png">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.rankupcbt.com/" />
+    <meta
+      property="og:title"
+      content="RankUp CBT | The Best JAMB Ranker for 2026"
+    />
+    <meta
+      property="og:description"
+      content="See where you stand among thousands of candidates. Use our JAMB Ranker tool to predict your admission chances."
+    />
+    <meta property="og:image" content="/assets/logo.png" />
 
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="RankUp CBT - Official JAMB Ranker">
-    
-    <link rel="icon" type="image/png" href="/assets/logo.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta
+      property="twitter:title"
+      content="RankUp CBT - Official JAMB Ranker"
+    />
+
+    <link rel="icon" type="image/png" href="/assets/logo.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         --primary: #5d5fef;
@@ -34,7 +56,11 @@
         --border: #e2e8f0;
       }
 
-      * { margin: 0; padding: 0; box-sizing: border-box; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
       body {
         font-family: "Inter", sans-serif;
         background-color: var(--bg-body);
@@ -53,15 +79,17 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         position: sticky;
         top: 0;
         z-index: 100;
+        gap: 15px; /* Adds breathing room between items */
       }
 
       .subject-switcher {
-        background: rgba(255,255,255,0.15);
-        border: 1px solid rgba(255,255,255,0.2);
+        flex-shrink: 0; /* Prevents the dropdown from squishing */
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         padding: 6px 12px;
         border-radius: 8px;
         display: flex;
@@ -69,16 +97,12 @@
         gap: 10px;
       }
 
-      .subject-select {
-        background: transparent;
-        border: none;
-        color: white;
-        font-weight: 600;
-        font-size: 0.95rem;
-        outline: none;
-        cursor: pointer;
+      /* Center the timer and prevent it from hitting the ID */
+      .timer-container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
       }
-      .subject-select option { color: black; }
 
       .timer-pill {
         background: white;
@@ -91,8 +115,16 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        white-space: nowrap;
       }
 
+      .user-id-badge {
+        flex-shrink: 0;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-align: right;
+        min-width: 120px; /* Ensures space for the ID string */
+      }
       /* --- MAIN LAYOUT --- */
       .exam-layout {
         display: grid;
@@ -113,7 +145,7 @@
         background: var(--surface);
         padding: 35px;
         border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
       }
 
       .q-meta {
@@ -149,8 +181,14 @@
         cursor: pointer;
         transition: 0.2s ease;
       }
-      .option:hover { border-color: var(--primary); background: #f8faff; }
-      .option.selected { border-color: var(--primary); background: #f1f5ff; }
+      .option:hover {
+        border-color: var(--primary);
+        background: #f8faff;
+      }
+      .option.selected {
+        border-color: var(--primary);
+        background: #f1f5ff;
+      }
 
       .option-tag {
         width: 32px;
@@ -164,7 +202,10 @@
         font-weight: 700;
         font-size: 0.9rem;
       }
-      .option.selected .option-tag { background: var(--primary); color: white; }
+      .option.selected .option-tag {
+        background: var(--primary);
+        color: white;
+      }
 
       /* Sidebar */
       .sidebar {
@@ -178,11 +219,11 @@
         height: calc(100vh - 140px);
       }
 
-      .sidebar-label { 
-        font-size: 0.75rem; 
-        text-transform: uppercase; 
-        font-weight: 700; 
-        color: var(--secondary); 
+      .sidebar-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--secondary);
         margin-bottom: 15px;
         display: block;
       }
@@ -204,9 +245,20 @@
         font-weight: 600;
         cursor: pointer;
       }
-      .grid-item.active { border: 2px solid var(--primary); color: var(--primary); }
-      .grid-item.done { background: var(--primary); color: white; border: none; }
-      .grid-item.flagged { background: var(--warning); color: white; border: none; }
+      .grid-item.active {
+        border: 2px solid var(--primary);
+        color: var(--primary);
+      }
+      .grid-item.done {
+        background: var(--primary);
+        color: white;
+        border: none;
+      }
+      .grid-item.flagged {
+        background: var(--warning);
+        color: white;
+        border: none;
+      }
 
       /* --- FOOTER (Exam Controls) --- */
       .exam-footer {
@@ -233,10 +285,23 @@
         gap: 8px;
         transition: 0.2s;
       }
-      .btn-prev { background: #f1f5f9; color: var(--secondary); }
-      .btn-next { background: var(--primary); color: white; }
-      .btn-submit { background: var(--success); color: white; }
-      .btn-calc-icon { background: #334155; color: white; padding: 12px 15px; }
+      .btn-prev {
+        background: #f1f5f9;
+        color: var(--secondary);
+      }
+      .btn-next {
+        background: var(--primary);
+        color: white;
+      }
+      .btn-submit {
+        background: var(--success);
+        color: white;
+      }
+      .btn-calc-icon {
+        background: #334155;
+        color: white;
+        padding: 12px 15px;
+      }
 
       /* --- CALCULATOR POPUP --- */
       #calc-modal {
@@ -248,7 +313,7 @@
         background: #1e293b;
         padding: 15px;
         border-radius: 16px;
-        box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
         z-index: 2000;
         width: 280px;
       }
@@ -282,10 +347,19 @@
         cursor: pointer;
         transition: 0.1s;
       }
-      .calc-btn:hover { background: #475569; }
-      .calc-btn.op { background: var(--primary); }
-      .calc-btn.eq { background: var(--success); grid-column: span 2; }
-      .calc-btn.clr { background: var(--danger); }
+      .calc-btn:hover {
+        background: #475569;
+      }
+      .calc-btn.op {
+        background: var(--primary);
+      }
+      .calc-btn.eq {
+        background: var(--success);
+        grid-column: span 2;
+      }
+      .calc-btn.clr {
+        background: var(--danger);
+      }
 
       /* --- MAIN FOOTER --- */
       .footer {
@@ -301,12 +375,32 @@
         max-width: 1280px;
         margin: 0 auto 60px;
       }
-      .footer-col h4 { margin-bottom: 24px; font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
-      .footer-col p { font-size: 0.95rem; color: #666; line-height: 1.7; }
-      .footer-col ul { list-style: none; }
-      .footer-col ul li { margin-bottom: 12px; }
-      .footer-col ul li a { font-size: 0.95rem; color: #666; text-decoration: none; transition: 0.25s; }
-      .footer-col ul li a:hover { color: var(--primary); }
+      .footer-col h4 {
+        margin-bottom: 24px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-main);
+      }
+      .footer-col p {
+        font-size: 0.95rem;
+        color: #666;
+        line-height: 1.7;
+      }
+      .footer-col ul {
+        list-style: none;
+      }
+      .footer-col ul li {
+        margin-bottom: 12px;
+      }
+      .footer-col ul li a {
+        font-size: 0.95rem;
+        color: #666;
+        text-decoration: none;
+        transition: 0.25s;
+      }
+      .footer-col ul li a:hover {
+        color: var(--primary);
+      }
       .whatsapp-link {
         display: inline-flex;
         align-items: center;
@@ -331,19 +425,34 @@
         font-size: 0.9rem;
         color: #999;
       }
-      .socials { display: flex; gap: 24px; }
-      .socials a { color: #999; font-size: 1.4rem; transition: 0.25s; }
-      .socials a:hover { color: var(--primary); }
+      .socials {
+        display: flex;
+        gap: 24px;
+      }
+      .socials a {
+        color: #999;
+        font-size: 1.4rem;
+        transition: 0.25s;
+      }
+      .socials a:hover {
+        color: var(--primary);
+      }
 
       @media (max-width: 900px) {
-        .exam-layout { grid-template-columns: 1fr; }
-        .sidebar { display: none; }
-        .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+        .exam-layout {
+          grid-template-columns: 1fr;
+        }
+        .sidebar {
+          display: none;
+        }
+        .footer-grid {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
       }
     </style>
   </head>
   <body>
-
     <header class="exam-header">
       <div class="subject-switcher">
         <i class="fa-solid fa-layer-group"></i>
@@ -356,28 +465,39 @@
         </select>
       </div>
 
-      <div class="timer-pill">
-        <i class="fa-regular fa-clock"></i>
-        <span id="timer">59:59</span>
+      <div class="timer-container">
+        <div class="timer-pill">
+          <i class="fa-regular fa-clock"></i>
+          <span id="timer">59:59</span>
+        </div>
       </div>
 
-      <div style="font-size: 0.9rem; font-weight: 600;">
-        ID: <span style="opacity: 0.8;">RankUp-8821</span>
+      <div class="user-id-badge">
+        ID: <span style="opacity: 0.8">RankUp-8821</span>
       </div>
     </header>
-
     <div class="exam-layout">
       <main class="question-area">
         <div class="question-card">
           <div class="q-meta">
             <span>QUESTION 14 OF 40</span>
-            <button onclick="toggleFlag()" id="flag-ui" style="background:none; border:none; color:var(--secondary); cursor:pointer;">
+            <button
+              onclick="toggleFlag()"
+              id="flag-ui"
+              style="
+                background: none;
+                border: none;
+                color: var(--secondary);
+                cursor: pointer;
+              "
+            >
               <i class="fa-solid fa-flag"></i> FLAG FOR REVIEW
             </button>
           </div>
 
           <h2 class="question-text">
-            Which of the following cell organelles is responsible for the synthesis of proteins in a cell?
+            Which of the following cell organelles is responsible for the
+            synthesis of proteins in a cell?
           </h2>
 
           <div class="options-container">
@@ -410,44 +530,67 @@
     </div>
 
     <footer class="exam-footer">
-      <button class="btn btn-prev"><i class="fa-solid fa-arrow-left"></i> Previous</button>
-      
-      <div style="display: flex; gap: 12px; align-items: center;">
-        <button class="btn btn-calc-icon" onclick="toggleCalc()" title="Open Calculator">
+      <button class="btn btn-prev">
+        <i class="fa-solid fa-arrow-left"></i> Previous
+      </button>
+
+      <div style="display: flex; gap: 12px; align-items: center">
+        <button
+          class="btn btn-calc-icon"
+          onclick="toggleCalc()"
+          title="Open Calculator"
+        >
           <i class="fa-solid fa-calculator"></i>
         </button>
-        <button class="btn btn-next">Next Question <i class="fa-solid fa-arrow-right"></i></button>
-        <button class="btn btn-submit" onclick="submitTest()">Submit Examination</button>
+        <button class="btn btn-next">
+          Next Question <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <button class="btn btn-submit" onclick="submitTest()">
+          Submit Examination
+        </button>
       </div>
     </footer>
 
     <div id="calc-modal">
-      <div style="display:flex; justify-content:space-between; color:white; margin-bottom:10px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          color: white;
+          margin-bottom: 10px;
+          font-weight: 700;
+          font-size: 0.8rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        "
+      >
         <span>RankUp Calc</span>
-        <span onclick="toggleCalc()" style="cursor:pointer; font-size: 1.2rem;">&times;</span>
+        <span onclick="toggleCalc()" style="cursor: pointer; font-size: 1.2rem"
+          >&times;</span
+        >
       </div>
-      <input type="text" class="calc-display" id="display" value="0" disabled>
+      <input type="text" class="calc-display" id="display" value="0" disabled />
       <div class="calc-grid">
         <button class="calc-btn clr" onclick="clearCalc()">C</button>
         <button class="calc-btn op" onclick="appendToDisplay('/')">/</button>
         <button class="calc-btn op" onclick="appendToDisplay('*')">×</button>
         <button class="calc-btn op" onclick="deleteLast()">DEL</button>
-        
+
         <button class="calc-btn" onclick="appendToDisplay('7')">7</button>
         <button class="calc-btn" onclick="appendToDisplay('8')">8</button>
         <button class="calc-btn" onclick="appendToDisplay('9')">9</button>
         <button class="calc-btn op" onclick="appendToDisplay('-')">-</button>
-        
+
         <button class="calc-btn" onclick="appendToDisplay('4')">4</button>
         <button class="calc-btn" onclick="appendToDisplay('5')">5</button>
         <button class="calc-btn" onclick="appendToDisplay('6')">6</button>
         <button class="calc-btn op" onclick="appendToDisplay('+')">+</button>
-        
+
         <button class="calc-btn" onclick="appendToDisplay('1')">1</button>
         <button class="calc-btn" onclick="appendToDisplay('2')">2</button>
         <button class="calc-btn" onclick="appendToDisplay('3')">3</button>
         <button class="calc-btn" onclick="appendToDisplay('.')">.</button>
-        
+
         <button class="calc-btn" onclick="appendToDisplay('0')">0</button>
         <button class="calc-btn" onclick="appendToDisplay('00')">00</button>
         <button class="calc-btn eq" onclick="calculateResult()">=</button>
@@ -457,11 +600,19 @@
     <footer class="footer">
       <div class="footer-grid">
         <div class="footer-col">
-          <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 20px;">
+          <div
+            style="
+              font-size: 1.5rem;
+              font-weight: 800;
+              color: var(--primary);
+              margin-bottom: 20px;
+            "
+          >
             <i class="fa-solid fa-square-poll-vertical"></i> RankUp
           </div>
           <p>
-            Empowering JAMB candidates with real-time rankings and academic insights to reach their dream institutions.
+            Empowering JAMB candidates with real-time rankings and academic
+            insights to reach their dream institutions.
           </p>
         </div>
 
@@ -476,8 +627,13 @@
 
         <div class="footer-col">
           <h4>Join the Conversation</h4>
-          <p style="margin-bottom:20px;">Get updates and study tips directly in our community.</p>
-          <a href="https://chat.whatsapp.com/EdRuXNAiECzHCBJZYIb2WN" class="whatsapp-link">
+          <p style="margin-bottom: 20px">
+            Get updates and study tips directly in our community.
+          </p>
+          <a
+            href="https://chat.whatsapp.com/EdRuXNAiECzHCBJZYIb2WN"
+            class="whatsapp-link"
+          >
             <i class="fa-brands fa-whatsapp"></i> Join WhatsApp Community
           </a>
         </div>
@@ -493,270 +649,272 @@
         </div>
       </div>
     </footer>
-<script>
-
-/* ===============================
+    <script>
+      /* ===============================
    GLOBAL STATE
 =================================*/
-let questions = [];
-let currentQuestionIndex = 0;
-let userAnswers = [];
-let selectedSubject = "bio";
-let token = localStorage.getItem("token");
+      let questions = [];
+      let currentQuestionIndex = 0;
+      let userAnswers = [];
+      let selectedSubject = "bio";
+      let token = localStorage.getItem("token");
 
-/* ===============================
+      /* ===============================
    1. GENERATE QUESTION GRID
 =================================*/
-const grid = document.getElementById('nav-grid');
+      const grid = document.getElementById("nav-grid");
 
-function generateGrid() {
-  grid.innerHTML = "";
+      function generateGrid() {
+        grid.innerHTML = "";
 
-  questions.forEach((_, index) => {
-    const item = document.createElement('div');
-    item.className = 'grid-item';
-    item.innerText = index + 1;
+        questions.forEach((_, index) => {
+          const item = document.createElement("div");
+          item.className = "grid-item";
+          item.innerText = index + 1;
 
-    if (index === currentQuestionIndex) {
-      item.classList.add('active');
-    }
+          if (index === currentQuestionIndex) {
+            item.classList.add("active");
+          }
 
-    const questionId = questions[index]._id;
-    const answered = userAnswers.find(a => a.qId === questionId);
-    if (answered) item.classList.add('done');
+          const questionId = questions[index]._id;
+          const answered = userAnswers.find((a) => a.qId === questionId);
+          if (answered) item.classList.add("done");
 
-    item.onclick = () => {
-      currentQuestionIndex = index;
-      renderQuestion();
-    };
+          item.onclick = () => {
+            currentQuestionIndex = index;
+            renderQuestion();
+          };
 
-    grid.appendChild(item);
-  });
-}
+          grid.appendChild(item);
+        });
+      }
 
-/* ===============================
+      /* ===============================
    2. FETCH QUESTIONS
 =================================*/
-async function loadQuestions(subject) {
-  try {
-    selectedSubject = subject;
-    userAnswers = [];
-    currentQuestionIndex = 0;
+      async function loadQuestions(subject) {
+        try {
+          selectedSubject = subject;
+          userAnswers = [];
+          currentQuestionIndex = 0;
 
-    const res = await fetch(`http://localhost:5000/api/questions/${subject}`, {
-      headers: {
-        Authorization: `Bearer ${token}`
+          const res = await fetch(
+            `http://localhost:5000/api/questions/${subject}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          );
+
+          const data = await res.json();
+          questions = data;
+
+          generateGrid();
+          renderQuestion();
+        } catch (err) {
+          console.error(err);
+          alert("Failed to load questions");
+        }
       }
-    });
 
-    const data = await res.json();
-    questions = data;
-
-    generateGrid();
-    renderQuestion();
-  } catch (err) {
-    console.error(err);
-    alert("Failed to load questions");
-  }
-}
-
-/* ===============================
+      /* ===============================
    3. RENDER QUESTION
 =================================*/
-function renderQuestion() {
-  if (!questions.length) return;
+      function renderQuestion() {
+        if (!questions.length) return;
 
-  const question = questions[currentQuestionIndex];
+        const question = questions[currentQuestionIndex];
 
-  document.querySelector(".question-text").innerText =
-    question.questionText;
+        document.querySelector(".question-text").innerText =
+          question.questionText;
 
-  document.querySelector(".q-meta span").innerText =
-    `QUESTION ${currentQuestionIndex + 1} OF ${questions.length}`;
+        document.querySelector(".q-meta span").innerText =
+          `QUESTION ${currentQuestionIndex + 1} OF ${questions.length}`;
 
-  const optionsContainer = document.querySelector(".options-container");
-  optionsContainer.innerHTML = "";
+        const optionsContainer = document.querySelector(".options-container");
+        optionsContainer.innerHTML = "";
 
-  question.options.forEach((opt) => {
-    const div = document.createElement("div");
-    div.className = "option";
+        question.options.forEach((opt) => {
+          const div = document.createElement("div");
+          div.className = "option";
 
-    div.innerHTML = `
+          div.innerHTML = `
       <div class="option-tag">${opt.label}</div>
       <span>${opt.text}</span>
     `;
 
-    div.onclick = () => handleSelect(div, opt.label);
-    optionsContainer.appendChild(div);
-  });
+          div.onclick = () => handleSelect(div, opt.label);
+          optionsContainer.appendChild(div);
+        });
 
-  restoreSelectedAnswer();
-  generateGrid();
-}
+        restoreSelectedAnswer();
+        generateGrid();
+      }
 
-/* ===============================
+      /* ===============================
    4. SELECTION LOGIC
 =================================*/
-function handleSelect(el, choice) {
-  document.querySelectorAll('.option')
-    .forEach(opt => opt.classList.remove('selected'));
+      function handleSelect(el, choice) {
+        document
+          .querySelectorAll(".option")
+          .forEach((opt) => opt.classList.remove("selected"));
 
-  el.classList.add('selected');
+        el.classList.add("selected");
 
-  const questionId = questions[currentQuestionIndex]._id;
-  const existing = userAnswers.find(a => a.qId === questionId);
+        const questionId = questions[currentQuestionIndex]._id;
+        const existing = userAnswers.find((a) => a.qId === questionId);
 
-  if (existing) {
-    existing.choice = choice;
-  } else {
-    userAnswers.push({
-      qId: questionId,
-      choice: choice
-    });
-  }
+        if (existing) {
+          existing.choice = choice;
+        } else {
+          userAnswers.push({
+            qId: questionId,
+            choice: choice,
+          });
+        }
 
-  generateGrid();
-}
+        generateGrid();
+      }
 
-/* ===============================
+      /* ===============================
    RESTORE SELECTED OPTION
 =================================*/
-function restoreSelectedAnswer() {
-  const questionId = questions[currentQuestionIndex]._id;
-  const existing = userAnswers.find(a => a.qId === questionId);
+      function restoreSelectedAnswer() {
+        const questionId = questions[currentQuestionIndex]._id;
+        const existing = userAnswers.find((a) => a.qId === questionId);
 
-  if (!existing) return;
+        if (!existing) return;
 
-  document.querySelectorAll('.option').forEach(opt => {
-    const label = opt.querySelector(".option-tag").innerText;
-    if (label === existing.choice) {
-      opt.classList.add('selected');
-    }
-  });
-}
+        document.querySelectorAll(".option").forEach((opt) => {
+          const label = opt.querySelector(".option-tag").innerText;
+          if (label === existing.choice) {
+            opt.classList.add("selected");
+          }
+        });
+      }
 
-/* ===============================
+      /* ===============================
    5. FLAGGING LOGIC (UNCHANGED)
 =================================*/
-function toggleFlag() {
-  const flag = document.getElementById('flag-ui');
-  flag.style.color =
-    flag.style.color === 'rgb(245, 158, 11)'
-      ? '#64748b'
-      : '#f59e0b';
-}
+      function toggleFlag() {
+        const flag = document.getElementById("flag-ui");
+        flag.style.color =
+          flag.style.color === "rgb(245, 158, 11)" ? "#64748b" : "#f59e0b";
+      }
 
-/* ===============================
+      /* ===============================
    6. NEXT / PREVIOUS
 =================================*/
-document.querySelector(".btn-next").onclick = () => {
-  if (currentQuestionIndex < questions.length - 1) {
-    currentQuestionIndex++;
-    renderQuestion();
-  }
-};
+      document.querySelector(".btn-next").onclick = () => {
+        if (currentQuestionIndex < questions.length - 1) {
+          currentQuestionIndex++;
+          renderQuestion();
+        }
+      };
 
-document.querySelector(".btn-prev").onclick = () => {
-  if (currentQuestionIndex > 0) {
-    currentQuestionIndex--;
-    renderQuestion();
-  }
-};
+      document.querySelector(".btn-prev").onclick = () => {
+        if (currentQuestionIndex > 0) {
+          currentQuestionIndex--;
+          renderQuestion();
+        }
+      };
 
-/* ===============================
+      /* ===============================
    7. TIMER LOGIC (FIXED SPEED)
 =================================*/
-let seconds = 3600;
-const timerEl = document.getElementById('timer');
+      let seconds = 3600;
+      const timerEl = document.getElementById("timer");
 
-const timerInterval = setInterval(() => {
-  seconds--;
+      const timerInterval = setInterval(() => {
+        seconds--;
 
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
+        const m = Math.floor(seconds / 60);
+        const s = seconds % 60;
 
-  timerEl.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+        timerEl.innerText = `${m}:${s < 10 ? "0" : ""}${s}`;
 
-  if (seconds <= 0) {
-    clearInterval(timerInterval);
-    submitTest();
-  }
-}, 1000);
+        if (seconds <= 0) {
+          clearInterval(timerInterval);
+          submitTest();
+        }
+      }, 1000);
 
-/* ===============================
+      /* ===============================
    8. CALCULATOR (UNCHANGED)
 =================================*/
-const display = document.getElementById('display');
+      const display = document.getElementById("display");
 
-function toggleCalc() {
-  const modal = document.getElementById('calc-modal');
-  modal.style.display =
-    modal.style.display === 'block' ? 'none' : 'block';
-}
+      function toggleCalc() {
+        const modal = document.getElementById("calc-modal");
+        modal.style.display =
+          modal.style.display === "block" ? "none" : "block";
+      }
 
-function appendToDisplay(value) {
-  if (display.value === '0') display.value = value;
-  else display.value += value;
-}
+      function appendToDisplay(value) {
+        if (display.value === "0") display.value = value;
+        else display.value += value;
+      }
 
-function clearCalc() { display.value = '0'; }
+      function clearCalc() {
+        display.value = "0";
+      }
 
-function deleteLast() {
-  display.value = display.value.slice(0, -1);
-  if (display.value === '') display.value = '0';
-}
+      function deleteLast() {
+        display.value = display.value.slice(0, -1);
+        if (display.value === "") display.value = "0";
+      }
 
-function calculateResult() {
-  try {
-    display.value = eval(display.value);
-  } catch (e) {
-    display.value = 'Error';
-    setTimeout(clearCalc, 1000);
-  }
-}
+      function calculateResult() {
+        try {
+          display.value = eval(display.value);
+        } catch (e) {
+          display.value = "Error";
+          setTimeout(clearCalc, 1000);
+        }
+      }
 
-/* ===============================
+      /* ===============================
    9. SUBMIT EXAM
 =================================*/
-async function submitTest() {
-  if (!confirm("Are you sure you want to submit?")) return;
+      async function submitTest() {
+        if (!confirm("Are you sure you want to submit?")) return;
 
-  try {
-    const res = await fetch("http://localhost:5000/api/exam/submit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        subject: selectedSubject,
-        userAnswers: userAnswers
-      })
-    });
+        try {
+          const res = await fetch("http://localhost:5000/api/exam/submit", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              subject: selectedSubject,
+              userAnswers: userAnswers,
+            }),
+          });
 
-    const data = await res.json();
+          const data = await res.json();
 
-    alert(`Score: ${data.score} / ${data.total}`);
+          alert(`Score: ${data.score} / ${data.total}`);
+        } catch (err) {
+          console.error(err);
+          alert("Submission failed");
+        }
+      }
 
-  } catch (err) {
-    console.error(err);
-    alert("Submission failed");
-  }
-}
-
-/* ===============================
+      /* ===============================
    10. SUBJECT SWITCH
 =================================*/
-document.getElementById('subject-dropdown')
-  .addEventListener('change', (e) => {
-    loadQuestions(e.target.value);
-  });
+      document
+        .getElementById("subject-dropdown")
+        .addEventListener("change", (e) => {
+          loadQuestions(e.target.value);
+        });
 
-/* ===============================
+      /* ===============================
    INITIAL LOAD
 =================================*/
-loadQuestions("bio");
-
-</script>
+      loadQuestions("bio");
+    </script>
   </body>
 </html>

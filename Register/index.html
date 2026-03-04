@@ -535,10 +535,9 @@
             alert("Passwords do not match");
             return;
           }
-
           try {
             const response = await fetch(
-              "http://127.0.0.1:3001/api/auth/register",
+              "https://rankupcbt-api-2.onrender.com/api/auth/register",
               {
                 method: "POST",
                 headers: {
