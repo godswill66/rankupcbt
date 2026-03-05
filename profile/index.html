@@ -1,466 +1,658 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Profile | RankUp CBT</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        :root {
-            --primary: #5d5fef;
-            --primary-dark: #4338ca;
-            --primary-light: #eef2ff;
-            --accent-gold: #f59e0b;
-            --text-main: #0f172a;
-            --text-light: #64748b;
-            --bg: #f8fafc;
-            --white: #ffffff;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
+      :root {
+        --primary: #5d5fef;
+        --primary-dark: #4338ca;
+        --primary-light: #eef2ff;
+        --accent-gold: #f59e0b;
+        --text-main: #0f172a;
+        --text-light: #64748b;
+        --bg: #f8fafc;
+        --white: #ffffff;
+        --border: #e2e8f0;
+        --success: #10b981;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text-main);
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg);
+        color: var(--text-main);
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
 
-        /* --- NAVIGATION --- */
-        .navbar {
-            background: var(--white);
-            height: 70px;
-            display: flex;
-            align-items: center;
-            padding: 0 5%;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+      /* --- NAVIGATION --- */
+      .navbar {
+        background: var(--white);
+        height: 70px;
+        display: flex;
+        align-items: center;
+        padding: 0 5%;
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
 
-        .nav-container {
-            max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+      .nav-container {
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-        .logo {
-            font-weight: 800;
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+      .logo {
+        font-weight: 800;
+        color: var(--primary);
+        text-decoration: none;
+        font-size: 1.4rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-        .nav-right { display: flex; align-items: center; gap: 20px; }
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
 
-        /* --- PROFILE LAYOUT --- */
+      /* --- PROFILE LAYOUT --- */
+      .profile-container {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 30px;
+        flex: 1;
+      }
+
+      .profile-card {
+        background: var(--white);
+        border-radius: 24px;
+        padding: 40px 30px;
+        text-align: center;
+        border: 1px solid var(--border);
+        height: fit-content;
+        position: sticky;
+        top: 90px;
+        box-shadow: var(--shadow);
+      }
+
+      /* CLICKABLE AVATAR STYLES */
+      .avatar-wrapper {
+        position: relative;
+        width: 130px;
+        height: 130px;
+        margin: 0 auto 25px;
+        cursor: pointer;
+        border-radius: 50%;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+
+      .avatar-wrapper:hover {
+        transform: scale(1.02);
+      }
+
+      .avatar-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid var(--primary-light);
+      }
+
+      .avatar-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s;
+        border-radius: 50%;
+        color: white;
+        font-size: 1.5rem;
+      }
+
+      .avatar-wrapper:hover .avatar-overlay {
+        opacity: 1;
+      }
+
+      #imageUpload {
+        display: none;
+      }
+
+      .rank-badge {
+        background: linear-gradient(135deg, var(--primary), #8b5cf6);
+        color: white;
+        padding: 6px 18px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 10px rgba(93, 95, 239, 0.3);
+      }
+
+      .settings-panel {
+        background: var(--white);
+        border-radius: 24px;
+        padding: 45px;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+      }
+
+      .section-title {
+        font-size: 1.6rem;
+        font-weight: 800;
+        margin-bottom: 35px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+      }
+
+      .form-group {
+        margin-bottom: 10px;
+      }
+      .form-group.full {
+        grid-column: span 2;
+      }
+
+      label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-light);
+        margin-bottom: 10px;
+        text-transform: uppercase;
+      }
+
+      label i {
+        color: var(--primary);
+        width: 20px;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 14px 18px;
+        border-radius: 12px;
+        border: 1.5px solid var(--border);
+        font-size: 1rem;
+        transition: all 0.3s;
+        background: #fcfdfe;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px var(--primary-light);
+      }
+
+      .btn-save {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 18px 30px;
+        border-radius: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        width: 100%;
+        transition: 0.3s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .btn-save:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+      }
+
+      .tag {
+        background: var(--primary-light);
+        color: var(--primary);
+        padding: 8px 16px;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-weight: 700;
+      }
+
+      /* --- DASHBOARD ORIGINAL FOOTER STYLES --- */
+      .footer {
+        background-color: white;
+        padding: 80px 5% 40px;
+        border-top: 1px solid #eee;
+        margin-top: 60px;
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1.5fr;
+        gap: 60px;
+        max-width: 1280px;
+        margin: 0 auto 60px;
+      }
+
+      .footer-col h4 {
+        margin-bottom: 24px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-main);
+      }
+
+      .footer-col p {
+        font-size: 0.95rem;
+        color: #666;
+        line-height: 1.7;
+      }
+
+      .footer-col ul {
+        list-style: none;
+      }
+      .footer-col ul li {
+        margin-bottom: 12px;
+      }
+      .footer-col ul li a {
+        font-size: 0.95rem;
+        color: #666;
+        text-decoration: none;
+        transition: 0.25s;
+      }
+      .footer-col ul li a:hover {
+        color: var(--primary);
+      }
+
+      .whatsapp-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        background-color: #25d366;
+        color: white;
+        padding: 14px 24px;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.3s;
+      }
+
+      .footer-bottom {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding-top: 40px;
+        border-top: 1px solid #f0f0f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #999;
+        font-size: 0.9rem;
+      }
+
+      .socials {
+        display: flex;
+        gap: 24px;
+      }
+      .socials a {
+        color: #999;
+        font-size: 1.4rem;
+        transition: 0.25s;
+      }
+      .socials a:hover {
+        color: var(--primary);
+      }
+
+      @media (max-width: 900px) {
         .profile-container {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 30px;
-            flex: 1;
+          grid-template-columns: 1fr;
+        }
+        .footer-grid {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+        .footer-bottom {
+          flex-direction: column;
+          gap: 20px;
+        }
+      }
+      /* --- MOBILE RESPONSIVENESS --- */
+      @media (max-width: 900px) {
+        .profile-container {
+          grid-template-columns: 1fr; /* Stack the sidebar and main form */
+          margin: 20px auto;
+          padding: 0 15px;
+          gap: 20px;
         }
 
         .profile-card {
-            background: var(--white);
-            border-radius: 24px;
-            padding: 40px 30px;
-            text-align: center;
-            border: 1px solid var(--border);
-            height: fit-content;
-            position: sticky;
-            top: 90px;
-            box-shadow: var(--shadow);
-        }
-
-        /* CLICKABLE AVATAR STYLES */
-        .avatar-wrapper {
-            position: relative;
-            width: 130px;
-            height: 130px;
-            margin: 0 auto 25px;
-            cursor: pointer;
-            border-radius: 50%;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-
-        .avatar-wrapper:hover {
-            transform: scale(1.02);
-        }
-
-        .avatar-img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 5px solid var(--primary-light);
-        }
-
-        .avatar-overlay {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s;
-            border-radius: 50%;
-            color: white;
-            font-size: 1.5rem;
-        }
-
-        .avatar-wrapper:hover .avatar-overlay {
-            opacity: 1;
-        }
-
-        #imageUpload { display: none; }
-
-        .rank-badge {
-            background: linear-gradient(135deg, var(--primary), #8b5cf6);
-            color: white;
-            padding: 6px 18px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 800;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(93, 95, 239, 0.3);
+          position: relative; /* Remove sticky on mobile */
+          top: 0;
+          padding: 30px 20px;
         }
 
         .settings-panel {
-            background: var(--white);
-            border-radius: 24px;
-            padding: 45px;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-        }
-
-        .section-title {
-            font-size: 1.6rem;
-            font-weight: 800;
-            margin-bottom: 35px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+          padding: 30px 20px;
+          border-radius: 20px;
         }
 
         .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
+          grid-template-columns: 1fr; /* Form inputs stack vertically */
+          gap: 15px;
         }
 
-        .form-group { margin-bottom: 10px; }
-        .form-group.full { grid-column: span 2; }
-
-        label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-light);
-            margin-bottom: 10px;
-            text-transform: uppercase;
+        .form-group.full {
+          grid-column: span 1;
         }
 
-        label i { color: var(--primary); width: 20px; }
-
-        input, select {
-            width: 100%;
-            padding: 14px 18px;
-            border-radius: 12px;
-            border: 1.5px solid var(--border);
-            font-size: 1rem;
-            transition: all 0.3s;
-            background: #fcfdfe;
+        .section-title {
+          font-size: 1.3rem;
+          margin-bottom: 25px;
         }
 
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px var(--primary-light);
+        .avatar-wrapper {
+          width: 110px;
+          height: 110px;
         }
 
-        .btn-save {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 18px 30px;
-            border-radius: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            transition: 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
+        /* Show camera icon by default on mobile since there is no hover */
+        .avatar-overlay {
+          opacity: 0.6;
+          background: rgba(0, 0, 0, 0.2);
         }
 
-        .btn-save:hover { background: var(--primary-dark); transform: translateY(-2px); }
-
-        .tag {
-            background: var(--primary-light);
-            color: var(--primary);
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 700;
-        }
-
-        /* --- DASHBOARD ORIGINAL FOOTER STYLES --- */
-        .footer {
-            background-color: white;
-            padding: 80px 5% 40px;
-            border-top: 1px solid #eee;
-            margin-top: 60px;
-        }
-
+        /* Footer Adjustments */
         .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1.5fr;
-            gap: 60px;
-            max-width: 1280px;
-            margin: 0 auto 60px;
-        }
-
-        .footer-col h4 {
-            margin-bottom: 24px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .footer-col p {
-            font-size: 0.95rem;
-            color: #666;
-            line-height: 1.7;
-        }
-
-        .footer-col ul { list-style: none; }
-        .footer-col ul li { margin-bottom: 12px; }
-        .footer-col ul li a {
-            font-size: 0.95rem;
-            color: #666;
-            text-decoration: none;
-            transition: 0.25s;
-        }
-        .footer-col ul li a:hover { color: var(--primary); }
-
-        .whatsapp-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            background-color: #25d366;
-            color: white;
-            padding: 14px 24px;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: 0.3s;
+          grid-template-columns: 1fr;
+          text-align: center;
+          gap: 40px;
         }
 
         .footer-bottom {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding-top: 40px;
-            border-top: 1px solid #f0f0f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #999;
-            font-size: 0.9rem;
+          flex-direction: column;
+          gap: 15px;
+          text-align: center;
         }
 
-        .socials { display: flex; gap: 24px; }
-        .socials a { color: #999; font-size: 1.4rem; transition: 0.25s; }
-        .socials a:hover { color: var(--primary); }
-
-        @media (max-width: 900px) {
-            .profile-container { grid-template-columns: 1fr; }
-            .footer-grid { grid-template-columns: 1fr; text-align: center; }
-            .footer-bottom { flex-direction: column; gap: 20px; }
+        .logo {
+          justify-content: center;
         }
-        /* --- MOBILE RESPONSIVENESS --- */
-@media (max-width: 900px) {
-    .profile-container {
-        grid-template-columns: 1fr; /* Stack the sidebar and main form */
-        margin: 20px auto;
-        padding: 0 15px;
-        gap: 20px;
-    }
+      }
+      /* --- BUTTON LOADING ANIMATION --- */
+      .btn-save {
+        position: relative;
+        overflow: hidden;
+      }
 
-    .profile-card {
-        position: relative; /* Remove sticky on mobile */
-        top: 0;
-        padding: 30px 20px;
-    }
+      .btn-save.is-loading {
+        background: var(--primary-dark);
+        pointer-events: none; /* Disable clicking while loading */
+        opacity: 0.8;
+      }
 
-    .settings-panel {
-        padding: 30px 20px;
-        border-radius: 20px;
-    }
+      .btn-save .fa-spinner {
+        display: none; /* Hidden by default */
+      }
 
-    .form-grid {
-        grid-template-columns: 1fr; /* Form inputs stack vertically */
-        gap: 15px;
-    }
+      .btn-save.is-loading .fa-cloud-arrow-up {
+        display: none;
+      }
 
-    .form-group.full {
-        grid-column: span 1;
-    }
+      .btn-save.is-loading .fa-spinner {
+        display: inline-block;
+        animation: rotate 1s linear infinite;
+      }
 
-    .section-title {
-        font-size: 1.3rem;
-        margin-bottom: 25px;
-    }
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
 
-    .avatar-wrapper {
-        width: 110px;
-        height: 110px;
-    }
+      /* Success Shimmer Effect after saving */
+      .btn-save.success-pulse {
+        animation: pulse 0.5s ease-in-out;
+        background-color: var(--success);
+      }
 
-    /* Show camera icon by default on mobile since there is no hover */
-    .avatar-overlay {
-        opacity: 0.6;
-        background: rgba(0, 0, 0, 0.2);
-    }
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
 
-    /* Footer Adjustments */
-    .footer-grid {
-        grid-template-columns: 1fr;
-        text-align: center;
-        gap: 40px;
-    }
-
-    .footer-bottom {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-    }
-
-    .logo {
-        justify-content: center;
-    }
-}
+      /* --- INPUT FOCUS ANIMATION --- */
+      input,
+      select {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <nav class="navbar">
-        <div class="nav-container">
-            <a href="/dashboard" class="logo">
-                <i class="fa-solid fa-square-poll-vertical"></i> RankUp
-            </a>
-            <div class="nav-right">
-                <a href="/dashboard" style="text-decoration:none; color: var(--text-main); font-weight:700; display:flex; align-items:center; gap:8px;">
-                    <i class="fa-solid fa-house-user"></i> Dashboard
-                </a>
-            </div>
+      <div class="nav-container">
+        <a href="/dashboard" class="logo">
+          <i class="fa-solid fa-square-poll-vertical"></i> RankUp
+        </a>
+        <div class="nav-right">
+          <a
+            href="/dashboard"
+            style="
+              text-decoration: none;
+              color: var(--text-main);
+              font-weight: 700;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            "
+          >
+            <i class="fa-solid fa-house-user"></i> Dashboard
+          </a>
         </div>
+      </div>
     </nav>
 
     <div class="profile-container">
-        <aside class="profile-card">
-            <input type="file" id="imageUpload" accept="image/*">
-            <div class="avatar-wrapper" onclick="document.getElementById('imageUpload').click()">
-                <img src="/assets/DEV_GODSWILL.jpg" alt="User Avatar" class="avatar-img" id="profileDisplay">
-                <div class="avatar-overlay">
-                    <i class="fa-solid fa-camera"></i>
-                </div>
+      <aside class="profile-card">
+        <input type="file" id="imageUpload" accept="image/*" />
+        <div
+          class="avatar-wrapper"
+          onclick="document.getElementById('imageUpload').click()"
+        >
+          <img
+            src="/assets/DEV_GODSWILL.jpg"
+            alt="User Avatar"
+            class="avatar-img"
+            id="profileDisplay"
+          />
+          <div class="avatar-overlay">
+            <i class="fa-solid fa-camera"></i>
+          </div>
+        </div>
+
+        <div class="rank-badge">
+          <i class="fa-solid fa-crown" style="color: var(--accent-gold)"></i>
+          RANK #2,342
+        </div>
+        <h2>Valentinavalee Valee</h2>
+        <p
+          style="
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+          "
+        >
+          <i class="fa-solid fa-circle-check" style="color: var(--success)"></i>
+          Verified Candidate
+        </p>
+        <hr
+          style="border: 0; border-top: 2px solid var(--bg); margin: 25px 0"
+        />
+        <div style="text-align: left">
+          <label style="color: var(--primary); font-size: 0.75rem"
+            ><i class="fa-solid fa-tags"></i> Exam Combination</label
+          >
+          <div
+            class="subject-tags"
+            style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px"
+          >
+            <span class="tag">Eng</span><span class="tag">Bio</span
+            ><span class="tag">Che</span><span class="tag">Phy</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="settings-panel">
+        <h1 class="section-title">
+          <i class="fa-solid fa-sliders" style="color: var(--primary)"></i>
+          Account Settings
+        </h1>
+        <form id="profileForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="fname"
+                ><i class="fa-solid fa-user-tag"></i> Real Name</label
+              >
+              <input type="text" id="fname" value="Valentinavalee Valee" />
             </div>
-
-            <div class="rank-badge">
-                <i class="fa-solid fa-crown" style="color: var(--accent-gold);"></i> RANK #2,342
+            <div class="form-group">
+              <label for="email"
+                ><i class="fa-solid fa-envelope"></i> Email</label
+              >
+              <input type="email" id="email" value="valentinavalee@gmail.com" />
             </div>
-            <h2>Valentinavalee Valee</h2>
-            <p style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 25px;">
-                <i class="fa-solid fa-circle-check" style="color:var(--success);"></i> Verified Candidate
-            </p>
-            <hr style="border: 0; border-top: 2px solid var(--bg); margin: 25px 0;">
-            <div style="text-align: left;">
-                <label style="color:var(--primary); font-size:0.75rem;"><i class="fa-solid fa-tags"></i> Exam Combination</label>
-                <div class="subject-tags" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
-                    <span class="tag">Eng</span><span class="tag">Bio</span><span class="tag">Che</span><span class="tag">Phy</span>
-                </div>
+            <div class="form-group">
+              <label for="phone"
+                ><i class="fa-solid fa-mobile-retro"></i> Phone</label
+              >
+              <input type="tel" id="phone" value="+234 812 345 6789" />
             </div>
-        </aside>
+            <div class="form-group">
+              <label for="uni"
+                ><i class="fa-solid fa-building-columns"></i> Institution
+                Choice</label
+              >
+              <select id="uni">
+                <option value="unilag">University of Lagos (UNILAG)</option>
+                <option value="ui">University of Ibadan (UI)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="location"
+                ><i class="fa-solid fa-location-dot"></i> Location</label
+              >
+              <input
+                type="text"
+                id="location"
+                value="Lagos, Nigeria"
+                placeholder="City, State"
+              />
+            </div>
+            <div class="form-group full">
+              <label for="bio"
+                ><i class="fa-solid fa-quote-left"></i> My Aspirations</label
+              >
+              <input
+                type="text"
+                id="bio"
+                placeholder="Ex: Future Medical Surgeon"
+              />
+            </div>
+          </div>
 
-        <main class="settings-panel">
-            <h1 class="section-title"><i class="fa-solid fa-sliders" style="color: var(--primary);"></i> Account Settings</h1>
-            <form id="profileForm">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="fname"><i class="fa-solid fa-user-tag"></i> Real Name</label>
-                        <input type="text" id="fname" value="Valentinavalee Valee">
-                    </div>
-                    <div class="form-group">
-                        <label for="email"><i class="fa-solid fa-envelope"></i> Email</label>
-                        <input type="email" id="email" value="valentinavalee@gmail.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="phone"><i class="fa-solid fa-mobile-retro"></i> Phone</label>
-                        <input type="tel" id="phone" value="+234 812 345 6789">
-                    </div>
-                    <div class="form-group">
-                        <label for="uni"><i class="fa-solid fa-building-columns"></i> Institution Choice</label>
-                        <select id="uni">
-                            <option value="unilag">University of Lagos (UNILAG)</option>
-                            <option value="ui">University of Ibadan (UI)</option>
-                        </select>
-                    </div>
-                    <div class="form-group full">
-                        <label for="bio"><i class="fa-solid fa-quote-left"></i> My Aspirations</label>
-                        <input type="text" id="bio" placeholder="Ex: Future Medical Surgeon">
-                    </div>
-                </div>
+          <div
+            class="security-header"
+            style="
+              margin: 30px 0 20px;
+              font-weight: 800;
+              display: flex;
+              align-items: center;
+              gap: 10px;
+            "
+          >
+            <i
+              class="fa-solid fa-shield-halved"
+              style="color: var(--accent-gold)"
+            ></i>
+            Login & Security
+          </div>
 
-                <div class="security-header" style="margin: 30px 0 20px; font-weight:800; display:flex; align-items:center; gap:10px;">
-                    <i class="fa-solid fa-shield-halved" style="color:var(--accent-gold);"></i> Login & Security
-                </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>New Password</label
+              ><input type="password" placeholder="New Password" />
+            </div>
+            <div class="form-group">
+              <label>Confirm</label
+              ><input type="password" placeholder="Confirm password" />
+            </div>
+          </div>
 
-                <div class="form-grid">
-                    <div class="form-group"><label>New Password</label><input type="password" placeholder="New Password"></div>
-                    <div class="form-group"><label>Confirm</label><input type="password" placeholder="Confirm password"></div>
-                </div>
-                
-                <button type="submit" class="btn-save">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes
-                </button>
-            </form>
-        </main>
+          <button type="submit" class="btn-save">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes
+          </button>
+        </form>
+      </main>
     </div>
 
     <footer class="footer">
       <div class="footer-grid">
         <div class="footer-col">
-          <div class="logo" style="margin-bottom:20px; font-size:1.5rem;">
+          <div class="logo" style="margin-bottom: 20px; font-size: 1.5rem">
             <i class="fa-solid fa-square-poll-vertical"></i> RankUp
           </div>
           <p>
-            Empowering JAMB candidates with real-time rankings and academic insights to reach their dream institutions.
+            Empowering JAMB candidates with real-time rankings and academic
+            insights to reach their dream institutions.
           </p>
         </div>
 
@@ -475,10 +667,13 @@
 
         <div class="footer-col">
           <h4>Join the Conversation</h4>
-          <p style="margin-bottom:20px;">
+          <p style="margin-bottom: 20px">
             Get updates and study tips directly in our community.
           </p>
-          <a href="https://chat.whatsapp.com/EdRuXNAiECzHCBJZYIb2WN" class="whatsapp-link">
+          <a
+            href="https://chat.whatsapp.com/EdRuXNAiECzHCBJZYIb2WN"
+            class="whatsapp-link"
+          >
             <i class="fa-brands fa-whatsapp"></i> Join WhatsApp Community
           </a>
         </div>
@@ -495,26 +690,49 @@
       </div>
     </footer>
 
-    <script>
-        // IMAGE PREVIEW LOGIC
-        const imageUpload = document.getElementById('imageUpload');
-        const profileDisplay = document.getElementById('profileDisplay');
+    <script>const profileForm = document.getElementById('profileForm');
+const saveBtn = profileForm.querySelector('.btn-save');
 
-        imageUpload.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    profileDisplay.src = e.target.result;
-                }
-                reader.readAsDataURL(file);
-            }
-        });
+profileForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // 1. Enter Loading State
+    saveBtn.classList.add('is-loading');
+    saveBtn.innerHTML = `<i class="fa-solid fa-spinner"></i> Saving Changes...`;
+    
+    // 2. Simulate API Call (2 seconds)
+    setTimeout(() => {
+        // 3. Exit Loading State
+        saveBtn.classList.remove('is-loading');
+        saveBtn.classList.add('success-pulse');
+        
+        // 4. Change to Success UI
+        saveBtn.style.backgroundColor = 'var(--success)';
+        saveBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Profile Saved!`;
+        
+        // 5. Reset button after 3 seconds
+        setTimeout(() => {
+            saveBtn.style.backgroundColor = '';
+            saveBtn.classList.remove('success-pulse');
+            saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
+        }, 3000);
+        
+    }, 2000);
+});
 
-        document.getElementById('profileForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert("✅ Profile updated successfully!");
-        });
-    </script>
-</body>
+// IMAGE PREVIEW LOGIC (Keep your existing code)
+const imageUpload = document.getElementById('imageUpload');
+const profileDisplay = document.getElementById('profileDisplay');
+
+imageUpload.addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            profileDisplay.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+});    </script>
+  </body>
 </html>
