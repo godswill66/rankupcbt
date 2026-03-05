@@ -783,7 +783,7 @@
 
       <main class="dashboard-content">
         <div class="welcome-section">
-          <h1>Welcome back, John Doe!</h1>
+          <h1>Welcome back, <span id="userName">...</span>!</h1>
           <p>Here's a quick overview of your progress and what's new.</p>
         </div>
 
@@ -868,10 +868,22 @@
               </button>
             </div>
             <ul class="profile-info-list">
-              <li><i class="fa-solid fa-user"></i> John Doe</li>
-              <li><i class="fa-solid fa-envelope"></i> john.doe@example.com</li>
-              <li><i class="fa-solid fa-phone"></i> +234 801 234 5678</li>
-              <li><i class="fa-solid fa-location-dot"></i> Lagos, Nigeria</li>
+              <li>
+                <i class="fa-solid fa-user"></i>
+                <span id="profileName">---</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-envelope"></i>
+                <span id="profileEmail">---</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-phone"></i>
+                <span id="profilePhone">---</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-location-dot"></i>
+                <span id="profileLocation">---</span>
+              </li>
             </ul>
           </div>
 
@@ -1009,73 +1021,48 @@
           });
 
           if (!res.ok) {
-            console.error("Failed to load results");
+            console.error("Failed to load dashboard");
             return;
           }
 
-          const results = await res.json();
+          const data = await res.json();
 
-          if (!results || results.length === 0) return;
-
-          // Sort newest first
-          results.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-          const latest = results[0];
+          if (!data) return;
 
           // Recent Score
           document.getElementById("recentScore").innerText =
-            `${latest.score}/${latest.totalQuestions}`;
+            data.latestScore || data.recentScore || "0/0";
 
-          // Overall Average %
-          const totalScore = results.reduce((sum, r) => sum + r.score, 0);
-          const totalPossible = results.reduce(
-            (sum, r) => sum + r.totalQuestions,
-            0,
-          );
-          const percentage = Math.round((totalScore / totalPossible) * 100);
+          // Overall Progress
+          const progress = data.averageScore || data.overallProgress || 0;
 
-          document.getElementById("overallProgress").innerText =
-            percentage + "%";
-          document.getElementById("progressBar").style.width = percentage + "%";
+          document.getElementById("overallProgress").innerText = progress + "%";
+          document.getElementById("progressBar").style.width = progress + "%";
 
-          // Temporary rank logic
-          const rankEstimate = 5000 - percentage * 20;
-          document.getElementById("currentRank").innerText =
-            Math.max(rankEstimate, 1) + "th";
+          // Rank
+          if (data.leaderboardRank) {
+            document.getElementById("currentRank").innerText =
+              data.leaderboardRank + "th";
+          }
 
-          // Subject chart data
-          const subjectMap = {};
+          // Subject Chart (only if analytics exist)
+          if (data.subjectAnalytics) {
+            const subjects = Object.keys(data.subjectAnalytics);
+            const averages = Object.values(data.subjectAnalytics);
 
-          results.forEach((r) => {
-            const percent = (r.score / r.totalQuestions) * 100;
-
-            if (!subjectMap[r.subject]) {
-              subjectMap[r.subject] = [];
-            }
-
-            subjectMap[r.subject].push(percent);
-          });
-
-          const subjects = Object.keys(subjectMap);
-
-          const averages = subjects.map((sub) => {
-            const arr = subjectMap[sub];
-            return (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1);
-          });
-
-          // Chart
-          new Chart(document.getElementById("subjectChart"), {
-            type: "bar",
-            data: {
-              labels: subjects,
-              datasets: [
-                {
-                  label: "Average Score %",
-                  data: averages,
-                },
-              ],
-            },
-          });
+            new Chart(document.getElementById("subjectChart"), {
+              type: "bar",
+              data: {
+                labels: subjects,
+                datasets: [
+                  {
+                    label: "Average Score %",
+                    data: averages,
+                  },
+                ],
+              },
+            });
+          }
         } catch (err) {
           console.error("Dashboard Error:", err);
         }
@@ -1083,6 +1070,35 @@
 
       // Run dashboard loader
       loadDashboardData();
+
+      // Load user profile
+      async function loadUserProfile() {
+        try {
+          const res = await fetch(`${API_BASE}/api/users/me`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          const user = await res.json();
+
+          // Update welcome message
+          document.getElementById("userName").innerText = user.name;
+
+          // Update profile section
+          document.getElementById("profileName").innerText = user.name;
+          document.getElementById("profileEmail").innerText = user.email;
+          document.getElementById("profilePhone").innerText =
+            user.phone || "Not provided";
+          document.getElementById("profileLocation").innerText =
+            user.location || "Not provided";
+        } catch (err) {
+          console.error("Profile error:", err);
+        }
+      }
+
+      loadUserProfile();
     </script>
   </body>
 </html>
