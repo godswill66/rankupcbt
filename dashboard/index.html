@@ -1000,7 +1000,7 @@
       // Load Dashboard Data
       async function loadDashboardData() {
         try {
-          const res = await fetch(`${API_BASE}/api/results/me`, {
+          const res = await fetch(`${API_BASE}/api/dashboard`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
