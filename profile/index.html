@@ -689,50 +689,116 @@
         </div>
       </div>
     </footer>
+    <script>
+      const API_BASE = "https://rankupcbt-api-2.onrender.com";
+      const token = localStorage.getItem("token");
 
-    <script>const profileForm = document.getElementById('profileForm');
-const saveBtn = profileForm.querySelector('.btn-save');
+      if (!token) {
+        window.location.href = "/login/";
+      }
 
-profileForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // 1. Enter Loading State
-    saveBtn.classList.add('is-loading');
-    saveBtn.innerHTML = `<i class="fa-solid fa-spinner"></i> Saving Changes...`;
-    
-    // 2. Simulate API Call (2 seconds)
-    setTimeout(() => {
-        // 3. Exit Loading State
-        saveBtn.classList.remove('is-loading');
-        saveBtn.classList.add('success-pulse');
-        
-        // 4. Change to Success UI
-        saveBtn.style.backgroundColor = 'var(--success)';
-        saveBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Profile Saved!`;
-        
-        // 5. Reset button after 3 seconds
-        setTimeout(() => {
-            saveBtn.style.backgroundColor = '';
-            saveBtn.classList.remove('success-pulse');
-            saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
-        }, 3000);
-        
-    }, 2000);
-});
+      const profileForm = document.getElementById("profileForm");
+      const saveBtn = profileForm.querySelector(".btn-save");
 
-// IMAGE PREVIEW LOGIC (Keep your existing code)
-const imageUpload = document.getElementById('imageUpload');
-const profileDisplay = document.getElementById('profileDisplay');
+      const imageUpload = document.getElementById("imageUpload");
+      const profileDisplay = document.getElementById("profileDisplay");
 
-imageUpload.addEventListener('change', function() {
-    const file = this.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            profileDisplay.src = e.target.result;
+      // LOAD USER PROFILE FROM DATABASE
+      async function loadProfile() {
+        try {
+          const res = await fetch(`${API_BASE}/api/users/me`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (!res.ok) return;
+
+          const user = await res.json();
+
+          document.getElementById("fname").value = user.name || "";
+          document.getElementById("email").value = user.email || "";
+          document.getElementById("phone").value = user.phone || "";
+          document.getElementById("location").value = user.location || "";
+          document.getElementById("bio").value = user.bio || "";
+
+          if (user.avatar) {
+            profileDisplay.src = user.avatar;
+          }
+        } catch (err) {
+          console.error("Profile load error:", err);
         }
-        reader.readAsDataURL(file);
-    }
-});    </script>
+      }
+
+      loadProfile();
+
+      // SAVE PROFILE TO DATABASE
+      profileForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById("fname").value;
+        const email = document.getElementById("email").value;
+        const phone = document.getElementById("phone").value;
+        const location = document.getElementById("location").value;
+        const bio = document.getElementById("bio").value;
+
+        saveBtn.classList.add("is-loading");
+        saveBtn.innerHTML = `<i class="fa-solid fa-spinner"></i> Saving Changes...`;
+
+        try {
+          const res = await fetch(`${API_BASE}/api/users/profile`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              name,
+              email,
+              phone,
+              location,
+              bio,
+            }),
+          });
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            alert(data.message || "Profile update failed");
+            return;
+          }
+
+          saveBtn.classList.remove("is-loading");
+          saveBtn.classList.add("success-pulse");
+          saveBtn.style.backgroundColor = "var(--success)";
+          saveBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Profile Saved!`;
+
+          setTimeout(() => {
+            saveBtn.style.backgroundColor = "";
+            saveBtn.classList.remove("success-pulse");
+            saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
+          }, 3000);
+        } catch (err) {
+          console.error(err);
+          alert("Server error. Please try again.");
+        }
+      });
+
+      // IMAGE PREVIEW ONLY
+      imageUpload.addEventListener("change", function () {
+        const file = this.files[0];
+
+        if (file) {
+          const reader = new FileReader();
+
+          reader.onload = function (e) {
+            profileDisplay.src = e.target.result;
+          };
+
+          reader.readAsDataURL(file);
+        }
+      });
+    </script>
   </body>
 </html>
