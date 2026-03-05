@@ -982,12 +982,11 @@ const token = localStorage.getItem("token");
 
 async function loadDashboardData() {
   try {
-    const res = await fetch("http://localhost:5000/api/results/me", {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
+const res = await fetch("https://rankupcbt-api-2.onrender.com/api/results/me", {
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+});
     const results = await res.json();
 
     if (!results || results.length === 0) return;
