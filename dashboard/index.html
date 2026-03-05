@@ -815,13 +815,16 @@
               </div>
               <div class="summary-item">
                 <span class="label">Overall Progress</span>
-<span class="value" id="overallProgress">--</span>              </div>
+                <span class="value" id="overallProgress">--</span>
+              </div>
             </div>
             <div class="recent-score">
               <span class="label">Recent Score</span>
-<span class="value" id="recentScore">--</span>            </div>
+              <span class="value" id="recentScore">--</span>
+            </div>
             <div class="progress-bar-container">
-<div class="progress-bar" id="progressBar"></div>            </div>
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
             <p class="progress-note">Progress towards next rank</p>
           </div>
 
@@ -855,7 +858,13 @@
             <div class="card-header-flex">
               <h3>Personal Profile</h3>
               <button class="btn-text-icon">
-                <i class="fa-solid fa-pen"></i><a href="/profile/" alt="my profile" style="text-decoration: none;">Edit Profile</a>
+                <i class="fa-solid fa-pen"></i
+                ><a
+                  href="/profile/"
+                  alt="my profile"
+                  style="text-decoration: none"
+                  >Edit Profile</a
+                >
               </button>
             </div>
             <ul class="profile-info-list">
@@ -931,33 +940,44 @@
 
     <!-- Toast Container -->
     <div id="toastContainer" class="toast-container"></div>
-
     <script>
+      const API_BASE = "https://rankupcbt-api-2.onrender.com";
+
+      // Get saved JWT token
+      const token = localStorage.getItem("token");
+
+      // Redirect if user not logged in
+      if (!token) {
+        window.location.href = "/login/";
+      }
+
       // Toggle notification dropdown
       document
         .getElementById("notificationBtn")
         ?.addEventListener("click", () => {
           document
             .getElementById("notificationDropdown")
-            .classList.toggle("active");
+            ?.classList.toggle("active");
         });
 
       // Close dropdown when clicking outside
       document.addEventListener("click", (e) => {
         const dropdown = document.getElementById("notificationDropdown");
         const btn = document.getElementById("notificationBtn");
+
         if (!btn?.contains(e.target) && !dropdown?.contains(e.target)) {
           dropdown?.classList.remove("active");
         }
       });
 
-      // Settings modal
+      // Settings modal open
       document
         .querySelector(".btn-text-icon")
         ?.addEventListener("click", () => {
           document.getElementById("settingsModal").style.display = "flex";
         });
 
+      // Close settings modal
       document
         .getElementById("closeSettings")
         ?.addEventListener("click", () => {
@@ -976,79 +996,93 @@
             document.getElementById("settingsModal").style.display = "none";
           }
         });
-    
 
-const token = localStorage.getItem("token");
+      // Load Dashboard Data
+      async function loadDashboardData() {
+        try {
+          const res = await fetch(`${API_BASE}/api/results/me`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-async function loadDashboardData() {
-  try {
-const res = await fetch("https://rankupcbt-api-2.onrender.com/api/results/me", {
-  headers: {
-    Authorization: `Bearer ${token}`
-  }
-});
-    const results = await res.json();
+          if (!res.ok) {
+            console.error("Failed to load results");
+            return;
+          }
 
-    if (!results || results.length === 0) return;
+          const results = await res.json();
 
-    // Sort newest first
-    results.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+          if (!results || results.length === 0) return;
 
-    const latest = results[0];
+          // Sort newest first
+          results.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-    // 🔹 Recent Score
-    document.getElementById("recentScore").innerText =
-      `${latest.score}/${latest.totalQuestions}`;
+          const latest = results[0];
 
-    // 🔹 Overall Average %
-    const totalScore = results.reduce((sum, r) => sum + r.score, 0);
-    const totalPossible = results.reduce((sum, r) => sum + r.totalQuestions, 0);
-    const percentage = Math.round((totalScore / totalPossible) * 100);
+          // Recent Score
+          document.getElementById("recentScore").innerText =
+            `${latest.score}/${latest.totalQuestions}`;
 
-    document.getElementById("overallProgress").innerText = percentage + "%";
-    document.getElementById("progressBar").style.width = percentage + "%";
+          // Overall Average %
+          const totalScore = results.reduce((sum, r) => sum + r.score, 0);
+          const totalPossible = results.reduce(
+            (sum, r) => sum + r.totalQuestions,
+            0,
+          );
+          const percentage = Math.round((totalScore / totalPossible) * 100);
 
-    // 🔹 Fake Rank Logic (until leaderboard built)
-    const rankEstimate = 5000 - (percentage * 20);
-    document.getElementById("currentRank").innerText =
-      Math.max(rankEstimate, 1) + "th";
+          document.getElementById("overallProgress").innerText =
+            percentage + "%";
+          document.getElementById("progressBar").style.width = percentage + "%";
 
-    // 🔹 Subject Chart
-    const subjectMap = {};
+          // Temporary rank logic
+          const rankEstimate = 5000 - percentage * 20;
+          document.getElementById("currentRank").innerText =
+            Math.max(rankEstimate, 1) + "th";
 
-    results.forEach(r => {
-      const percent = (r.score / r.totalQuestions) * 100;
+          // Subject chart data
+          const subjectMap = {};
 
-      if (!subjectMap[r.subject]) {
-        subjectMap[r.subject] = [];
+          results.forEach((r) => {
+            const percent = (r.score / r.totalQuestions) * 100;
+
+            if (!subjectMap[r.subject]) {
+              subjectMap[r.subject] = [];
+            }
+
+            subjectMap[r.subject].push(percent);
+          });
+
+          const subjects = Object.keys(subjectMap);
+
+          const averages = subjects.map((sub) => {
+            const arr = subjectMap[sub];
+            return (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1);
+          });
+
+          // Chart
+          new Chart(document.getElementById("subjectChart"), {
+            type: "bar",
+            data: {
+              labels: subjects,
+              datasets: [
+                {
+                  label: "Average Score %",
+                  data: averages,
+                },
+              ],
+            },
+          });
+        } catch (err) {
+          console.error("Dashboard Error:", err);
+        }
       }
 
-      subjectMap[r.subject].push(percent);
-    });
-
-    const subjects = Object.keys(subjectMap);
-    const averages = subjects.map(sub => {
-      const arr = subjectMap[sub];
-      return (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(1);
-    });
-
-    new Chart(document.getElementById("subjectChart"), {
-      type: "bar",
-      data: {
-        labels: subjects,
-        datasets: [{
-          label: "Average Score %",
-          data: averages
-        }]
-      }
-    });
-
-  } catch (err) {
-    console.error("Dashboard Error:", err);
-  }
-}
-
-loadDashboardData();
-</script>
+      // Run dashboard loader
+      loadDashboardData();
+    </script>
   </body>
 </html>
