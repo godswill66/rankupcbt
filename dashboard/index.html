@@ -1084,10 +1084,10 @@
           const user = await res.json();
 
           // Update welcome message
-          document.getElementById("userName").innerText = user.name;
+          document.getElementById("fullName").innerText = user.fullName;
 
           // Update profile section
-          document.getElementById("profileName").innerText = user.name;
+          document.getElementById("fullName").innerText = user.fullName;
           document.getElementById("profileEmail").innerText = user.email;
           document.getElementById("profilePhone").innerText =
             user.phone || "Not provided";
