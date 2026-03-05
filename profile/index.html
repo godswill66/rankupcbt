@@ -689,116 +689,130 @@
         </div>
       </div>
     </footer>
-    <script>
-      const API_BASE = "https://rankupcbt-api-2.onrender.com";
-      const token = localStorage.getItem("token");
 
-      if (!token) {
-        window.location.href = "/login/";
+    <script>const API = "https://rankupcbt-api.onrender.com/api/users";
+
+const profileForm = document.getElementById("profileForm");
+const saveBtn = profileForm.querySelector(".btn-save");
+
+const nameInput = document.getElementById("fname");
+const emailInput = document.getElementById("email");
+const phoneInput = document.getElementById("phone");
+const locationInput = document.getElementById("location");
+const bioInput = document.getElementById("bio");
+
+const token = localStorage.getItem("token");
+
+
+/* =========================
+   LOAD USER PROFILE
+========================= */
+
+async function loadProfile() {
+  try {
+
+    const res = await fetch(`${API}/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`
       }
+    });
 
-      const profileForm = document.getElementById("profileForm");
-      const saveBtn = profileForm.querySelector(".btn-save");
+    const user = await res.json();
 
-      const imageUpload = document.getElementById("imageUpload");
-      const profileDisplay = document.getElementById("profileDisplay");
+    nameInput.value = user.name || "";
+    emailInput.value = user.email || "";
+    phoneInput.value = user.phone || "";
+    locationInput.value = user.location || "";
+    bioInput.value = user.bio || "";
 
-      // LOAD USER PROFILE FROM DATABASE
-      async function loadProfile() {
-        try {
-          const res = await fetch(`${API_BASE}/api/users/me`, {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+  } catch (err) {
+    console.log("Profile load error:", err);
+  }
+}
 
-          if (!res.ok) return;
+loadProfile();
 
-          const user = await res.json();
 
-          document.getElementById("fname").value = user.name || "";
-          document.getElementById("email").value = user.email || "";
-          document.getElementById("phone").value = user.phone || "";
-          document.getElementById("location").value = user.location || "";
-          document.getElementById("bio").value = user.bio || "";
 
-          if (user.avatar) {
-            profileDisplay.src = user.avatar;
-          }
-        } catch (err) {
-          console.error("Profile load error:", err);
-        }
-      }
+/* =========================
+   UPDATE PROFILE
+========================= */
 
-      loadProfile();
+profileForm.addEventListener("submit", async function(e) {
+  e.preventDefault();
 
-      // SAVE PROFILE TO DATABASE
-      profileForm.addEventListener("submit", async function (e) {
-        e.preventDefault();
+  saveBtn.classList.add("is-loading");
+  saveBtn.innerHTML = `<i class="fa-solid fa-spinner"></i> Saving Changes...`;
 
-        const name = document.getElementById("fname").value;
-        const email = document.getElementById("email").value;
-        const phone = document.getElementById("phone").value;
-        const location = document.getElementById("location").value;
-        const bio = document.getElementById("bio").value;
+  try {
 
-        saveBtn.classList.add("is-loading");
-        saveBtn.innerHTML = `<i class="fa-solid fa-spinner"></i> Saving Changes...`;
+    const res = await fetch(`${API}/profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
 
-        try {
-          const res = await fetch(`${API_BASE}/api/users/profile`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              name,
-              email,
-              phone,
-              location,
-              bio,
-            }),
-          });
+      body: JSON.stringify({
+        name: nameInput.value,
+        email: emailInput.value,
+        phone: phoneInput.value,
+        location: locationInput.value,
+        bio: bioInput.value
+      })
+    });
 
-          const data = await res.json();
+    const data = await res.json();
 
-          if (!res.ok) {
-            alert(data.message || "Profile update failed");
-            return;
-          }
+    saveBtn.classList.remove("is-loading");
+    saveBtn.classList.add("success-pulse");
 
-          saveBtn.classList.remove("is-loading");
-          saveBtn.classList.add("success-pulse");
-          saveBtn.style.backgroundColor = "var(--success)";
-          saveBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Profile Saved!`;
+    saveBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Profile Saved!`;
 
-          setTimeout(() => {
-            saveBtn.style.backgroundColor = "";
-            saveBtn.classList.remove("success-pulse");
-            saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
-          }, 3000);
-        } catch (err) {
-          console.error(err);
-          alert("Server error. Please try again.");
-        }
-      });
+    setTimeout(() => {
 
-      // IMAGE PREVIEW ONLY
-      imageUpload.addEventListener("change", function () {
-        const file = this.files[0];
+      saveBtn.classList.remove("success-pulse");
+      saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
 
-        if (file) {
-          const reader = new FileReader();
+    }, 2500);
 
-          reader.onload = function (e) {
-            profileDisplay.src = e.target.result;
-          };
+  } catch (err) {
 
-          reader.readAsDataURL(file);
-        }
-      });
-    </script>
+    console.log(err);
+
+    saveBtn.classList.remove("is-loading");
+    saveBtn.innerHTML = `Error saving profile`;
+
+  }
+});
+
+
+
+/* =========================
+   IMAGE PREVIEW
+========================= */
+
+const imageUpload = document.getElementById("imageUpload");
+const profileDisplay = document.getElementById("profileDisplay");
+
+imageUpload.addEventListener("change", function() {
+
+  const file = this.files[0];
+
+  if (file) {
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+
+      profileDisplay.src = e.target.result;
+
+    };
+
+    reader.readAsDataURL(file);
+
+  }
+
+});    </script>
   </body>
 </html>
