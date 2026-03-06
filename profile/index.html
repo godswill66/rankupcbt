@@ -690,129 +690,133 @@
       </div>
     </footer>
 
-    <script>const API = "https://rankupcbt-api.onrender.com/api/users";
+    <script>
+      const API = "https://rankupcbt-api-2.onrender.com/api/users";
 
-const profileForm = document.getElementById("profileForm");
-const saveBtn = profileForm.querySelector(".btn-save");
+      const profileForm = document.getElementById("profileForm");
+      const saveBtn = profileForm.querySelector(".btn-save");
 
-const fullNameInput = document.getElementById("fullName");
-const emailInput = document.getElementById("email");
-const phoneInput = document.getElementById("phone");
-const locationInput = document.getElementById("location");
-const bioInput = document.getElementById("bio");
+      const fullNameInput = document.getElementById("fullName");
+      const emailInput = document.getElementById("email");
+      const phoneInput = document.getElementById("phone");
+      const locationInput = document.getElementById("location");
+      const bioInput = document.getElementById("bio");
+      const institutionInput = document.getElementById("uni");
 
-const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
+      if (!token) {
+        alert("You must login first");
+        window.location.href = "/login";
+      }
 
-/* =========================
+      /* =========================
    LOAD USER PROFILE
 ========================= */
 
-async function loadProfile() {
-  try {
+      async function loadProfile() {
+        try {
+          const res = await fetch(`${API}/me`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-    const res = await fetch(`${API}/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`
+          if (!res.ok) {
+            throw new Error("Failed to fetch profile");
+          }
+
+          const user = await res.json();
+
+          fullNameInput.value = user.fullName || "";
+          emailInput.value = user.email || "";
+          phoneInput.value = user.phone || "";
+          locationInput.value = user.location || "";
+          bioInput.value = user.bio || "";
+          institutionInput.value = user.institution || "";
+        } catch (err) {
+          console.error("Profile load error:", err);
+        }
       }
-    });
 
-    const user = await res.json();
+      loadProfile();
 
-    fullNameInput.value = user.fullName || "";
-    emailInput.value = user.email || "";
-    phoneInput.value = user.phone || "";
-    locationInput.value = user.location || "";
-    bioInput.value = user.bio || "";
-
-  } catch (err) {
-    console.log("Profile load error:", err);
-  }
-}
-
-loadProfile();
-
-
-
-/* =========================
+      /* =========================
    UPDATE PROFILE
 ========================= */
 
-profileForm.addEventListener("submit", async function(e) {
-  e.preventDefault();
+      profileForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
 
-  saveBtn.classList.add("is-loading");
-  saveBtn.innerHTML = `<i class="fa-solid fa-spinner"></i> Saving Changes...`;
+        saveBtn.classList.add("is-loading");
+        saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving Changes...`;
 
-  try {
+        try {
+          const res = await fetch(`${API}/profile`, {
+            method: "PUT",
 
-    const res = await fetch(`${API}/profile`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
 
-      body: JSON.stringify({
-        fullName: fullNameInput.value,
-        email: emailInput.value,
-        phone: phoneInput.value,
-        location: locationInput.value,
-        bio: bioInput.value
-      })
-    });
+            body: JSON.stringify({
+              fullName: fullNameInput.value,
+              email: emailInput.value,
+              phone: phoneInput.value,
+              location: locationInput.value,
+              bio: bioInput.value,
+              institution: institutionInput.value,
+            }),
+          });
 
-    const data = await res.json();
+          const data = await res.json();
 
-    saveBtn.classList.remove("is-loading");
-    saveBtn.classList.add("success-pulse");
+          if (!res.ok) {
+            throw new Error(data.message || "Failed to update profile");
+          }
 
-    saveBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Profile Saved!`;
+          saveBtn.classList.remove("is-loading");
+          saveBtn.classList.add("success-pulse");
 
-    setTimeout(() => {
+          saveBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Profile Saved!`;
 
-      saveBtn.classList.remove("success-pulse");
-      saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
+          setTimeout(() => {
+            saveBtn.classList.remove("success-pulse");
+            saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
+          }, 2500);
+        } catch (err) {
+          console.error("Profile update error:", err);
 
-    }, 2500);
+          saveBtn.classList.remove("is-loading");
+          saveBtn.innerHTML = `Error saving profile`;
 
-  } catch (err) {
+          setTimeout(() => {
+            saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
+          }, 2500);
+        }
+      });
 
-    console.log(err);
-
-    saveBtn.classList.remove("is-loading");
-    saveBtn.innerHTML = `Error saving profile`;
-
-  }
-});
-
-
-
-/* =========================
+      /* =========================
    IMAGE PREVIEW
 ========================= */
 
-const imageUpload = document.getElementById("imageUpload");
-const profileDisplay = document.getElementById("profileDisplay");
+      const imageUpload = document.getElementById("imageUpload");
+      const profileDisplay = document.getElementById("profileDisplay");
 
-imageUpload.addEventListener("change", function() {
+      imageUpload.addEventListener("change", function () {
+        const file = this.files[0];
 
-  const file = this.files[0];
+        if (file) {
+          const reader = new FileReader();
 
-  if (file) {
+          reader.onload = function (e) {
+            profileDisplay.src = e.target.result;
+          };
 
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-
-      profileDisplay.src = e.target.result;
-
-    };
-
-    reader.readAsDataURL(file);
-
-  }
-
-});    </script>
+          reader.readAsDataURL(file);
+        }
+      });
+    </script>
   </body>
 </html>
