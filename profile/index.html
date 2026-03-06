@@ -559,10 +559,10 @@
         <form id="profileForm">
           <div class="form-grid">
             <div class="form-group">
-              <label for="fname"
+              <label for="fullName"
                 ><i class="fa-solid fa-user-tag"></i> Real Name</label
               >
-              <input type="text" id="fname" value="Valentinavalee Valee" />
+              <input type="text" id="fullName" value="Valentinavalee Valee" />
             </div>
             <div class="form-group">
               <label for="email"
@@ -695,7 +695,7 @@
 const profileForm = document.getElementById("profileForm");
 const saveBtn = profileForm.querySelector(".btn-save");
 
-const nameInput = document.getElementById("fname");
+const fullNameInput = document.getElementById("fullName");
 const emailInput = document.getElementById("email");
 const phoneInput = document.getElementById("phone");
 const locationInput = document.getElementById("location");
@@ -719,7 +719,7 @@ async function loadProfile() {
 
     const user = await res.json();
 
-    nameInput.value = user.name || "";
+    fullNameInput.value = user.fullName || "";
     emailInput.value = user.email || "";
     phoneInput.value = user.phone || "";
     locationInput.value = user.location || "";
@@ -754,7 +754,7 @@ profileForm.addEventListener("submit", async function(e) {
       },
 
       body: JSON.stringify({
-        name: nameInput.value,
+        fullName: fullNameInput.value,
         email: emailInput.value,
         phone: phoneInput.value,
         location: locationInput.value,
