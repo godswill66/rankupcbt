@@ -714,33 +714,49 @@
    LOAD USER PROFILE
 ========================= */
 
-      async function loadProfile() {
-        try {
-          const res = await fetch(`${API}/me`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+      // Load user profile
+async function loadUserProfile() {
+  try {
+    const res = await fetch(`${API_BASE}/api/users/me`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-          if (!res.ok) {
-            throw new Error("Failed to fetch profile");
-          }
+    if (!res.ok) {
+      console.error("Failed to load profile");
+      return;
+    }
 
-          const user = await res.json();
+    const user = await res.json();
 
-          fullNameInput.value = user.fullName || "";
-          emailInput.value = user.email || "";
-          phoneInput.value = user.phone || "";
-          locationInput.value = user.location || "";
-          bioInput.value = user.bio || "";
-          institutionInput.value = user.institution || "";
-        } catch (err) {
-          console.error("Profile load error:", err);
-        }
-      }
+    if (!user) return;
 
-      loadProfile();
+    // Welcome message
+    document.getElementById("fullName").innerText =
+      user.fullName || "User";
 
+    // Profile section
+    document.getElementById("profileName").innerText =
+      user.fullName || "Not provided";
+
+    document.getElementById("profileEmail").innerText =
+      user.email || "Not provided";
+
+    document.getElementById("profilePhone").innerText =
+      user.phone || "Not provided";
+
+    document.getElementById("profileLocation").innerText =
+      user.location || "Not provided";
+
+  } catch (err) {
+    console.error("Profile Load Error:", err);
+  }
+}
+
+// Run profile loader
+loadUserProfile();
       /* =========================
    UPDATE PROFILE
 ========================= */

@@ -863,12 +863,14 @@
                   href="/profile/"
                   alt="my profile"
                   style="text-decoration: none"
-                  > edit</a
+                >
+                  edit</a
                 >
               </button>
             </div>
             <ul class="profile-info-list">
               <li>
+                mg
                 <i class="fa-solid fa-user"></i>
                 <span id="profileName">---</span>
               </li>
@@ -967,6 +969,9 @@
       document
         .getElementById("notificationBtn")
         ?.addEventListener("click", () => {
+          <a href="/profile/" class="btn-text-icon">
+            <i class="fa-solid fa-pen"></i> Edit
+          </a>;
           document
             .getElementById("notificationDropdown")
             ?.classList.toggle("active");
@@ -1089,8 +1094,8 @@
           // Update profile section
           document.getElementById("profileName").innerText = user.fullName;
           document.getElementById("profileEmail").innerText = user.email;
-          document.getElementById("profilePhone").innerText = user.phone // "Not provided"
-            user.phone || "Not provided";
+          document.getElementById("profilePhone").innerText = user.phone; // "Not provided"
+          user.phone || "Not provided";
           document.getElementById("profileLocation").innerText =
             user.location || "Not provided";
         } catch (err) {
