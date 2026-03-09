@@ -269,7 +269,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        position:relative;
+        position: relative;
         bottom: 0;
         z-index: 100;
       }
@@ -437,69 +437,71 @@
       .socials a:hover {
         color: var(--primary);
       }
-@media (max-width: 900px) {
-  /* 1. Hide the User ID Badge in Header */
-  .user-id-badge {
-    display: none !important;
-  }
+      @media (max-width: 900px) {
+        /* 1. Hide the User ID Badge in Header */
+        .user-id-badge {
+          display: none !important;
+        }
 
-  /* 2. Main Layout Adjustment */
-  .exam-layout {
-    grid-template-columns: 1fr;
-  }
-  .sidebar {
-    display: none;
-  }
+        /* 2. Main Layout Adjustment */
+        .exam-layout {
+          grid-template-columns: 1fr;
+        }
+        .sidebar {
+          display: none;
+        }
 
-  /* 3. Compress and Align Exam Footer to the Left */
-  .exam-footer {
-    padding: 0 10px; /* Minimal padding to save space */
-    justify-content: flex-start; /* Move content to the left */
-    gap: 6px;
-    height: 70px;
-  }
+        /* 3. Compress and Align Exam Footer to the Left */
+        .exam-footer {
+          padding: 0 10px; /* Minimal padding to save space */
+          justify-content: flex-start; /* Move content to the left */
+          gap: 6px;
+          height: 70px;
+        }
 
-  /* Container for Calc, Next, and Submit */
-  .exam-footer > div {
-    justify-content: flex-start !important;
-    gap: 6px !important;
-    width: auto;
-  }
+        /* Container for Calc, Next, and Submit */
+        .exam-footer > div {
+          justify-content: flex-start !important;
+          gap: 6px !important;
+          width: auto;
+        }
 
-  /* 4. Make all buttons smaller to fit the row */
-  .btn, .btn-btn-submit {
-    padding: 8px 10px !important; /* Tight padding */
-    font-size: 0.75rem !important; /* Smaller text */
-    white-space: nowrap;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    border-radius: 6px;
-  }
+        /* 4. Make all buttons smaller to fit the row */
+        .btn,
+        .btn-btn-submit {
+          padding: 8px 10px !important; /* Tight padding */
+          font-size: 0.75rem !important; /* Smaller text */
+          white-space: nowrap;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          border-radius: 6px;
+        }
 
-  /* Remove text from "Next" and "Previous" if space is too tight */
-  .btn-next, .btn-prev {
-    padding: 8px 8px !important;
-  }
+        /* Remove text from "Next" and "Previous" if space is too tight */
+        .btn-next,
+        .btn-prev {
+          padding: 8px 8px !important;
+        }
 
-  /* Icon only adjustments for the calculator */
-  .btn-calc-icon {
-    padding: 8px 12px !important;
-  }
+        /* Icon only adjustments for the calculator */
+        .btn-calc-icon {
+          padding: 8px 12px !important;
+        }
 
-  /* 5. Center the Calculator Modal */
-  #calc-modal {
-    width: 280px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
+        /* 5. Center the Calculator Modal */
+        #calc-modal {
+          width: 280px;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
 
-  /* Footer grid (bottom of page) */
-  .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
+        /* Footer grid (bottom of page) */
+        .footer-grid {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
       }
     </style>
   </head>
@@ -596,7 +598,7 @@
         <button class="btn btn-next">
           Next Question <i class="fa-solid-fa-arrow-right"></i>
         </button>
-        <button class="btn-btn-submit" onclick="submitTest()">
+        <button class="btn btn-submit" onclick="submitTest()">
           Submit Examination
         </button>
       </div>
