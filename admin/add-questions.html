@@ -3,13 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RankUp Admin | Control Center</title>
+    <title>Admin RankUpcbt| Control Panel</title>
+    <meta
+      name="description"
+      content="RankUp CBT is the ultimate JAMB Ranker. Practice past questions, track your performance against thousands of students, and boost your JAMB score for free."
+    />
+    <meta
+      name="keywords"
+      content="JAMB Ranker, JAMB CBT Practice, RankUp CBT, Nigeria exam preparation, UTME ranking, JAMB score tracker"
+    />
+    <meta name="author" content="RankUp CBT" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.rankupcbt.com/" />
+    <meta property="og:url" content="https://rankupcbt-api-2.onrender.com" />
+    <meta
+      property="og:title"
+      content="RankUp CBT | The Best JAMB Ranker for 2026"
+    />
+    <meta
+      property="og:description"
+      content="See where you stand among thousands of candidates. Use our JAMB Ranker tool to predict your admission chances."
+    />
+    <meta property="og:image" content="/assets/logo.png" />
+
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta
+      property="twitter:title"
+      content="RankUp CBT - Official JAMB Ranker"
+    />
+
+    <link rel="icon" type="image/png" href="/assets/logo.png" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -433,7 +463,8 @@
       document.getElementById("current-date").innerText =
         new Date().toDateString();
 
-      const API_URL = "https://rankupcbt-api-2.onrender.com/api/admin/questions";
+      const API_URL =
+        "https://rankupcbt-api-2.onrender.com/api/admin/questions";
       let allQuestions = [];
       let filteredQuestions = [];
       let currentPage = 1;
@@ -492,7 +523,6 @@ RENDER TABLE
         <td>
           <strong>${q.correctAnswer}</strong>
         </td>
-
         <td>
 
           <button class="btn-action btn-edit"

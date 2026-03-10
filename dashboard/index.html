@@ -17,6 +17,8 @@
 
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.rankupcbt.com/" />
+    <meta property="og:url" content="https://rankupcbt-api-2.onrender.com" />
+
     <meta
       property="og:title"
       content="RankUp CBT | The Best JAMB Ranker for 2026"
@@ -870,7 +872,6 @@
             </div>
             <ul class="profile-info-list">
               <li>
-                mg
                 <i class="fa-solid fa-user"></i>
                 <span id="profileName">---</span>
               </li>
@@ -961,17 +962,17 @@
       const token = localStorage.getItem("token");
 
       // Redirect if user not logged in
-      if (!token) {
-        window.location.href = "/login/";
-      }
+     if (!res.ok) {
+    localStorage.removeItem("token");
+    window.location.href = "/login/";
+    return;
+}
 
-      // Toggle notification dropdown
+
+      // Toggle notification dropdown// Toggle notification dropdown
       document
         .getElementById("notificationBtn")
         ?.addEventListener("click", () => {
-          <a href="/profile/" class="btn-text-icon">
-            <i class="fa-solid fa-pen"></i> Edit
-          </a>;
           document
             .getElementById("notificationDropdown")
             ?.classList.toggle("active");
