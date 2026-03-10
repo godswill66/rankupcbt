@@ -301,7 +301,7 @@
         <a href="#" class="nav-item active"
           ><i class="fas fa-chart-pie"></i> Dashboard</a
         >
-        <a href="#manage-questions" class="nav-item"
+        <a href="#" class="nav-item"
           ><i class="fas fa-book"></i> Manage Questions</a
         >
         <a href="#" class="nav-item"><i class="fas fa-users"></i> Students</a>
@@ -433,8 +433,7 @@
       document.getElementById("current-date").innerText =
         new Date().toDateString();
 
-      const API_URL = "http://localhost:3000/api/admin/questions";
-
+      const API_URL = "https://rankupcbt-api-2.onrender.com/api/admin/questions";
       let allQuestions = [];
       let filteredQuestions = [];
       let currentPage = 1;
