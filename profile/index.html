@@ -509,7 +509,7 @@
           onclick="document.getElementById('imageUpload').click()"
         >
           <img
-            src="/assets/DEV_GODSWILL.jpg"
+            src=""
             alt="User Avatar"
             class="avatar-img"
             id="profileDisplay"
@@ -692,17 +692,6 @@
 
     <script>
       const API = "https://rankupcbt-api-2.onrender.com/api/users";
-
-      const profileForm = document.getElementById("profileForm");
-      const saveBtn = profileForm.querySelector(".btn-save");
-
-      const fullNameInput = document.getElementById("fullName");
-      const emailInput = document.getElementById("email");
-      const phoneInput = document.getElementById("phone");
-      const locationInput = document.getElementById("location");
-      const bioInput = document.getElementById("bio");
-      const institutionInput = document.getElementById("uni");
-
       const token = localStorage.getItem("token");
 
       if (!token) {
@@ -710,57 +699,57 @@
         window.location.href = "/login";
       }
 
+      const profileForm = document.getElementById("profileForm");
+      const saveBtn = profileForm.querySelector(".btn-save");
+
+      // Form Inputs
+      const fullNameInput = document.getElementById("fullName");
+      const emailInput = document.getElementById("email");
+      const phoneInput = document.getElementById("phone");
+      const locationInput = document.getElementById("location");
+      const bioInput = document.getElementById("bio");
+      const institutionInput = document.getElementById("uni");
+
+      // Profile Sidebar Elements
+      const sidebarName = document.querySelector(".profile-card h2");
+
       /* =========================
    LOAD USER PROFILE
 ========================= */
+      async function loadUserProfile() {
+        try {
+          const res = await fetch(`${API}/me`, {
+            // Fixed API reference
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-      // Load user profile
-async function loadUserProfile() {
-  try {
-    const res = await fetch(`${API_BASE}/api/users/me`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+          if (!res.ok) throw new Error("Failed to load profile");
 
-    if (!res.ok) {
-      console.error("Failed to load profile");
-      return;
-    }
+          const user = await res.json();
 
-    const user = await res.json();
+          // Map data to Form Inputs
+          fullNameInput.value = user.fullName || "";
+          emailInput.value = user.email || "";
+          phoneInput.value = user.phone || "";
+          locationInput.value = user.location || "";
+          bioInput.value = user.bio || "";
+          institutionInput.value = user.institution || "unilag";
 
-    if (!user) return;
+          // Map data to Sidebar
+          sidebarName.innerText = user.fullName || "User";
+        } catch (err) {
+          console.error("Profile Load Error:", err);
+        }
+      }
 
-    // Welcome message
-    document.getElementById("fullName").innerText =
-      user.fullName || "User";
+      loadUserProfile();
 
-    // Profile section
-    document.getElementById("profileName").innerText =
-      user.fullName || "Not provided";
-
-    document.getElementById("profileEmail").innerText =
-      user.email || "Not provided";
-
-    document.getElementById("profilePhone").innerText =
-      user.phone || "Not provided";
-
-    document.getElementById("profileLocation").innerText =
-      user.location || "Not provided";
-
-  } catch (err) {
-    console.error("Profile Load Error:", err);
-  }
-}
-
-// Run profile loader
-loadUserProfile();
       /* =========================
    UPDATE PROFILE
 ========================= */
-
       profileForm.addEventListener("submit", async function (e) {
         e.preventDefault();
 
@@ -770,12 +759,10 @@ loadUserProfile();
         try {
           const res = await fetch(`${API}/profile`, {
             method: "PUT",
-
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-
             body: JSON.stringify({
               fullName: fullNameInput.value,
               email: emailInput.value,
@@ -787,26 +774,24 @@ loadUserProfile();
           });
 
           const data = await res.json();
+          if (!res.ok) throw new Error(data.message || "Update failed");
 
-          if (!res.ok) {
-            throw new Error(data.message || "Failed to update profile");
-          }
-
+          // Success UI
           saveBtn.classList.remove("is-loading");
           saveBtn.classList.add("success-pulse");
-
           saveBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Profile Saved!`;
+
+          // Update sidebar name immediately
+          sidebarName.innerText = fullNameInput.value;
 
           setTimeout(() => {
             saveBtn.classList.remove("success-pulse");
             saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
           }, 2500);
         } catch (err) {
-          console.error("Profile update error:", err);
-
+          console.error("Update error:", err);
           saveBtn.classList.remove("is-loading");
           saveBtn.innerHTML = `Error saving profile`;
-
           setTimeout(() => {
             saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
           }, 2500);
@@ -816,21 +801,18 @@ loadUserProfile();
       /* =========================
    IMAGE PREVIEW
 ========================= */
-
       const imageUpload = document.getElementById("imageUpload");
       const profileDisplay = document.getElementById("profileDisplay");
 
       imageUpload.addEventListener("change", function () {
         const file = this.files[0];
-
         if (file) {
           const reader = new FileReader();
-
-          reader.onload = function (e) {
-            profileDisplay.src = e.target.result;
-          };
-
+          reader.onload = (e) => (profileDisplay.src = e.target.result);
           reader.readAsDataURL(file);
+
+          // Note: You'll need a separate endpoint (e.g., /profile/avatar)
+          // if you want to upload this image to your server!
         }
       });
     </script>
