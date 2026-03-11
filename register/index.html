@@ -318,6 +318,46 @@
         font-size: 1.2rem;
       }
 
+      /* --- NEW: FULL SCREEN LOADING SCREEN --- */
+      #fullScreenLoader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(8px);
+        display: none; /* Hidden by default */
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        flex-direction: column;
+      }
+
+      .loader-content {
+        text-align: center;
+      }
+
+      .loader-icon {
+        font-size: 4rem;
+        color: var(--primary);
+        margin-bottom: 20px;
+        animation: pulseAndSpin 1.5s ease-in-out infinite;
+      }
+
+      .loader-text {
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+      }
+
+      @keyframes pulseAndSpin {
+        0% { transform: scale(1) rotate(0deg); opacity: 0.7; }
+        50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+        100% { transform: scale(1) rotate(360deg); opacity: 0.7; }
+      }
+
       /* --- Responsive Breakpoints --- */
       @media (max-width: 992px) {
         .signup-layout {
@@ -359,9 +399,17 @@
           font-size: 1.6rem;
         }
       }
+      
     </style>
   </head>
   <body>
+    <div id="fullScreenLoader">
+      <div class="loader-content">
+        <i class="fa-solid fa-square-poll-vertical loader-icon"></i>
+        <div class="loader-text">Setting up your RankUp portal...</div>
+      </div>
+    </div>
+
     <nav class="navbar">
       <div class="container nav-content">
         <a href="#" class="logo">
@@ -420,7 +468,7 @@
                 <input
                   type="password"
                   id="password"
-                  placeholder="••••••••"
+                  placeholder="Create Password"
                   required
                 />
               </div>
@@ -430,7 +478,7 @@
                 <input
                   type="password"
                   id="confirmPassword"
-                  placeholder="••••••••"
+                  placeholder="confirm Password"
                   required
                 />
               </div>
@@ -509,9 +557,11 @@
         </div>
       </div>
     </footer>
+
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const form = document.getElementById("signupForm");
+        const loader = document.getElementById("fullScreenLoader");
 
         form.addEventListener("submit", async (e) => {
           e.preventDefault();
@@ -538,6 +588,10 @@
             alert("Passwords do not match");
             return;
           }
+
+          // SHOW THE FULL SCREEN ANIMATION
+          loader.style.display = "flex";
+
           try {
             const response = await fetch(
               "https://rankupcbt-api-2.onrender.com/api/auth/register",
@@ -557,6 +611,7 @@
             const data = await response.json();
 
             if (!response.ok) {
+              loader.style.display = "none"; // HIDE IF ERROR
               alert(data.message || "Registration failed");
               return;
             }
@@ -569,6 +624,7 @@
             // Redirect to dashboard
             window.location.href = "/dashboard/";
           } catch (error) {
+            loader.style.display = "none"; // HIDE IF ERROR
             console.error(error);
             alert("Cannot connect to backend. Please try again later.");
           }
