@@ -961,13 +961,9 @@
       // Get saved JWT token
       const token = localStorage.getItem("token");
 
-      // Redirect if user not logged in
-     if (!res.ok) {
-    localStorage.removeItem("token");
-    window.location.href = "/login/";
-    return;
-}
-
+      if (!token) {
+        window.location.href = "/login/";
+      }
 
       // Toggle notification dropdown// Toggle notification dropdown
       document
