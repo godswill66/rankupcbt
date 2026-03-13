@@ -4,6 +4,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin RankUpcbt| Control Panel</title>
+    <meta
+      name="description"
+      content="RankUp CBT is the ultimate JAMB Ranker. Practice past questions, track your performance against thousands of students, and boost your JAMB score for free."
+    />
+    <meta
+      name="keywords"
+      content="JAMB Ranker, JAMB CBT Practice, RankUp CBT, Nigeria exam preparation, UTME ranking, JAMB score tracker"
+    />
+    <meta name="author" content="RankUp CBT" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.rankupcbt.com/" />
+    <meta
+      property="og:title"
+      content="RankUp CBT | The Best JAMB Ranker for 2026"
+    />
+    <meta
+      property="og:description"
+      content="See where you stand among thousands of candidates. Use our JAMB Ranker tool to predict your admission chances."
+    />
+    <meta property="og:image" content="/assets/logo.png" />
+
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta
+      property="twitter:title"
+      content="RankUp CBT - Official JAMB Ranker"
+    />
+
     <link rel="icon" type="image/png" href="/assets/logo.png" />
     <link
       rel="stylesheet"
@@ -24,6 +52,7 @@
         --danger: #ef4444;
         --success: #10b981;
       }
+
       * {
         margin: 0;
         padding: 0;
@@ -36,6 +65,8 @@
         min-height: 100vh;
         color: var(--text-main);
       }
+
+      /* --- SIDEBAR --- */
       .sidebar {
         width: 260px;
         background: var(--bg-sidebar);
@@ -73,12 +104,16 @@
         background: #f1f5ff;
         color: var(--admin-primary);
       }
+
+      /* --- MAIN CONTENT --- */
       .main-content {
         margin-left: 260px;
         flex: 1;
         padding: 40px;
         width: calc(100% - 260px);
       }
+
+      /* --- STATS --- */
       .header-stats {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -102,6 +137,8 @@
         font-size: 1.8rem;
         font-weight: 800;
       }
+
+      /* --- TOOLBAR (SEARCH/FILTER) --- */
       .toolbar {
         display: flex;
         background: white;
@@ -139,6 +176,8 @@
         outline: none;
         min-width: 150px;
       }
+
+      /* --- DATA TABLE --- */
       .table-section {
         background: white;
         border-radius: 20px;
@@ -165,6 +204,13 @@
         font-size: 0.9rem;
         vertical-align: middle;
       }
+
+      .question-text {
+        max-width: 400px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
       .badge {
         padding: 5px 10px;
         border-radius: 8px;
@@ -184,6 +230,7 @@
         background: #fef3c7;
         color: #92400e;
       }
+
       .btn-action {
         padding: 8px;
         border: none;
@@ -199,6 +246,12 @@
       .btn-delete {
         color: var(--danger);
       }
+      .btn-action:hover {
+        background: #f1f5ff;
+        transform: scale(1.1);
+      }
+
+      /* --- PAGINATION --- */
       .pagination {
         display: flex;
         justify-content: center;
@@ -214,11 +267,18 @@
         border-radius: 8px;
         cursor: pointer;
         font-weight: 600;
+        transition: 0.2s;
       }
       .page-btn.active {
         background: var(--admin-primary);
         color: white;
+        border-color: var(--admin-primary);
       }
+      .page-btn:hover:not(.active) {
+        background: #f8fafc;
+      }
+
+      /* --- ADD FORM SECTION --- */
       .form-section {
         background: white;
         padding: 30px;
@@ -242,6 +302,9 @@
         cursor: pointer;
         width: 100%;
         transition: 0.3s;
+      }
+      .btn-submit:hover {
+        background: var(--admin-dark);
       }
       label {
         font-weight: 600;
@@ -267,14 +330,17 @@
         <a href="#" class="nav-item active"
           ><i class="fas fa-chart-pie"></i> Dashboard</a
         >
-        <a href="#manage-questions" class="nav-item"
+        <a href="#" class="nav-item"
           ><i class="fas fa-book"></i> Manage Questions</a
         >
         <a href="#" class="nav-item"><i class="fas fa-users"></i> Students</a>
-        <a href="#" class="nav-item" onclick="logoutAdmin()"
-          ><i class="fas fa-sign-out-alt"></i> Logout</a
-        >
+        <a href="#" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
       </nav>
+      <div style="margin-top: auto">
+        <a href="/" class="nav-item"
+          ><i class="fas fa-sign-out-alt"></i> Back to Site</a
+        >
+      </div>
     </aside>
 
     <main class="main-content">
@@ -355,13 +421,14 @@
       <h2 id="manage-questions" style="margin-bottom: 20px">
         Database Manager
       </h2>
+
       <div class="toolbar">
         <div class="search-box">
           <i class="fas fa-search"></i>
           <input
             type="text"
             id="searchInput"
-            placeholder="Search questions..."
+            placeholder="Search by question text..."
             oninput="handleSearch()"
           />
         </div>
@@ -391,161 +458,259 @@
         <div class="pagination" id="pagination"></div>
       </div>
     </main>
-
     <script>
+      document.getElementById("current-date").innerText =
+        new Date().toDateString();
+
       const API_URL =
         "https://rankupcbt-api-2.onrender.com/api/admin/questions";
       let allQuestions = [];
       let filteredQuestions = [];
       let currentPage = 1;
       const rowsPerPage = 8;
-
-      document.getElementById("current-date").innerText =
-        new Date().toDateString();
-
-      // SECURITY & TOKEN HELPER
-      function getAuthHeaders() {
-        const token = localStorage.getItem("rankup_token");
-        return {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        };
-      }
-
-      (function checkAuth() {
-        const session = localStorage.getItem("rankup_admin_session");
-        if (session !== "active_logged_in") {
-          window.location.href = "../admin-auth/admin-auth.html";
-        }
-      })();
-
-      function logoutAdmin() {
-        localStorage.removeItem("rankup_admin_session");
-        localStorage.removeItem("rankup_token");
-        window.location.href = "../admin-auth/admin-auth.html";
-      }
+      /* ===============================
+LOAD QUESTIONS FROM BACKEND
+=============================== */
 
       async function fetchQuestions() {
         try {
-          const res = await fetch(API_URL, { headers: getAuthHeaders() });
+          const res = await fetch(API_URL);
           const data = await res.json();
+
           allQuestions = data;
           filteredQuestions = [...allQuestions];
+
           renderTable();
         } catch (error) {
           console.error("Failed to load questions", error);
         }
       }
 
+      /* ===============================
+RENDER TABLE
+=============================== */
+
       function renderTable() {
         const tbody = document.getElementById("questions-tbody");
         tbody.innerHTML = "";
+
         const start = (currentPage - 1) * rowsPerPage;
-        const pageData = filteredQuestions.slice(start, start + rowsPerPage);
+        const end = start + rowsPerPage;
+
+        const pageData = filteredQuestions.slice(start, end);
 
         document.getElementById("total-questions-stat").innerText =
           allQuestions.length.toLocaleString();
 
         pageData.forEach((q) => {
           tbody.innerHTML += `
-            <tr>
-              <td><span class="badge badge-${q.subject}">${q.subject}</span></td>
-              <td><div class="question-text">${q.questionText}</div></td>
-              <td><strong>${q.correctAnswer}</strong></td>
-              <td>
-                <button class="btn-action btn-edit" onclick="editItem('${q._id}')"><i class="fas fa-pen-to-square"></i></button>
-                <button class="btn-action btn-delete" onclick="deleteItem('${q._id}')"><i class="fas fa-trash-can"></i></button>
-              </td>
-            </tr>`;
+      <tr>
+
+        <td>
+          <span class="badge badge-${q.subject}">
+            ${q.subject}
+          </span>
+        </td>
+
+        <td>
+          <div class="question-text">
+            ${q.questionText}
+          </div>
+        </td>
+
+        <td>
+          <strong>${q.correctAnswer}</strong>
+        </td>
+        <td>
+
+          <button class="btn-action btn-edit"
+          onclick="editItem('${q._id}')">
+
+          <i class="fas fa-pen-to-square"></i>
+
+          </button>
+
+          <button class="btn-action btn-delete"
+          onclick="deleteItem('${q._id}')">
+
+          <i class="fas fa-trash-can"></i>
+
+          </button>
+
+        </td>
+
+      </tr>
+    `;
         });
+
         renderPagination();
       }
+
+      /* ===============================
+PAGINATION
+=============================== */
 
       function renderPagination() {
         const totalPages = Math.ceil(filteredQuestions.length / rowsPerPage);
         const container = document.getElementById("pagination");
+
         container.innerHTML = "";
+
         for (let i = 1; i <= totalPages; i++) {
-          container.innerHTML += `<button class="page-btn ${i === currentPage ? "active" : ""}" onclick="goToPage(${i})">${i}</button>`;
+          container.innerHTML += `
+      <button class="page-btn ${i === currentPage ? "active" : ""}"
+      onclick="goToPage(${i})">
+
+      ${i}
+
+      </button>
+    `;
         }
       }
 
+      /* ===============================
+SEARCH
+=============================== */
+
       function handleSearch() {
         const term = document.getElementById("searchInput").value.toLowerCase();
+
         filteredQuestions = allQuestions.filter((q) =>
           q.questionText.toLowerCase().includes(term),
         );
+
         currentPage = 1;
+
         renderTable();
       }
 
+      /* ===============================
+FILTER BY SUBJECT
+=============================== */
+
       function handleFilter() {
         const sub = document.getElementById("subjectFilter").value;
+
         filteredQuestions =
           sub === "all"
             ? [...allQuestions]
             : allQuestions.filter((q) => q.subject === sub);
+
         currentPage = 1;
+
         renderTable();
       }
 
+      /* ===============================
+DELETE QUESTION
+=============================== */
+
       async function deleteItem(id) {
-        if (!confirm("Delete permanently?")) return;
+        if (!confirm("Delete this question permanently?")) return;
+
         await fetch(`${API_URL}/${id}`, {
           method: "DELETE",
-          headers: getAuthHeaders(),
         });
+
         fetchQuestions();
       }
+
+      /* ===============================
+EDIT QUESTION
+=============================== */
 
       async function editItem(id) {
         const q = allQuestions.find((item) => item._id === id);
+
         const newText = prompt("Edit Question:", q.questionText);
+
         if (!newText) return;
+
         await fetch(`${API_URL}/${id}`, {
           method: "PUT",
-          headers: getAuthHeaders(),
-          body: JSON.stringify({ questionText: newText }),
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            questionText: newText,
+          }),
         });
+
         fetchQuestions();
       }
+
+      /* ===============================
+CHANGE PAGE
+=============================== */
 
       function goToPage(p) {
         currentPage = p;
+
         renderTable();
       }
+
+      /* ===============================
+REFRESH DATA
+=============================== */
+
       function refreshData() {
-        fetchQuestions();
+        document.getElementById("searchInput").value = "";
+        document.getElementById("subjectFilter").value = "all";
+
+        filteredQuestions = [...allQuestions];
+
+        renderTable();
       }
+
+      /* ===============================
+ADD QUESTION
+=============================== */
 
       document.getElementById("questionForm").onsubmit = async (e) => {
         e.preventDefault();
+
         const data = {
           subject: document.getElementById("subject").value,
+
           questionText: document.getElementById("questionText").value,
+
           options: [
             { label: "A", text: optA.value },
+
             { label: "B", text: optB.value },
+
             { label: "C", text: optC.value },
+
             { label: "D", text: optD.value },
           ],
+
           correctAnswer: document
             .getElementById("correctLabel")
             .value.toUpperCase(),
         };
 
-        const res = await fetch(API_URL, {
+        await fetch(API_URL, {
           method: "POST",
-          headers: getAuthHeaders(),
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
           body: JSON.stringify(data),
         });
 
-        if (res.ok) {
-          e.target.reset();
-          fetchQuestions();
-          alert("Question added!");
-        }
+        e.target.reset();
+
+        fetchQuestions();
+
+        alert("Question added successfully");
       };
+
+      /* ===============================
+INITIAL LOAD
+=============================== */
 
       fetchQuestions();
     </script>
