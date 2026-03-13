@@ -185,7 +185,7 @@
       <p id="error-msg"></p>
     </div>
     <script>
-      // Point this to your Render URL when you go live!
+      // Correct Base URL to match your server.js (app.use("/api/auth", ...))
       const API_BASE_URL = "http://localhost:3001/api/auth";
 
       document.getElementById("loginForm").onsubmit = async function (e) {
@@ -205,7 +205,7 @@
         loginBtn.disabled = true;
 
         try {
-          // Corrected URL: Removed the extra /auth/
+          // This now correctly targets http://localhost:3001/api/auth/admin/login
           const response = await fetch(`${API_BASE_URL}/admin/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -215,7 +215,7 @@
           const data = await response.json();
 
           if (response.ok) {
-            // Save token and session
+            // MATCHED: We are using "rankup_token" just like your Dashboard script!
             localStorage.setItem("rankup_token", data.token);
             localStorage.setItem("rankup_admin_session", "active_logged_in");
 

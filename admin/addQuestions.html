@@ -457,76 +457,116 @@
         </table>
         <div class="pagination" id="pagination"></div>
       </div>
-    </main><script>
-  document.getElementById("current-date").innerText = new Date().toDateString();
+    </main>
+    <script>
+      // 1. Configuration & Security Guard
+      document.getElementById("current-date").innerText =
+        new Date().toDateString();
 
-  // URL Config
-  const API_URL = "http://localhost:3001/api/questions";
-  const token = localStorage.getItem("rankup_token");
+      const API_URL = "http://localhost:3001/api/admin";
+      // IMPORTANT: Ensure this key name ("rankup_token") matches what you set during Login!
+      const token = localStorage.getItem("rankup_token");
 
-  // Auth Guard
-  if (!token) {
-    window.location.href = "../admin-auth/admin-auth.html";
-  }
-
-  let allQuestions = [];
-
-  // 1. Fetch Questions on Load
-  async function fetchQuestions() {
-    try {
-      const res = await fetch(API_URL, {
-        headers: { "Authorization": `Bearer ${token}` }
-      });
-      if (!res.ok) throw new Error("Unauthorized");
-      
-      allQuestions = await res.json();
-      renderTable(allQuestions);
-      document.getElementById("total-questions-stat").innerText = allQuestions.length;
-    } catch (error) {
-      alert("Session expired. Please log in again.");
-      logout();
-    }
-  }
-
-  // 2. Add New Question
-  document.getElementById("questionForm").onsubmit = async (e) => {
-    e.preventDefault();
-    const data = {
-      subject: document.getElementById("subject").value,
-      questionText: document.getElementById("questionText").value,
-      options: [
-        { label: "A", text: document.getElementById("optA").value },
-        { label: "B", text: document.getElementById("optB").value },
-        { label: "C", text: document.getElementById("optC").value },
-        { label: "D", text: document.getElementById("optD").value },
-      ],
-      correctAnswer: document.getElementById("correctLabel").value.toUpperCase(),
-    };
-
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (res.ok) {
-        alert("Question Synced to Cloud! ✅");
-        e.target.reset();
-        fetchQuestions();
+      if (!token) {
+        window.location.href = "../admin-auth/adminAuth.html";
       }
-    } catch (err) {
-      alert("Error uploading question.");
-    }
-  };
 
-  // 3. Render Table
-  function renderTable(questions) {
-    const tbody = document.getElementById("questions-tbody");
-    tbody.innerHTML = questions.map(q => `
+      let allQuestions = [];
+
+      // 2. FETCH: Get all questions
+      async function fetchQuestions() {
+        try {
+          const res = await fetch(API_URL, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          // If the server returns 401 (Unauthorized) or 404, this will trigger the catch block
+          if (!res.ok) throw new Error("Fetch failed");
+
+          allQuestions = await res.json();
+          renderTable(allQuestions);
+          document.getElementById("total-questions-stat").innerText =
+            allQuestions.length;
+        } catch (error) {
+          console.error("Fetch Error:", error);
+          alert("Session expired or unauthorized access. Please log in again.");
+          logout();
+        }
+      }
+
+      // 3. POST: Add a new question
+      document.getElementById("questionForm").onsubmit = async (e) => {
+        e.preventDefault();
+
+        const data = {
+          subject: document.getElementById("subject").value,
+          questionText: document.getElementById("questionText").value,
+          options: [
+            { label: "A", text: document.getElementById("optA").value },
+            { label: "B", text: document.getElementById("optB").value },
+            { label: "C", text: document.getElementById("optC").value },
+            { label: "D", text: document.getElementById("optD").value },
+          ],
+          correctAnswer: document
+            .getElementById("correctLabel")
+            .value.toUpperCase(),
+        };
+
+        try {
+          const res = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (res.ok) {
+            alert("Question Synced to Cloud! ✅");
+            e.target.reset();
+            fetchQuestions(); // Refresh the table
+          } else {
+            const errorData = await res.json();
+            alert(`Error: ${errorData.message}`);
+          }
+        } catch (err) {
+          alert("Network error: Could not upload question.");
+        }
+      };
+
+      // 4. DELETE: Remove a question
+      async function deleteQuestion(id) {
+        if (!confirm("Delete this question forever?")) return;
+
+        try {
+          const res = await fetch(`${API_URL}/${id}`, {
+            // This calls /api/admin/:id
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (res.ok) {
+            fetchQuestions(); // Refresh table after delete
+          } else {
+            alert("Failed to delete question.");
+          }
+        } catch (err) {
+          alert("Error connecting to server.");
+        }
+      }
+
+      // 5. HELPER: Render Table & Logout
+      function renderTable(questions) {
+        const tbody = document.getElementById("questions-tbody");
+        tbody.innerHTML = questions
+          .map(
+            (q) => `
       <tr>
         <td><span class="badge badge-${q.subject}">${q.subject.toUpperCase()}</span></td>
         <td class="question-text">${q.questionText}</td>
@@ -537,29 +577,18 @@
           </button>
         </td>
       </tr>
-    `).join("");
-  }
+    `,
+          )
+          .join("");
+      }
 
-  // 4. Delete Question
-  async function deleteQuestion(id) {
-    if (!confirm("Delete this question forever?")) return;
-    try {
-      await fetch(`${API_URL}/${id}`, {
-        method: "DELETE",
-        headers: { "Authorization": `Bearer ${token}` }
-      });
+      function logout() {
+        localStorage.removeItem("rankup_token");
+        window.location.href = "../admin-auth/adminAuth.html";
+      }
+
+      // Initial load
       fetchQuestions();
-    } catch (err) {
-      alert("Delete failed.");
-    }
-  }
-
-  function logout() {
-    localStorage.clear();
-    window.location.href = "../admin-auth/adminAuth.html";
-  }
-
-  // Initial load
-  fetchQuestions();
-</script>  </body>
+    </script>
+  </body>
 </html>
