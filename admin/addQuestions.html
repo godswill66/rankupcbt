@@ -463,7 +463,7 @@
       document.getElementById("current-date").innerText =
         new Date().toDateString();
 
-      const API_URL = "http://localhost:3001/api/admin";
+      const API_URL = "https://rankupcbt-api-2.onrender.com/api/admin";
       // IMPORTANT: Ensure this key name ("rankup_token") matches what you set during Login!
       const token = localStorage.getItem("rankup_token");
 
@@ -584,7 +584,7 @@
 
       function logout() {
         localStorage.removeItem("rankup_token");
-        window.location.href = "../admin-auth/adminAuth.html";
+        window.location.href = "../adminAuth/adminAuth.html";
       }
 
       // Initial load
