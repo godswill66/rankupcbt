@@ -43,6 +43,8 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    />
 
     <style>
       * {
@@ -680,6 +682,53 @@
           text-align: center;
         }
       }
+      .skills-list li {
+        display: block; /* Change from flex to block */
+        border-bottom: 1px solid #f1f5f9;
+        padding: 0;
+      }
+
+      .subject-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 10px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .subject-header:hover {
+        background: #f8fafc;
+      }
+
+      .subject-history {
+        display: none; /* Hidden by default */
+        background: #fcfcfd;
+        padding: 10px 20px;
+        border-top: 1px dashed #eee;
+      }
+
+      .subject-history.active {
+        display: block;
+      }
+
+      .history-item {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.75rem;
+        color: #64748b;
+        padding: 5px 0;
+      }
+
+      .arrow-icon {
+        transition: transform 0.3s;
+        font-size: 0.7rem;
+        color: #94a3b8;
+      }
+
+      .subject-header.open .arrow-icon {
+        transform: rotate(180deg);
+      }
     </style>
   </head>
   <body class="dashboard-body">
@@ -958,6 +1007,7 @@
     <script>
       const API_BASE = "https://rankupcbt-api-2.onrender.com";
       const token = localStorage.getItem("token");
+      let performanceChart = null; // Global variable to store the chart instance
 
       if (!token) {
         window.location.href = "/login/";
@@ -980,22 +1030,6 @@
         }
       });
 
-      document
-        .querySelector(".btn-text-icon")
-        ?.addEventListener("click", () => {
-          document.getElementById("settingsModal").style.display = "flex";
-        });
-
-      document
-        .getElementById("closeSettings")
-        ?.addEventListener("click", () => {
-          document.getElementById("settingsModal").style.display = "none";
-        });
-
-      document.getElementById("cancelBtn")?.addEventListener("click", () => {
-        document.getElementById("settingsModal").style.display = "none";
-      });
-
       // --- Data Loading ---
       async function loadDashboardData() {
         try {
@@ -1012,35 +1046,107 @@
           // 1. Performance Summary
           document.getElementById("recentScore").innerText =
             data.latestScore || "0/0";
-
           const progress = data.overallProgress || 0;
           document.getElementById("overallProgress").innerText = progress + "%";
           document.getElementById("progressBar").style.width = progress + "%";
-
           document.getElementById("currentRank").innerText =
             data.leaderboardRank ? data.leaderboardRank + "th" : "N/A";
 
-          // 2. Subject Analytics List
+          // 2. Subject Analytics List with Dropdowns
           if (data.subjectAnalytics) {
             const skillsList = document.querySelector(".skills-list");
             skillsList.innerHTML = "";
 
+            const subjectNames = [];
+            const subjectAverages = [];
+
             Object.entries(data.subjectAnalytics).forEach(
-              ([subject, score]) => {
+              ([subject, details]) => {
+                subjectNames.push(
+                  subject.charAt(0).toUpperCase() + subject.slice(1),
+                );
+                subjectAverages.push(details.average);
+
                 const li = document.createElement("li");
                 const formattedSubject =
                   subject.charAt(0).toUpperCase() + subject.slice(1);
+
                 li.innerHTML = `
-            <span>${formattedSubject}</span> 
-            <span style="font-weight:700; color: #5d5fef;">${score}%</span>
+            <div class="subject-header" onclick="this.parentElement.querySelector('.subject-history').classList.toggle('active'); this.classList.toggle('open')">
+              <div style="display:flex; align-items:center; gap:10px;">
+                 <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                 <span>${formattedSubject}</span>
+              </div>
+              <span style="font-weight:700; color: #5d5fef;">Avg: ${details.average}%</span>
+            </div>
+            <div class="subject-history">
+              <div style="font-size:0.7rem; font-weight:600; color:#94a3b8; margin-bottom:5px; text-transform:uppercase;">Past Performances</div>
+              ${details.history
+                .map(
+                  (score, index) => `
+                <div class="history-item">
+                  <span>Practice #${index + 1}</span>
+                  <span style="font-weight:600; color:${score >= 50 ? "#10b981" : "#ff4d4d"}">${score}%</span>
+                </div>
+              `,
+                )
+                .join("")}
+              <div class="history-item" style="border-top: 1px solid #eee; margin-top:5px; padding-top:5px; font-weight:700;">
+                <span>Total Answered</span>
+                <span>${details.totalQuestions || 0} Questions</span>
+              </div>
+            </div>
           `;
                 skillsList.appendChild(li);
               },
             );
+
+            // 3. Initialize Chart.js
+            renderPerformanceChart(subjectNames, subjectAverages);
           }
         } catch (err) {
           console.error("Dashboard Error:", err);
         }
+      }
+
+      function renderPerformanceChart(labels, scores) {
+        const ctx = document.getElementById("subjectChart")?.getContext("2d");
+        if (!ctx) return;
+
+        // Destroy old chart if it exists (prevents ghosting on hover)
+        if (performanceChart) {
+          performanceChart.destroy();
+        }
+
+        performanceChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Subject Average (%)",
+                data: scores,
+                backgroundColor: "#5d5fef22", // Light purple
+                borderColor: "#5d5fef", // Solid purple
+                borderWidth: 2,
+                borderRadius: 6,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: false },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 100,
+                ticks: { callback: (value) => value + "%" },
+              },
+            },
+          },
+        });
       }
 
       async function loadUserProfile() {
@@ -1049,14 +1155,10 @@
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
           });
-
           const user = await res.json();
-
           document.getElementById("fullName").innerText = user.fullName;
           document.getElementById("profileName").innerText = user.fullName;
           document.getElementById("profileEmail").innerText = user.email;
-
-          // Fixed logic for phone and location
           document.getElementById("profilePhone").innerText =
             user.phone || "Not provided";
           document.getElementById("profileLocation").innerText =
