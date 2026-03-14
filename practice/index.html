@@ -83,11 +83,11 @@
         position: sticky;
         top: 0;
         z-index: 100;
-        gap: 15px; /* Adds breathing room between items */
+        gap: 15px;
       }
 
       .subject-switcher {
-        flex-shrink: 0; /* Prevents the dropdown from squishing */
+        flex-shrink: 0;
         background: rgba(255, 255, 255, 0.15);
         border: 1px solid rgba(255, 255, 255, 0.2);
         padding: 6px 12px;
@@ -97,7 +97,6 @@
         gap: 10px;
       }
 
-      /* Center the timer and prevent it from hitting the ID */
       .timer-container {
         flex: 1;
         display: flex;
@@ -123,8 +122,9 @@
         font-size: 0.9rem;
         font-weight: 600;
         text-align: right;
-        min-width: 120px; /* Ensures space for the ID string */
+        min-width: 120px;
       }
+
       /* --- MAIN LAYOUT --- */
       .exam-layout {
         display: grid;
@@ -251,11 +251,6 @@
       }
       .grid-item.done {
         background: var(--primary);
-        color: white;
-        border: none;
-      }
-      .grid-item.flagged {
-        background: var(--warning);
         color: white;
         border: none;
       }
@@ -438,12 +433,10 @@
         color: var(--primary);
       }
       @media (max-width: 900px) {
-        /* 1. Hide the User ID Badge in Header */
         .user-id-badge {
           display: none !important;
         }
 
-        /* 2. Main Layout Adjustment */
         .exam-layout {
           grid-template-columns: 1fr;
         }
@@ -451,26 +444,22 @@
           display: none;
         }
 
-        /* 3. Compress and Align Exam Footer to the Left */
         .exam-footer {
-          padding: 0 10px; /* Minimal padding to save space */
-          justify-content: flex-start; /* Move content to the left */
+          padding: 0 10px;
+          justify-content: flex-start;
           gap: 6px;
           height: 70px;
         }
 
-        /* Container for Calc, Next, and Submit */
         .exam-footer > div {
           justify-content: flex-start !important;
           gap: 6px !important;
           width: auto;
         }
 
-        /* 4. Make all buttons smaller to fit the row */
-        .btn,
-        .btn-btn-submit {
-          padding: 8px 10px !important; /* Tight padding */
-          font-size: 0.75rem !important; /* Smaller text */
+        .btn {
+          padding: 8px 10px !important;
+          font-size: 0.75rem !important;
           white-space: nowrap;
           height: 40px;
           display: flex;
@@ -478,26 +467,6 @@
           border-radius: 6px;
         }
 
-        /* Remove text from "Next" and "Previous" if space is too tight */
-        .btn-next,
-        .btn-prev {
-          padding: 8px 8px !important;
-        }
-
-        /* Icon only adjustments for the calculator */
-        .btn-calc-icon {
-          padding: 8px 12px !important;
-        }
-
-        /* 5. Center the Calculator Modal */
-        #calc-modal {
-          width: 280px;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-        }
-
-        /* Footer grid (bottom of page) */
         .footer-grid {
           grid-template-columns: 1fr;
           gap: 40px;
@@ -521,7 +490,7 @@
       <div class="timer-container">
         <div class="timer-pill">
           <i class="fa-regular fa-clock"></i>
-          <span id="timer">59:59</span>
+          <span id="timer">2:00:00</span>
         </div>
       </div>
 
@@ -529,11 +498,12 @@
         ID: <span style="opacity: 0.8">RankUp-8821</span>
       </div>
     </header>
+
     <div class="exam-layout">
       <main class="question-area">
         <div class="question-card">
           <div class="q-meta">
-            <span>QUESTION 14 OF 40</span>
+            <span id="q-counter">LOADING...</span>
             <button
               onclick="toggleFlag()"
               id="flag-ui"
@@ -548,29 +518,9 @@
             </button>
           </div>
 
-          <h2 class="question-text">
-            Which of the following cell organelles is responsible for the
-            synthesis of proteins in a cell?
-          </h2>
+          <h2 class="question-text">Loading questions, please wait...</h2>
 
-          <div class="options-container">
-            <div class="option" onclick="handleSelect(this, 'A')">
-              <div class="option-tag">A</div>
-              <span>Mitochondria</span>
-            </div>
-            <div class="option" onclick="handleSelect(this, 'B')">
-              <div class="option-tag">B</div>
-              <span>Ribosomes</span>
-            </div>
-            <div class="option" onclick="handleSelect(this, 'C')">
-              <div class="option-tag">C</div>
-              <span>Nucleus</span>
-            </div>
-            <div class="option" onclick="handleSelect(this, 'D')">
-              <div class="option-tag">D</div>
-              <span>Golgi Apparatus</span>
-            </div>
-          </div>
+          <div class="options-container"></div>
         </div>
       </main>
 
@@ -584,7 +534,7 @@
 
     <footer class="exam-footer">
       <button class="btn btn-prev">
-        <i class="fa-solid-fa-arrow-left"></i> Previous
+        <i class="fa-solid fa-arrow-left"></i> Previous
       </button>
 
       <div style="display: flex; gap: 12px; align-items: center">
@@ -596,7 +546,7 @@
           <i class="fa-solid fa-calculator"></i>
         </button>
         <button class="btn btn-next">
-          Next Question <i class="fa-solid-fa-arrow-right"></i>
+          Next Question <i class="fa-solid fa-arrow-right"></i>
         </button>
         <button class="btn btn-submit" onclick="submitTest()">
           Submit Examination
@@ -628,22 +578,18 @@
         <button class="calc-btn op" onclick="appendToDisplay('/')">/</button>
         <button class="calc-btn op" onclick="appendToDisplay('*')">×</button>
         <button class="calc-btn op" onclick="deleteLast()">DEL</button>
-
         <button class="calc-btn" onclick="appendToDisplay('7')">7</button>
         <button class="calc-btn" onclick="appendToDisplay('8')">8</button>
         <button class="calc-btn" onclick="appendToDisplay('9')">9</button>
         <button class="calc-btn op" onclick="appendToDisplay('-')">-</button>
-
         <button class="calc-btn" onclick="appendToDisplay('4')">4</button>
         <button class="calc-btn" onclick="appendToDisplay('5')">5</button>
         <button class="calc-btn" onclick="appendToDisplay('6')">6</button>
         <button class="calc-btn op" onclick="appendToDisplay('+')">+</button>
-
         <button class="calc-btn" onclick="appendToDisplay('1')">1</button>
         <button class="calc-btn" onclick="appendToDisplay('2')">2</button>
         <button class="calc-btn" onclick="appendToDisplay('3')">3</button>
         <button class="calc-btn" onclick="appendToDisplay('.')">.</button>
-
         <button class="calc-btn" onclick="appendToDisplay('0')">0</button>
         <button class="calc-btn" onclick="appendToDisplay('00')">00</button>
         <button class="calc-btn eq" onclick="calculateResult()">=</button>
@@ -702,170 +648,188 @@
         </div>
       </div>
     </footer>
+
     <script>
-      /* ===============================
-   GLOBAL STATE
-=================================*/
       let questions = [];
       let currentQuestionIndex = 0;
       let userAnswers = [];
       let selectedSubject = "bio";
-      let token = localStorage.getItem("token");
+      let token = localStorage.getItem("rankup_token");
 
-      /* ===============================
-   1. GENERATE QUESTION GRID
-=================================*/
-      const grid = document.getElementById("nav-grid");
-
-      function generateGrid() {
-        grid.innerHTML = "";
-
-        questions.forEach((_, index) => {
-          const item = document.createElement("div");
-          item.className = "grid-item";
-          item.innerText = index + 1;
-
-          if (index === currentQuestionIndex) {
-            item.classList.add("active");
-          }
-
-          const questionId = questions[index]._id;
-          const answered = userAnswers.find((a) => a.qId === questionId);
-          if (answered) item.classList.add("done");
-
-          item.onclick = () => {
-            currentQuestionIndex = index;
-            renderQuestion();
-          };
-
-          grid.appendChild(item);
-        });
-      }
-
-      /* ===============================
-   2. FETCH QUESTIONS
-=================================*/
       async function loadQuestions(subject) {
         try {
           selectedSubject = subject;
           userAnswers = [];
           currentQuestionIndex = 0;
+          document.querySelector(".question-text").innerText =
+            "Loading " + subject.toUpperCase() + " questions...";
+          document.querySelector(".options-container").innerHTML = "";
+
+          if (!token) {
+            alert("Session expired. Please log in.");
+            return;
+          }
 
           const res = await fetch(
-            `http://rankupcbt-api-2.onrender.com/api/questions/${subject}`,
+            `https://rankupcbt-api-2.onrender.com/api/admin?subject=${subject}`,
             {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
+              headers: { Authorization: `Bearer ${token}` },
             },
           );
 
+          if (!res.ok) throw new Error("Server Error");
           const data = await res.json();
-          questions = data;
+          questions = data.filter(
+            (q) => q.subject.toLowerCase() === subject.toLowerCase(),
+          );
+
+          if (questions.length === 0) {
+            document.querySelector(".question-text").innerText =
+              "No questions found for this subject.";
+            document.getElementById("q-counter").innerText = "0 OF 0";
+            return;
+          }
 
           generateGrid();
           renderQuestion();
         } catch (err) {
           console.error(err);
-          alert("Failed to load questions");
+          document.querySelector(".question-text").innerText =
+            "Connection Error. Please check your network.";
         }
       }
 
-      /* ===============================
-   3. RENDER QUESTION
-=================================*/
       function renderQuestion() {
         if (!questions.length) return;
-
-        const question = questions[currentQuestionIndex];
-
-        document.querySelector(".question-text").innerText =
-          question.questionText;
-
-        document.querySelector(".q-meta span").innerText =
+        const q = questions[currentQuestionIndex];
+        document.querySelector(".question-text").innerText = q.questionText;
+        document.getElementById("q-counter").innerText =
           `QUESTION ${currentQuestionIndex + 1} OF ${questions.length}`;
 
-        const optionsContainer = document.querySelector(".options-container");
-        optionsContainer.innerHTML = "";
-
-        question.options.forEach((opt) => {
+        const container = document.querySelector(".options-container");
+        container.innerHTML = "";
+        q.options.forEach((opt) => {
           const div = document.createElement("div");
           div.className = "option";
-
-          div.innerHTML = `
-      <div class="option-tag">${opt.label}</div>
-      <span>${opt.text}</span>
-    `;
-
+          div.innerHTML = `<div class="option-tag">${opt.label}</div><span>${opt.text}</span>`;
           div.onclick = () => handleSelect(div, opt.label);
-          optionsContainer.appendChild(div);
+          container.appendChild(div);
         });
-
         restoreSelectedAnswer();
         generateGrid();
       }
 
-      /* ===============================
-   4. SELECTION LOGIC
-=================================*/
       function handleSelect(el, choice) {
         document
           .querySelectorAll(".option")
-          .forEach((opt) => opt.classList.remove("selected"));
-
+          .forEach((o) => o.classList.remove("selected"));
         el.classList.add("selected");
-
-        const questionId = questions[currentQuestionIndex]._id;
-        const existing = userAnswers.find((a) => a.qId === questionId);
-
-        if (existing) {
-          existing.choice = choice;
-        } else {
-          userAnswers.push({
-            qId: questionId,
-            choice: choice,
-          });
-        }
-
+        const qId = questions[currentQuestionIndex]._id;
+        const existing = userAnswers.find((a) => a.qId === qId);
+        if (existing) existing.choice = choice;
+        else userAnswers.push({ qId, choice });
         generateGrid();
       }
 
-      /* ===============================
-   RESTORE SELECTED OPTION
-=================================*/
       function restoreSelectedAnswer() {
-        const questionId = questions[currentQuestionIndex]._id;
-        const existing = userAnswers.find((a) => a.qId === questionId);
-
-        if (!existing) return;
-
+        const qId = questions[currentQuestionIndex]._id;
+        const ans = userAnswers.find((a) => a.qId === qId);
+        if (!ans) return;
         document.querySelectorAll(".option").forEach((opt) => {
-          const label = opt.querySelector(".option-tag").innerText;
-          if (label === existing.choice) {
+          if (opt.querySelector(".option-tag").innerText === ans.choice)
             opt.classList.add("selected");
-          }
         });
       }
 
-      /* ===============================
-   5. FLAGGING LOGIC (UNCHANGED)
-=================================*/
-      function toggleFlag() {
-        const flag = document.getElementById("flag-ui");
-        flag.style.color =
-          flag.style.color === "rgb(245, 158, 11)" ? "#64748b" : "#f59e0b";
+      function generateGrid() {
+        const grid = document.getElementById("nav-grid");
+        grid.innerHTML = "";
+        questions.forEach((_, i) => {
+          const item = document.createElement("div");
+          item.className = `grid-item ${i === currentQuestionIndex ? "active" : ""}`;
+          if (userAnswers.find((a) => a.qId === questions[i]._id))
+            item.classList.add("done");
+          item.innerText = i + 1;
+          item.onclick = () => {
+            currentQuestionIndex = i;
+            renderQuestion();
+          };
+          grid.appendChild(item);
+        });
       }
 
-      /* ===============================
-   6. NEXT / PREVIOUS
-=================================*/
+      // JAMB Time: 2 Hours
+      let seconds = 7200;
+      setInterval(() => {
+        if (seconds <= 0) return submitTest();
+        seconds--;
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = seconds % 60;
+        document.getElementById("timer").innerText =
+          `${h}:${m < 10 ? "0" : ""}${m}:${s < 10 ? "0" : ""}${s}`;
+      }, 1000);
+
+      // Calculator logic preserved
+      const display = document.getElementById("display");
+      function toggleCalc() {
+        const m = document.getElementById("calc-modal");
+        m.style.display = m.style.display === "block" ? "none" : "block";
+      }
+      function appendToDisplay(v) {
+        if (display.value === "0") display.value = v;
+        else display.value += v;
+      }
+      function clearCalc() {
+        display.value = "0";
+      }
+      function deleteLast() {
+        display.value = display.value.slice(0, -1) || "0";
+      }
+      function calculateResult() {
+        try {
+          display.value = eval(display.value);
+        } catch {
+          display.value = "Error";
+          setTimeout(clearCalc, 1000);
+        }
+      }
+
+      async function submitTest() {
+        if (!confirm("Are you sure you want to submit?")) return;
+        try {
+          const res = await fetch(
+            "https://rankupcbt-api-2.onrender.com/api/exam/submit",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ subject: selectedSubject, userAnswers }),
+            },
+          );
+          const data = await res.json();
+          alert(`Score: ${data.score} / ${data.total}`);
+        } catch (err) {
+          alert("Submission failed.");
+        }
+      }
+
+      document
+        .getElementById("subject-dropdown")
+        .addEventListener("change", (e) => loadQuestions(e.target.value));
+      function toggleFlag() {
+        const f = document.getElementById("flag-ui");
+        f.style.color =
+          f.style.color === "rgb(245, 158, 11)" ? "#64748b" : "#f59e0b";
+      }
       document.querySelector(".btn-next").onclick = () => {
         if (currentQuestionIndex < questions.length - 1) {
           currentQuestionIndex++;
           renderQuestion();
         }
       };
-
       document.querySelector(".btn-prev").onclick = () => {
         if (currentQuestionIndex > 0) {
           currentQuestionIndex--;
@@ -873,99 +837,6 @@
         }
       };
 
-      /* ===============================
-   7. TIMER LOGIC (FIXED SPEED)
-=================================*/
-      let seconds = 3600;
-      const timerEl = document.getElementById("timer");
-
-      const timerInterval = setInterval(() => {
-        seconds--;
-
-        const m = Math.floor(seconds / 60);
-        const s = seconds % 60;
-
-        timerEl.innerText = `${m}:${s < 10 ? "0" : ""}${s}`;
-
-        if (seconds <= 0) {
-          clearInterval(timerInterval);
-          submitTest();
-        }
-      }, 1000);
-
-      /* ===============================
-   8. CALCULATOR (UNCHANGED)
-=================================*/
-      const display = document.getElementById("display");
-
-      function toggleCalc() {
-        const modal = document.getElementById("calc-modal");
-        modal.style.display =
-          modal.style.display === "block" ? "none" : "block";
-      }
-
-      function appendToDisplay(value) {
-        if (display.value === "0") display.value = value;
-        else display.value += value;
-      }
-
-      function clearCalc() {
-        display.value = "0";
-      }
-
-      function deleteLast() {
-        display.value = display.value.slice(0, -1);
-        if (display.value === "") display.value = "0";
-      }
-
-      function calculateResult() {
-        try {
-          display.value = eval(display.value);
-        } catch (e) {
-          display.value = "Error";
-          setTimeout(clearCalc, 1000);
-        }
-      }
-
-      /* ===============================
-   9. SUBMIT EXAM
-=================================*/
-      async function submitTest() {
-        if (!confirm("Are you sure you want to submit?")) return;
-
-        try {
-          const res = await fetch("https://rankupcbt-api-2.onrender.com/api/exam/submit", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              subject: selectedSubject,
-              userAnswers: userAnswers,
-            }),
-          });
-
-          const data = await res.json();
-
-          alert(`Score: ${data.score} / ${data.total}`);
-        } catch (err) {
-          console.error(err);
-          alert("Submission failed");
-        }
-      }
-      /* ===============================
-   10. SUBJECT SWITCH
-=================================*/
-      document
-        .getElementById("subject-dropdown")
-        .addEventListener("change", (e) => {
-          loadQuestions(e.target.value);
-        });
-
-      /* ===============================
-   INITIAL LOAD
-=================================*/
       loadQuestions("bio");
     </script>
   </body>
