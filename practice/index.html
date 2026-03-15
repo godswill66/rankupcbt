@@ -655,50 +655,38 @@
       let userAnswers = [];
       let selectedSubject = "bio";
       let token = localStorage.getItem("rankup_token");
+async function loadQuestions(subject) {
+  try {
+    // ... existing setup code ...
 
-      async function loadQuestions(subject) {
-        try {
-          selectedSubject = subject;
-          userAnswers = [];
-          currentQuestionIndex = 0;
-          document.querySelector(".question-text").innerText =
-            "Loading " + subject.toUpperCase() + " questions...";
-          document.querySelector(".options-container").innerHTML = "";
-
-          if (!token) {
-            alert("Session expired. Please log in.");
-            return;
-          }
-
-          const res = await fetch(
-            `https://rankupcbt-api-2.onrender.com/api/admin?subject=${subject}`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            },
-          );
-
-          if (!res.ok) throw new Error("Server Error");
-          const data = await res.json();
-          questions = data.filter(
-            (q) => q.subject.toLowerCase() === subject.toLowerCase(),
-          );
-
-          if (questions.length === 0) {
-            document.querySelector(".question-text").innerText =
-              "No questions found for this subject.";
-            document.getElementById("q-counter").innerText = "0 OF 0";
-            return;
-          }
-
-          generateGrid();
-          renderQuestion();
-        } catch (err) {
-          console.error(err);
-          document.querySelector(".question-text").innerText =
-            "Connection Error. Please check your network.";
-        }
+    // IMPORTANT: Path matches the new backend route
+    const res = await fetch(
+      `https://rankupcbt-api-2.onrender.com/api/admin/practice?subject=${subject}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
       }
+    );
 
+    if (!res.ok) throw new Error("Server Error");
+    
+    const data = await res.json();
+    
+    // This handles the "No new question yet" logic
+    if (data.length === 0) {
+      document.querySelector(".question-text").innerText = "No new questions yet for this subject.";
+      document.getElementById("q-counter").innerText = "0 OF 0";
+      return;
+    }
+
+    questions = data;
+    generateGrid();
+    renderQuestion();
+
+  } catch (err) {
+    console.error(err);
+    document.querySelector(".question-text").innerText = "Connection Error. Please check your network.";
+  }
+}
       function renderQuestion() {
         if (!questions.length) return;
         const q = questions[currentQuestionIndex];
