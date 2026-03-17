@@ -240,6 +240,7 @@
         justify-content: center;
         align-items: center;
         gap: 12px;
+        margin-top: 20px;
       }
       .btn-save:hover {
         background: var(--primary-dark);
@@ -382,16 +383,17 @@
           gap: 15px;
         }
       }
-      /* --- Loader Styling (Extracted from Register) --- */
+
+      /* --- Loader Styling --- */
       #fullScreenLoader {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.9);
         backdrop-filter: blur(8px);
-        display: none;
+        display: none; /* Controlled by JS */
         justify-content: center;
         align-items: center;
         z-index: 9999;
@@ -436,9 +438,10 @@
     <div id="fullScreenLoader">
       <div class="loader-content">
         <i class="fa-solid fa-square-poll-vertical loader-icon"></i>
-        <div class="loader-text">Commiting Changes...</div>
+        <div class="loader-text">Loading...</div>
       </div>
     </div>
+
     <nav class="navbar">
       <div class="nav-container">
         <a href="/dashboard" class="logo">
@@ -590,6 +593,7 @@
               <label>New Password</label>
               <input
                 type="password"
+                id="newPassword"
                 placeholder="New Password"
                 autocomplete="new-password"
               />
@@ -598,6 +602,7 @@
               <label>Confirm</label>
               <input
                 type="password"
+                id="confirmPassword"
                 placeholder="Confirm password"
                 autocomplete="new-password"
               />
@@ -609,6 +614,7 @@
         </form>
       </main>
     </div>
+
     <footer class="footer">
       <div class="footer-grid">
         <div class="footer-col">
@@ -629,14 +635,11 @@
           </ul>
         </div>
         <div class="footer-col">
-          <p>
-            Get updates and study tips directly in our <br />
-            community.
-          </p>
           <h4>Join Community</h4>
-          <a href="#" class="whatsapp-link">
-            <i class="fa-brands fa-whatsapp"></i> Join WhatsApp Community
-          </a>
+          <p>Get updates and study tips directly in our community.</p>
+          <a href="#" class="whatsapp-link"
+            ><i class="fa-brands fa-whatsapp"></i> Join WhatsApp Community</a
+          >
         </div>
       </div>
       <div class="footer-bottom">
@@ -648,13 +651,14 @@
         </div>
       </div>
     </footer>
+
     <script>
       const API = "https://rankupcbt-api-2.onrender.com/api/users";
       const token = localStorage.getItem("token");
 
-      // Define Elements
+      // Elements
       const loader = document.getElementById("fullScreenLoader");
-      const loaderText = loader.querySelector(".loader-text"); // Select the text inside loader
+      const loaderText = loader.querySelector(".loader-text");
       const profileForm = document.getElementById("profileForm");
       const saveBtn = profileForm.querySelector(".btn-save");
       const imageUpload = document.getElementById("imageUpload");
@@ -668,22 +672,22 @@
       const institutionInput = document.getElementById("uni");
       const sidebarName = document.querySelector(".profile-card h2");
 
-      if (!token) {
-        window.location.href = "/login";
+      if (!token) window.location.href = "/login";
+
+      /* --- HELPER: LOADER TOGGLE --- */
+      function toggleLoader(show, text = "Loading...") {
+        loaderText.innerText = text;
+        loader.style.display = show ? "flex" : "none";
       }
 
-      /* --- LOAD PROFILE --- */
+      /* --- INITIAL LOAD --- */
       async function loadUserProfile() {
-        loaderText.innerText = "Loading Profile..."; // Change text
-        loader.style.display = "flex";
-
+        toggleLoader(true, "Loading Profile...");
         try {
           const res = await fetch(`${API}/me`, {
-            method: "GET",
             headers: { Authorization: `Bearer ${token}` },
           });
-
-          if (!res.ok) throw new Error("Failed to load profile");
+          if (!res.ok) throw new Error("Failed");
           const user = await res.json();
 
           fullNameInput.value = user.fullName || "";
@@ -694,21 +698,15 @@
           institutionInput.value = user.institution || "unilag";
           sidebarName.innerText = user.fullName || "User";
 
-          if (user.profilePicture) {
-            profileDisplay.src = user.profilePicture;
-          } else {
-            profileDisplay.src =
-              "https://ui-avatars.com/api/?name=" +
-              (user.fullName || "User") +
-              "&background=5d5fef&color=fff";
-          }
+          profileDisplay.src =
+            user.profilePicture ||
+            `https://ui-avatars.com/api/?name=${user.fullName || "User"}&background=5d5fef&color=fff`;
         } catch (err) {
-          console.error("Profile Load Error:", err);
+          console.error(err);
         } finally {
-          loader.style.display = "none";
+          toggleLoader(false);
         }
       }
-
       loadUserProfile();
 
       /* --- SAVE TEXT CHANGES --- */
@@ -723,58 +721,55 @@
           return;
         }
 
+        // Show UI Loading immediately
         saveBtn.classList.add("is-loading");
         saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
+        toggleLoader(true, "Committing Changes...");
 
-        loaderText.innerText = "Committing Changes..."; // Change text
-        loader.style.display = "flex";
+        // Small timeout to ensure the browser paints the loader before the fetch blocks the thread
+        setTimeout(async () => {
+          try {
+            const updateData = {
+              fullName: fullNameInput.value,
+              email: emailInput.value,
+              phone: phoneInput.value,
+              location: locationInput.value,
+              bio: bioInput.value,
+              institution: institutionInput.value,
+            };
 
-        try {
-          const updateData = {
-            fullName: fullNameInput.value,
-            email: emailInput.value,
-            phone: phoneInput.value,
-            location: locationInput.value,
-            bio: bioInput.value,
-            institution: institutionInput.value,
-          };
+            if (passwordInput.value) updateData.password = passwordInput.value;
 
-          if (passwordInput.value) updateData.password = passwordInput.value;
+            const res = await fetch(`${API}/profile`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(updateData),
+            });
 
-          const res = await fetch(`${API}/profile`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(updateData),
-          });
+            if (!res.ok) throw new Error("Update failed");
 
-          if (!res.ok) throw new Error("Update failed");
+            // Success UI
+            passwordInput.value = "";
+            confirmInput.value = "";
+            saveBtn.classList.remove("is-loading");
+            saveBtn.classList.add("btn-success", "success-pulse");
+            saveBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Saved!`;
+            sidebarName.innerText = fullNameInput.value;
 
-          // Clear password fields after success
-          passwordInput.value = "";
-          confirmInput.value = "";
-
-          saveBtn.classList.remove("is-loading");
-          saveBtn.classList.add("btn-success", "success-pulse");
-          saveBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Saved!`;
-          sidebarName.innerText = fullNameInput.value;
-
-          setTimeout(() => {
-            saveBtn.classList.remove("btn-success", "success-pulse");
-            saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
-          }, 2500);
-        } catch (err) {
-          console.error("Update error:", err);
-          saveBtn.classList.remove("is-loading");
-          saveBtn.innerHTML = `Error saving profile`;
-          setTimeout(() => {
-            saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
-          }, 2500);
-        } finally {
-          loader.style.display = "none";
-        }
+            setTimeout(() => {
+              saveBtn.classList.remove("btn-success", "success-pulse");
+              saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
+            }, 2500);
+          } catch (err) {
+            saveBtn.innerHTML = `Error saving profile`;
+            saveBtn.classList.remove("is-loading");
+          } finally {
+            toggleLoader(false);
+          }
+        }, 100);
       });
 
       /* --- IMAGE UPLOAD --- */
@@ -782,9 +777,7 @@
         const file = this.files[0];
         if (!file) return;
 
-        loaderText.innerText = "Uploading Image..."; // Change text
-        loader.style.display = "flex";
-
+        toggleLoader(true, "Uploading Image...");
         const formData = new FormData();
         formData.append("profileImage", file);
 
@@ -802,9 +795,9 @@
             alert("Upload failed: " + data.message);
           }
         } catch (err) {
-          console.error("Upload error:", err);
+          console.error(err);
         } finally {
-          loader.style.display = "none";
+          toggleLoader(false);
         }
       });
     </script>
