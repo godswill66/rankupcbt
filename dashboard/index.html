@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -44,7 +45,6 @@
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    />
 
     <style>
       * {
@@ -729,6 +729,161 @@
       .subject-header.open .arrow-icon {
         transform: rotate(180deg);
       }
+      /* ───────────────────────────────────────────────
+   1. Page entrance – gentle overall fade
+─────────────────────────────────────────────── */
+body {
+  animation: pageFadeIn 1.2s ease-out forwards;
+}
+
+@keyframes pageFadeIn {
+  from { opacity: 0.4; }
+  to   { opacity: 1; }
+}
+
+/* ───────────────────────────────────────────────
+   2. Main content entrance with stagger
+   (welcome + action cards + stats grid)
+─────────────────────────────────────────────── */
+.dashboard-content > * {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: cardEntrance 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Stagger – increase delay per direct child */
+.welcome-section       { animation-delay: 0.1s; }
+.action-grid           { animation-delay: 0.25s; }
+.stats-grid            { animation-delay: 0.4s;  }
+
+/* Individual cards inside stats-grid get micro-stagger */
+.stats-grid > .card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: cardEntrance 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.stats-grid > .card:nth-child(1) { animation-delay: 0.45s; }
+.stats-grid > .card:nth-child(2) { animation-delay: 0.55s; }
+.stats-grid > .card:nth-child(3) { animation-delay: 0.65s; }
+.stats-grid > .card:nth-child(4) { animation-delay: 0.75s; }
+.stats-grid > .card:nth-child(5) { animation-delay: 0.85s; }
+.stats-grid > .card:nth-child(6) { animation-delay: 0.95s; }
+
+@keyframes cardEntrance {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ───────────────────────────────────────────────
+   3. Action cards – stronger hover lift + shadow
+─────────────────────────────────────────────── */
+.action-card {
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.action-card:hover {
+  transform: translateY(-8px) scale(1.015);
+  box-shadow: 0 22px 44px rgba(93, 95, 239, 0.14);
+}
+
+/* Primary action card gets extra attention */
+.action-card.primary-bg:hover {
+  box-shadow: 0 24px 48px rgba(93, 95, 239, 0.28);
+}
+
+/* ───────────────────────────────────────────────
+   4. Sidebar items – modern underline + scale micro
+─────────────────────────────────────────────── */
+.side-item {
+  position: relative;
+  transition: all 0.28s ease;
+}
+
+.side-item::after {
+  content: "";
+  position: absolute;
+  inset-inline: 25px 0;
+  bottom: 0;
+  height: 2px;
+  background: #5d5fef;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.32s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.side-item:hover::after,
+.side-item.active::after {
+  transform: scaleX(1);
+}
+
+.side-item:hover {
+  transform: translateX(4px);
+  color: #5d5fef !important;
+}
+
+/* ───────────────────────────────────────────────
+   5. Buttons – lift + color transition
+─────────────────────────────────────────────── */
+.btn-white, .btn-outline, .btn-text-icon {
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-white:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(93, 95, 239, 0.22);
+}
+
+.btn-outline:hover {
+  background: #5d5fef;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btn-text-icon:hover {
+  transform: translateX(4px);
+}
+
+/* ───────────────────────────────────────────────
+   6. Notification dropdown – already has popupAnim,
+      just make badge pulse softer
+─────────────────────────────────────────────── */
+.notification-badge {
+  animation: pulseSoft 2.4s infinite ease-in-out;
+}
+
+@keyframes pulseSoft {
+  0%, 100%   { transform: scale(1);   box-shadow: 0 0 0 0 rgba(255,77,77,0.5); }
+  50%        { transform: scale(1.12); box-shadow: 0 0 0 10px rgba(255,77,77,0); }
+}
+
+/* ───────────────────────────────────────────────
+   7. Subject accordion headers – smooth open/close
+─────────────────────────────────────────────── */
+.subject-header {
+  transition: background-color 0.22s ease, padding-left 0.22s ease;
+}
+
+.subject-header:hover {
+  padding-left: 14px;
+}
+
+.subject-history {
+  transition: all 0.4s ease-out;
+  overflow: hidden;
+}
+
+/* Optional: make chart container fade in a bit later */
+#subjectChart {
+  opacity: 0;
+  animation: chartFadeIn 1.2s ease-out 0.9s forwards;
+}
+
+@keyframes chartFadeIn {
+  to { opacity: 1; }
+}
     </style>
   </head>
   <body class="dashboard-body">
