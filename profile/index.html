@@ -776,78 +776,56 @@
       }
 
       loadUserProfile();
-
-      /* =========================
-   UPDATE PROFILE
+/* =========================
+   LOAD USER PROFILE
 ========================= */
-      profileForm.addEventListener("submit", async function (e) {
-        e.preventDefault();
+async function loadUserProfile() {
+  try {
+    const res = await fetch(`${API}/me`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-        saveBtn.classList.add("is-loading");
-        saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving Changes...`;
+    if (!res.ok) throw new Error("Failed to load profile");
+    const user = await res.json();
 
-        try {
-          const res = await fetch(`${API}/profile`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              fullName: fullNameInput.value,
-              email: emailInput.value,
-              phone: phoneInput.value,
-              location: locationInput.value,
-              bio: bioInput.value,
-              institution: institutionInput.value,
-            }),
-          });
+    // Map data to Form Inputs
+    fullNameInput.value = user.fullName || "";
+    emailInput.value = user.email || "";
+    phoneInput.value = user.phone || "";
+    locationInput.value = user.location || "";
+    bioInput.value = user.bio || "";
+    institutionInput.value = user.institution || "";
 
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.message || "Update failed");
-
-          // Success UI
-          saveBtn.classList.remove("is-loading");
-          saveBtn.classList.add("success-pulse");
-          saveBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Profile Saved!`;
-
-          // Update sidebar name immediately
-          sidebarName.innerText = fullNameInput.value;
-
-          setTimeout(() => {
-            saveBtn.classList.remove("success-pulse");
-            saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
-          }, 2500);
-        } catch (err) {
-          console.error("Update error:", err);
-          saveBtn.classList.remove("is-loading");
-          saveBtn.innerHTML = `Error saving profile`;
-          setTimeout(() => {
-            saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
-          }, 2500);
-        }
-      });
-
-      /* =========================
-   IMAGE PREVIEW
-========================= */imageUpload.addEventListener("change", async function () {
+    // UPDATE SIDEBAR AND IMAGE
+    sidebarName.innerText = user.fullName || "User";
+    
+    // FIX: This ensures the image stays on refresh!
+    if (user.profilePicture && profileDisplay) {
+      profileDisplay.src = user.profilePicture;
+    }
+  } catch (err) {
+    console.error("Profile Load Error:", err);
+  }
+}/* =========================
+   IMAGE UPLOAD
+========================= */
+imageUpload.addEventListener("change", async function () {
   const file = this.files[0];
   if (!file) return;
 
-  // Show immediate preview
+  // Show immediate local preview
   profileDisplay.src = URL.createObjectURL(file);
 
-  // Create Form Data
   const formData = new FormData();
   formData.append("profileImage", file);
 
   try {
-    const res = await fetch(`${API_BASE}/api/users/upload-avatar`, {
+    // FIX: Use 'API' instead of 'API_BASE'
+    const res = await fetch(`${API}/upload-avatar`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
-        // Note: DO NOT set Content-Type header when sending FormData; 
-        // the browser does it automatically with the correct "boundary"
       },
       body: formData,
     });
@@ -855,11 +833,14 @@
     const data = await res.json();
     if (res.ok) {
       alert("Profile picture updated in the cloud!");
+      // Update the display with the official Cloudinary URL
+      profileDisplay.src = data.url; 
+    } else {
+      alert("Upload failed: " + data.message);
     }
   } catch (err) {
     console.error("Upload error:", err);
   }
-});
-    </script>
+});    </script>
   </body>
 </html>
