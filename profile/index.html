@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>RankUp CBT | profile</title>
     <meta
       name="description"
@@ -15,24 +14,6 @@
     />
     <meta name="author" content="RankUp CBT" />
 
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.rankupcbt.com/" />
-    <meta
-      property="og:title"
-      content="RankUp CBT | The Best JAMB Ranker for 2026"
-    />
-    <meta
-      property="og:description"
-      content="See where you stand among thousands of candidates. Use our JAMB Ranker tool to predict your admission chances."
-    />
-    <meta property="og:image" content="/assets/logo.png" />
-
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta
-      property="twitter:title"
-      content="RankUp CBT - Official JAMB Ranker"
-    />
-
     <link rel="icon" type="image/png" href="/assets/logo.png" />
     <link
       rel="stylesheet"
@@ -42,6 +23,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
+
     <style>
       :root {
         --primary: #5d5fef;
@@ -84,7 +66,6 @@
         top: 0;
         z-index: 1000;
       }
-
       .nav-container {
         max-width: 1200px;
         width: 100%;
@@ -93,7 +74,6 @@
         justify-content: space-between;
         align-items: center;
       }
-
       .logo {
         font-weight: 800;
         color: var(--primary);
@@ -103,7 +83,6 @@
         align-items: center;
         gap: 8px;
       }
-
       .nav-right {
         display: flex;
         align-items: center;
@@ -120,7 +99,6 @@
         gap: 30px;
         flex: 1;
       }
-
       .profile-card {
         background: var(--white);
         border-radius: 24px;
@@ -133,7 +111,6 @@
         box-shadow: var(--shadow);
       }
 
-      /* CLICKABLE AVATAR STYLES */
       .avatar-wrapper {
         position: relative;
         width: 130px;
@@ -144,11 +121,9 @@
         overflow: hidden;
         transition: transform 0.3s ease;
       }
-
       .avatar-wrapper:hover {
         transform: scale(1.02);
       }
-
       .avatar-img {
         width: 100%;
         height: 100%;
@@ -156,7 +131,6 @@
         object-fit: cover;
         border: 5px solid var(--primary-light);
       }
-
       .avatar-overlay {
         position: absolute;
         top: 0;
@@ -173,11 +147,9 @@
         color: white;
         font-size: 1.5rem;
       }
-
       .avatar-wrapper:hover .avatar-overlay {
         opacity: 1;
       }
-
       #imageUpload {
         display: none;
       }
@@ -203,7 +175,6 @@
         border: 1px solid var(--border);
         box-shadow: var(--shadow);
       }
-
       .section-title {
         font-size: 1.6rem;
         font-weight: 800;
@@ -218,14 +189,12 @@
         grid-template-columns: 1fr 1fr;
         gap: 25px;
       }
-
       .form-group {
         margin-bottom: 10px;
       }
       .form-group.full {
         grid-column: span 2;
       }
-
       label {
         display: flex;
         align-items: center;
@@ -236,12 +205,10 @@
         margin-bottom: 10px;
         text-transform: uppercase;
       }
-
       label i {
         color: var(--primary);
         width: 20px;
       }
-
       input,
       select {
         width: 100%;
@@ -252,13 +219,13 @@
         transition: all 0.3s;
         background: #fcfdfe;
       }
-
       input:focus {
         outline: none;
         border-color: var(--primary);
         box-shadow: 0 0 0 4px var(--primary-light);
       }
 
+      /* --- BUTTON STATES --- */
       .btn-save {
         background: var(--primary);
         color: white;
@@ -274,10 +241,34 @@
         align-items: center;
         gap: 12px;
       }
-
       .btn-save:hover {
         background: var(--primary-dark);
         transform: translateY(-2px);
+      }
+
+      .btn-save.is-loading {
+        background: var(--primary-dark);
+        pointer-events: none;
+        opacity: 0.8;
+      }
+      .btn-save.btn-success {
+        background-color: var(--success) !important;
+        color: white !important;
+      }
+      .success-pulse {
+        animation: pulse-green 0.5s;
+      }
+
+      @keyframes pulse-green {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
       }
 
       .tag {
@@ -289,14 +280,13 @@
         font-weight: 700;
       }
 
-      /* --- DASHBOARD ORIGINAL FOOTER STYLES --- */
+      /* --- FOOTER --- */
       .footer {
         background-color: white;
         padding: 80px 5% 40px;
         border-top: 1px solid #eee;
         margin-top: 60px;
       }
-
       .footer-grid {
         display: grid;
         grid-template-columns: 2fr 1fr 1.5fr;
@@ -304,20 +294,17 @@
         max-width: 1280px;
         margin: 0 auto 60px;
       }
-
       .footer-col h4 {
         margin-bottom: 24px;
         font-size: 1.1rem;
         font-weight: 700;
         color: var(--text-main);
       }
-
       .footer-col p {
         font-size: 0.95rem;
         color: #666;
         line-height: 1.7;
       }
-
       .footer-col ul {
         list-style: none;
       }
@@ -333,7 +320,6 @@
       .footer-col ul li a:hover {
         color: var(--primary);
       }
-
       .whatsapp-link {
         display: inline-flex;
         align-items: center;
@@ -347,7 +333,6 @@
         text-decoration: none;
         transition: 0.3s;
       }
-
       .footer-bottom {
         max-width: 1280px;
         margin: 0 auto;
@@ -359,7 +344,6 @@
         color: #999;
         font-size: 0.9rem;
       }
-
       .socials {
         display: flex;
         gap: 24px;
@@ -376,134 +360,27 @@
       @media (max-width: 900px) {
         .profile-container {
           grid-template-columns: 1fr;
-        }
-        .footer-grid {
-          grid-template-columns: 1fr;
-          text-align: center;
-        }
-        .footer-bottom {
-          flex-direction: column;
-          gap: 20px;
-        }
-      }
-      /* --- MOBILE RESPONSIVENESS --- */
-      @media (max-width: 900px) {
-        .profile-container {
-          grid-template-columns: 1fr; /* Stack the sidebar and main form */
           margin: 20px auto;
           padding: 0 15px;
-          gap: 20px;
         }
-
         .profile-card {
-          position: relative; /* Remove sticky on mobile */
+          position: relative;
           top: 0;
-          padding: 30px 20px;
         }
-
-        .settings-panel {
-          padding: 30px 20px;
-          border-radius: 20px;
-        }
-
         .form-grid {
-          grid-template-columns: 1fr; /* Form inputs stack vertically */
-          gap: 15px;
+          grid-template-columns: 1fr;
         }
-
         .form-group.full {
           grid-column: span 1;
         }
-
-        .section-title {
-          font-size: 1.3rem;
-          margin-bottom: 25px;
-        }
-
-        .avatar-wrapper {
-          width: 110px;
-          height: 110px;
-        }
-
-        /* Show camera icon by default on mobile since there is no hover */
-        .avatar-overlay {
-          opacity: 0.6;
-          background: rgba(0, 0, 0, 0.2);
-        }
-
-        /* Footer Adjustments */
         .footer-grid {
           grid-template-columns: 1fr;
           text-align: center;
-          gap: 40px;
         }
-
         .footer-bottom {
           flex-direction: column;
           gap: 15px;
-          text-align: center;
         }
-
-        .logo {
-          justify-content: center;
-        }
-      }
-      /* --- BUTTON LOADING ANIMATION --- */
-      .btn-save {
-        position: relative;
-        overflow: hidden;
-      }
-
-      .btn-save.is-loading {
-        background: var(--primary-dark);
-        pointer-events: none; /* Disable clicking while loading */
-        opacity: 0.8;
-      }
-
-      .btn-save .fa-spinner {
-        display: none; /* Hidden by default */
-      }
-
-      .btn-save.is-loading .fa-cloud-arrow-up {
-        display: none;
-      }
-
-      .btn-save.is-loading .fa-spinner {
-        display: inline-block;
-        animation: rotate 1s linear infinite;
-      }
-
-      @keyframes rotate {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      /* Success Shimmer Effect after saving */
-      .btn-save.success-pulse {
-        animation: pulse 0.5s ease-in-out;
-        background-color: var(--success);
-      }
-
-      @keyframes pulse {
-        0% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.03);
-        }
-        100% {
-          transform: scale(1);
-        }
-      }
-
-      /* --- INPUT FOCUS ANIMATION --- */
-      input,
-      select {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
     </style>
   </head>
@@ -553,7 +430,7 @@
           <i class="fa-solid fa-crown" style="color: var(--accent-gold)"></i>
           RANK #2,342
         </div>
-        <h2>Valentinavalee Valee</h2>
+        <h2>Loading...</h2>
         <p
           style="
             color: var(--text-light);
@@ -592,19 +469,19 @@
               <label for="fullName"
                 ><i class="fa-solid fa-user-tag"></i> Real Name</label
               >
-              <input type="text" id="fullName" value="Valentinavalee Valee" />
+              <input type="text" id="fullName" placeholder="Your Full Name" />
             </div>
             <div class="form-group">
               <label for="email"
                 ><i class="fa-solid fa-envelope"></i> Email</label
               >
-              <input type="email" id="email" value="valentinavalee@gmail.com" />
+              <input type="email" id="email" placeholder="email@example.com" />
             </div>
             <div class="form-group">
               <label for="phone"
                 ><i class="fa-solid fa-mobile-retro"></i> Phone</label
               >
-              <input type="tel" id="phone" value="+234 812 345 6789" />
+              <input type="tel" id="phone" placeholder="+234..." />
             </div>
             <div class="form-group">
               <label for="uni"
@@ -614,18 +491,16 @@
               <select id="uni">
                 <option value="unilag">University of Lagos (UNILAG)</option>
                 <option value="ui">University of Ibadan (UI)</option>
+                <option value="unizik">
+                  Nnamdi Azikiwe University (UNIZIK)
+                </option>
               </select>
             </div>
             <div class="form-group">
               <label for="location"
                 ><i class="fa-solid fa-location-dot"></i> Location</label
               >
-              <input
-                type="text"
-                id="location"
-                value="Lagos, Nigeria"
-                placeholder="City, State"
-              />
+              <input type="text" id="location" placeholder="City, State" />
             </div>
             <div class="form-group full">
               <label for="bio"
@@ -658,12 +533,12 @@
 
           <div class="form-grid">
             <div class="form-group">
-              <label>New Password</label
-              ><input type="password" placeholder="New Password" />
+              <label>New Password</label>
+              <input type="password" placeholder="New Password" />
             </div>
             <div class="form-group">
-              <label>Confirm</label
-              ><input type="password" placeholder="Confirm password" />
+              <label>Confirm</label>
+              <input type="password" placeholder="Confirm password" />
             </div>
           </div>
 
@@ -682,10 +557,9 @@
           </div>
           <p>
             Empowering JAMB candidates with real-time rankings and academic
-            insights to reach their dream institutions.
+            insights.
           </p>
         </div>
-
         <div class="footer-col">
           <h4>Platform</h4>
           <ul>
@@ -694,28 +568,19 @@
             <li><a href="/about/">About Us</a></li>
           </ul>
         </div>
-
         <div class="footer-col">
-          <h4>Join the Conversation</h4>
-          <p style="margin-bottom: 20px">
-            Get updates and study tips directly in our community.
-          </p>
-          <a
-            href="https://chat.whatsapp.com/EdRuXNAiECzHCBJZYIb2WN"
-            class="whatsapp-link"
-          >
+          <h4>Join Community</h4>
+          <a href="#" class="whatsapp-link">
             <i class="fa-brands fa-whatsapp"></i> Join WhatsApp Community
           </a>
         </div>
       </div>
-
       <div class="footer-bottom">
-        <p>© 2025–2026 RankUp. All rights reserved.</p>
+        <p>© 2026 RankUp. All rights reserved.</p>
         <div class="socials">
           <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
           <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
           <a href="#"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
         </div>
       </div>
     </footer>
@@ -731,116 +596,123 @@
 
       const profileForm = document.getElementById("profileForm");
       const saveBtn = profileForm.querySelector(".btn-save");
+      const imageUpload = document.getElementById("imageUpload");
+      const profileDisplay = document.getElementById("profileDisplay");
 
-      // Form Inputs
       const fullNameInput = document.getElementById("fullName");
       const emailInput = document.getElementById("email");
       const phoneInput = document.getElementById("phone");
       const locationInput = document.getElementById("location");
       const bioInput = document.getElementById("bio");
       const institutionInput = document.getElementById("uni");
-
-      // Profile Sidebar Elements
       const sidebarName = document.querySelector(".profile-card h2");
 
-      /* =========================
-   LOAD USER PROFILE
-========================= */
+      /* --- LOAD PROFILE --- */
       async function loadUserProfile() {
         try {
           const res = await fetch(`${API}/me`, {
-            // Fixed API reference
             method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           });
 
           if (!res.ok) throw new Error("Failed to load profile");
-
           const user = await res.json();
 
-          // Map data to Form Inputs
           fullNameInput.value = user.fullName || "";
           emailInput.value = user.email || "";
           phoneInput.value = user.phone || "";
           locationInput.value = user.location || "";
           bioInput.value = user.bio || "";
           institutionInput.value = user.institution || "unilag";
-
-          // Map data to Sidebar
           sidebarName.innerText = user.fullName || "User";
+
+          if (user.profilePicture) {
+            profileDisplay.src = user.profilePicture;
+          } else {
+            profileDisplay.src =
+              "https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg";
+          }
         } catch (err) {
           console.error("Profile Load Error:", err);
         }
       }
 
       loadUserProfile();
-/* =========================
-   LOAD USER PROFILE
-========================= */
-async function loadUserProfile() {
-  try {
-    const res = await fetch(`${API}/me`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    });
 
-    if (!res.ok) throw new Error("Failed to load profile");
-    const user = await res.json();
+      /* --- SAVE TEXT CHANGES --- */
+      profileForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
 
-    // Map data to Form Inputs
-    fullNameInput.value = user.fullName || "";
-    emailInput.value = user.email || "";
-    phoneInput.value = user.phone || "";
-    locationInput.value = user.location || "";
-    bioInput.value = user.bio || "";
-    institutionInput.value = user.institution || "";
+        saveBtn.classList.add("is-loading");
+        saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
 
-    // UPDATE SIDEBAR AND IMAGE
-    sidebarName.innerText = user.fullName || "User";
-    
-    // FIX: This ensures the image stays on refresh!
-    if (user.profilePicture && profileDisplay) {
-      profileDisplay.src = user.profilePicture;
-    }
-  } catch (err) {
-    console.error("Profile Load Error:", err);
-  }
-}/* =========================
-   IMAGE UPLOAD
-========================= */
-imageUpload.addEventListener("change", async function () {
-  const file = this.files[0];
-  if (!file) return;
+        try {
+          const res = await fetch(`${API}/profile`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              fullName: fullNameInput.value,
+              email: emailInput.value,
+              phone: phoneInput.value,
+              location: locationInput.value,
+              bio: bioInput.value,
+              institution: institutionInput.value,
+            }),
+          });
 
-  // Show immediate local preview
-  profileDisplay.src = URL.createObjectURL(file);
+          if (!res.ok) throw new Error("Update failed");
 
-  const formData = new FormData();
-  formData.append("profileImage", file);
+          // SUCCESS STATE
+          saveBtn.classList.remove("is-loading");
+          saveBtn.classList.add("btn-success", "success-pulse");
+          saveBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Saved!`;
+          sidebarName.innerText = fullNameInput.value;
 
-  try {
-    // FIX: Use 'API' instead of 'API_BASE'
-    const res = await fetch(`${API}/upload-avatar`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    });
+          setTimeout(() => {
+            saveBtn.classList.remove("btn-success", "success-pulse");
+            saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
+          }, 2500);
+        } catch (err) {
+          console.error("Update error:", err);
+          saveBtn.classList.remove("is-loading");
+          saveBtn.innerHTML = `Error saving profile`;
+          setTimeout(() => {
+            saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
+          }, 2500);
+        }
+      });
 
-    const data = await res.json();
-    if (res.ok) {
-      alert("Profile picture updated in the cloud!");
-      // Update the display with the official Cloudinary URL
-      profileDisplay.src = data.url; 
-    } else {
-      alert("Upload failed: " + data.message);
-    }
-  } catch (err) {
-    console.error("Upload error:", err);
-  }
-});    </script>
+      /* --- IMAGE UPLOAD --- */
+      imageUpload.addEventListener("change", async function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        profileDisplay.src = URL.createObjectURL(file);
+
+        const formData = new FormData();
+        formData.append("profileImage", file);
+
+        try {
+          const res = await fetch(`${API}/upload-avatar`, {
+            method: "POST",
+            headers: { Authorization: `Bearer ${token}` },
+            body: formData,
+          });
+
+          const data = await res.json();
+          if (res.ok) {
+            alert("Profile picture updated!");
+            profileDisplay.src = data.url;
+          } else {
+            alert("Upload failed: " + data.message);
+          }
+        } catch (err) {
+          console.error("Upload error:", err);
+        }
+      });
+    </script>
   </body>
 </html>
