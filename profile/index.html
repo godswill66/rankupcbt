@@ -382,9 +382,63 @@
           gap: 15px;
         }
       }
+      /* --- Loader Styling (Extracted from Register) --- */
+      #fullScreenLoader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(8px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        flex-direction: column;
+      }
+
+      .loader-content {
+        text-align: center;
+      }
+
+      .loader-icon {
+        font-size: 4rem;
+        color: var(--primary);
+        margin-bottom: 20px;
+        animation: pulseAndSpin 1.5s ease-in-out infinite;
+      }
+
+      .loader-text {
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+      }
+
+      @keyframes pulseAndSpin {
+        0% {
+          transform: scale(1) rotate(0deg);
+          opacity: 0.7;
+        }
+        50% {
+          transform: scale(1.2) rotate(180deg);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1) rotate(360deg);
+          opacity: 0.7;
+        }
+      }
     </style>
   </head>
   <body>
+    <div id="fullScreenLoader">
+      <div class="loader-content">
+        <i class="fa-solid fa-square-poll-vertical loader-icon"></i>
+        <div class="loader-text">Commiting Changes...</div>
+      </div>
+    </div>
     <nav class="navbar">
       <div class="nav-container">
         <a href="/dashboard" class="logo">
@@ -584,16 +638,12 @@
         </div>
       </div>
     </footer>
-
     <script>
       const API = "https://rankupcbt-api-2.onrender.com/api/users";
       const token = localStorage.getItem("token");
 
-      if (!token) {
-        alert("You must login first");
-        window.location.href = "/login";
-      }
-
+      // Define Elements
+      const loader = document.getElementById("fullScreenLoader");
       const profileForm = document.getElementById("profileForm");
       const saveBtn = profileForm.querySelector(".btn-save");
       const imageUpload = document.getElementById("imageUpload");
@@ -607,8 +657,16 @@
       const institutionInput = document.getElementById("uni");
       const sidebarName = document.querySelector(".profile-card h2");
 
+      // Redirect if no token
+      if (!token) {
+        window.location.href = "/login";
+      }
+
       /* --- LOAD PROFILE --- */
       async function loadUserProfile() {
+        // Show loader while fetching initial data
+        loader.style.display = "flex";
+
         try {
           const res = await fetch(`${API}/me`, {
             method: "GET",
@@ -630,10 +688,15 @@
             profileDisplay.src = user.profilePicture;
           } else {
             profileDisplay.src =
-              "https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg";
+              "https://ui-avatars.com/api/?name=" +
+              (user.fullName || "User") +
+              "&background=5d5fef&color=fff";
           }
         } catch (err) {
           console.error("Profile Load Error:", err);
+        } finally {
+          // HIDE loader after data is loaded or failed
+          loader.style.display = "none";
         }
       }
 
@@ -643,24 +706,42 @@
       profileForm.addEventListener("submit", async function (e) {
         e.preventDefault();
 
+        const password = document.querySelector(
+          'input[placeholder="New Password"]',
+        ).value;
+        const confirmPassword = document.querySelector(
+          'input[placeholder="Confirm password"]',
+        ).value;
+
+        if (password && password !== confirmPassword) {
+          alert("Passwords do not match!");
+          return;
+        }
+
         saveBtn.classList.add("is-loading");
         saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
+        loader.style.display = "flex"; // Show global loader for commitment
 
         try {
+          const updateData = {
+            fullName: fullNameInput.value,
+            email: emailInput.value,
+            phone: phoneInput.value,
+            location: locationInput.value,
+            bio: bioInput.value,
+            institution: institutionInput.value,
+          };
+
+          // Only add password to request if user typed one
+          if (password) updateData.password = password;
+
           const res = await fetch(`${API}/profile`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({
-              fullName: fullNameInput.value,
-              email: emailInput.value,
-              phone: phoneInput.value,
-              location: locationInput.value,
-              bio: bioInput.value,
-              institution: institutionInput.value,
-            }),
+            body: JSON.stringify(updateData),
           });
 
           if (!res.ok) throw new Error("Update failed");
@@ -682,6 +763,8 @@
           setTimeout(() => {
             saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
           }, 2500);
+        } finally {
+          loader.style.display = "none"; // Always hide loader at the end
         }
       });
 
@@ -690,7 +773,11 @@
         const file = this.files[0];
         if (!file) return;
 
+        // Preview immediately
+        const originalSrc = profileDisplay.src;
         profileDisplay.src = URL.createObjectURL(file);
+
+        loader.style.display = "flex"; // Show loader for image upload
 
         const formData = new FormData();
         formData.append("profileImage", file);
@@ -704,13 +791,16 @@
 
           const data = await res.json();
           if (res.ok) {
-            alert("Profile picture updated!");
             profileDisplay.src = data.url;
           } else {
+            profileDisplay.src = originalSrc; // Revert on failure
             alert("Upload failed: " + data.message);
           }
         } catch (err) {
+          profileDisplay.src = originalSrc; // Revert on error
           console.error("Upload error:", err);
+        } finally {
+          loader.style.display = "none"; // Hide loader
         }
       });
     </script>

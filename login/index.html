@@ -9,14 +9,7 @@
     <meta name="keywords" content="JAMB Ranker, JAMB CBT Practice, RankUp CBT, Nigeria exam preparation, UTME ranking, JAMB score tracker" />
     <meta name="author" content="RankUp CBT" />
 
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.rankupcbt.com/" />
-    <meta property="og:title" content="RankUp CBT | The Best JAMB Ranker for 2026" />
-    <meta property="og:description" content="See where you stand among thousands of candidates. Use our JAMB Ranker tool to predict your admission chances." />
-    <meta property="og:image" content="/assets/logo.png" />
-
     <link rel="icon" type="image/png" href="/assets/logo.png" />
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
@@ -37,7 +30,7 @@
       }
 
       body {
-        font-family: "Inter", sans-serif; /* Consistent font from Register page */
+        font-family: "Inter", sans-serif;
         color: var(--text-main);
         line-height: 1.6;
         background-color: var(--bg-body);
@@ -50,6 +43,46 @@
         max-width: 1100px;
         margin: 0 auto;
         padding: 0 20px;
+      }
+
+      /* --- Loader Styling (Extracted from Register) --- */
+      #fullScreenLoader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(8px);
+        display: none; 
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        flex-direction: column;
+      }
+
+      .loader-content {
+        text-align: center;
+      }
+
+      .loader-icon {
+        font-size: 4rem;
+        color: var(--primary);
+        margin-bottom: 20px;
+        animation: pulseAndSpin 1.5s ease-in-out infinite;
+      }
+
+      .loader-text {
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+      }
+
+      @keyframes pulseAndSpin {
+        0% { transform: scale(1) rotate(0deg); opacity: 0.7; }
+        50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+        100% { transform: scale(1) rotate(360deg); opacity: 0.7; }
       }
 
       /* --- Navbar --- */
@@ -132,7 +165,7 @@
       }
 
       .auth-title {
-        font-size: 2rem; /* Matched Register title size */
+        font-size: 2rem;
         margin-bottom: 10px;
         font-weight: 800;
         text-align: center;
@@ -284,11 +317,6 @@
         text-decoration: none;
         color: var(--text-muted);
         font-size: 0.9rem;
-        transition: color 0.3s;
-      }
-
-      .footer-col ul li a:hover {
-        color: var(--primary);
       }
 
       .whatsapp-link {
@@ -312,11 +340,6 @@
         border-top: 1px solid #f0f0f0;
       }
 
-      .footer-bottom p {
-        font-size: 0.85rem;
-        color: #999;
-      }
-
       .socials {
         display: flex;
         gap: 20px;
@@ -329,7 +352,7 @@
 
       /* --- Responsive --- */
       @media (max-width: 768px) {
-        .btn-text { display: none; } /* Match Register page mobile behavior */
+        .btn-text { display: none; }
         .footer-grid {
           grid-template-columns: 1fr;
           text-align: center;
@@ -348,6 +371,13 @@
     </style>
   </head>
   <body>
+    <div id="fullScreenLoader">
+      <div class="loader-content">
+        <i class="fa-solid fa-square-poll-vertical loader-icon"></i>
+        <div class="loader-text">Verifying your credentials...</div>
+      </div>
+    </div>
+
     <nav class="navbar">
       <div class="container nav-content">
         <a href="/" class="logo">
@@ -402,7 +432,7 @@
           </button>
 
           <div class="auth-footer">
-            Don't have an account? <a href="/Register/">Register Now</a>
+            Don't have an account? <a href="/register/">Register Now</a>
           </div>
         </form>
       </div>
@@ -447,12 +477,16 @@
 
     <script>
       const loginForm = document.getElementById("loginForm");
+      const loader = document.getElementById("fullScreenLoader");
 
       loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         const email = document.getElementById("loginEmail").value.trim();
         const password = document.getElementById("loginPassword").value;
+
+        // SHOW THE FULL SCREEN ANIMATION
+        loader.style.display = "flex";
 
         try {
           const response = await fetch("https://rankupcbt-api-2.onrender.com/api/auth/login", {
@@ -464,6 +498,7 @@
           const data = await response.json();
 
           if (!response.ok) {
+            loader.style.display = "none"; // HIDE IF ERROR
             alert(data.message || "Login failed");
             return;
           }
@@ -471,8 +506,9 @@
           localStorage.setItem("token", data.token);
           window.location.href = "/dashboard/";
         } catch (error) {
+          loader.style.display = "none"; // HIDE IF ERROR
           console.error(error);
-          alert("Cannot connect to server. Ensure backend is running on port 3001.");
+          alert("Cannot connect to server. Please try again later.");
         }
       });
     </script>
