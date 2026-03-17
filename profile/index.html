@@ -588,21 +588,27 @@
           <div class="form-grid">
             <div class="form-group">
               <label>New Password</label>
-              <input type="password" placeholder="New Password" />
+              <input
+                type="password"
+                placeholder="New Password"
+                autocomplete="new-password"
+              />
             </div>
             <div class="form-group">
               <label>Confirm</label>
-              <input type="password" placeholder="Confirm password" />
+              <input
+                type="password"
+                placeholder="Confirm password"
+                autocomplete="new-password"
+              />
             </div>
           </div>
-
           <button type="submit" class="btn-save">
             <i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes
           </button>
         </form>
       </main>
     </div>
-
     <footer class="footer">
       <div class="footer-grid">
         <div class="footer-col">
@@ -623,6 +629,10 @@
           </ul>
         </div>
         <div class="footer-col">
+          <p>
+            Get updates and study tips directly in our <br />
+            community.
+          </p>
           <h4>Join Community</h4>
           <a href="#" class="whatsapp-link">
             <i class="fa-brands fa-whatsapp"></i> Join WhatsApp Community
@@ -644,6 +654,7 @@
 
       // Define Elements
       const loader = document.getElementById("fullScreenLoader");
+      const loaderText = loader.querySelector(".loader-text"); // Select the text inside loader
       const profileForm = document.getElementById("profileForm");
       const saveBtn = profileForm.querySelector(".btn-save");
       const imageUpload = document.getElementById("imageUpload");
@@ -657,14 +668,13 @@
       const institutionInput = document.getElementById("uni");
       const sidebarName = document.querySelector(".profile-card h2");
 
-      // Redirect if no token
       if (!token) {
         window.location.href = "/login";
       }
 
       /* --- LOAD PROFILE --- */
       async function loadUserProfile() {
-        // Show loader while fetching initial data
+        loaderText.innerText = "Loading Profile..."; // Change text
         loader.style.display = "flex";
 
         try {
@@ -695,7 +705,6 @@
         } catch (err) {
           console.error("Profile Load Error:", err);
         } finally {
-          // HIDE loader after data is loaded or failed
           loader.style.display = "none";
         }
       }
@@ -706,21 +715,19 @@
       profileForm.addEventListener("submit", async function (e) {
         e.preventDefault();
 
-        const password = document.querySelector(
-          'input[placeholder="New Password"]',
-        ).value;
-        const confirmPassword = document.querySelector(
-          'input[placeholder="Confirm password"]',
-        ).value;
+        const passwordInput = document.getElementById("newPassword");
+        const confirmInput = document.getElementById("confirmPassword");
 
-        if (password && password !== confirmPassword) {
+        if (passwordInput.value && passwordInput.value !== confirmInput.value) {
           alert("Passwords do not match!");
           return;
         }
 
         saveBtn.classList.add("is-loading");
         saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
-        loader.style.display = "flex"; // Show global loader for commitment
+
+        loaderText.innerText = "Committing Changes..."; // Change text
+        loader.style.display = "flex";
 
         try {
           const updateData = {
@@ -732,8 +739,7 @@
             institution: institutionInput.value,
           };
 
-          // Only add password to request if user typed one
-          if (password) updateData.password = password;
+          if (passwordInput.value) updateData.password = passwordInput.value;
 
           const res = await fetch(`${API}/profile`, {
             method: "PUT",
@@ -746,7 +752,10 @@
 
           if (!res.ok) throw new Error("Update failed");
 
-          // SUCCESS STATE
+          // Clear password fields after success
+          passwordInput.value = "";
+          confirmInput.value = "";
+
           saveBtn.classList.remove("is-loading");
           saveBtn.classList.add("btn-success", "success-pulse");
           saveBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Saved!`;
@@ -764,7 +773,7 @@
             saveBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Save Profile Changes`;
           }, 2500);
         } finally {
-          loader.style.display = "none"; // Always hide loader at the end
+          loader.style.display = "none";
         }
       });
 
@@ -773,11 +782,8 @@
         const file = this.files[0];
         if (!file) return;
 
-        // Preview immediately
-        const originalSrc = profileDisplay.src;
-        profileDisplay.src = URL.createObjectURL(file);
-
-        loader.style.display = "flex"; // Show loader for image upload
+        loaderText.innerText = "Uploading Image..."; // Change text
+        loader.style.display = "flex";
 
         const formData = new FormData();
         formData.append("profileImage", file);
@@ -793,14 +799,12 @@
           if (res.ok) {
             profileDisplay.src = data.url;
           } else {
-            profileDisplay.src = originalSrc; // Revert on failure
             alert("Upload failed: " + data.message);
           }
         } catch (err) {
-          profileDisplay.src = originalSrc; // Revert on error
           console.error("Upload error:", err);
         } finally {
-          loader.style.display = "none"; // Hide loader
+          loader.style.display = "none";
         }
       });
     </script>
