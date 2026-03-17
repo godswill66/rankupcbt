@@ -649,146 +649,168 @@
       </div>
     </footer>
     <script>
-      let questions = [];
-      let currentQuestionIndex = 0;
-      let userAnswers = [];
-      let selectedSubject = "bio";
-      const token = localStorage.getItem("rankup_token");
+  let questions = [];
+  let currentQuestionIndex = 0;
+  let userAnswers = [];
+  let selectedSubject = "bio";
 
-      // LOAD QUESTIONS FROM API
-      async function loadQuestions(subject) {
-        const questionTextEl = document.querySelector(".question-text");
-        const counterEl = document.getElementById("q-counter");
-        const container = document.querySelector(".options-container");
+  // --- 1. CORE DATA LOADING ---
+  async function loadQuestions(subject) {
+    const questionTextEl = document.querySelector(".question-text");
+    const counterEl = document.getElementById("q-counter");
+    const container = document.querySelector(".options-container");
 
-        try {
-          selectedSubject = subject;
-          questionTextEl.innerText = "Connecting to RankUp servers...";
-          container.innerHTML = ""; // Clear options while loading
+    try {
+      selectedSubject = subject;
+      questionTextEl.innerText = "Connecting to RankUp servers...";
+      container.innerHTML = ""; 
 
-          const res = await fetch(
-            `https://rankupcbt-api-2.onrender.com/api/admin/practice?subject=${subject}`,
-            {
-              method: "GET",
-              headers: { "Content-Type": "application/json" },
-            },
-          );
+      const res = await fetch(
+        `https://rankupcbt-api-2.onrender.com/api/admin/practice?subject=${subject}`
+      );
 
-          if (!res.ok) throw new Error(`Server Error: ${res.status}`);
+      if (!res.ok) throw new Error(`Server Error: ${res.status}`);
+      const data = await res.json();
 
-          const data = await res.json();
-
-          if (!data || data.length === 0) {
-            questionTextEl.innerText =
-              "No questions available for this subject yet.";
-            counterEl.innerText = "0 OF 0";
-            questions = [];
-            return;
-          }
-
-          questions = data;
-          currentQuestionIndex = 0;
-          generateGrid();
-          renderQuestion();
-        } catch (err) {
-          console.error("Fetch Error:", err);
-          questionTextEl.innerText =
-            "Connection Error. Please check your internet or try again in 1 minute.";
-        }
+      if (!data || data.length === 0) {
+        questionTextEl.innerText = "No questions available for this subject yet.";
+        counterEl.innerText = "0 OF 0";
+        questions = [];
+        return;
       }
 
-      function renderQuestion() {
-        if (!questions.length) return;
-        const q = questions[currentQuestionIndex];
+      questions = data;
+      currentQuestionIndex = 0;
+      generateGrid();
+      renderQuestion();
+    } catch (err) {
+      console.error("Fetch Error:", err);
+      questionTextEl.innerText = "Connection Error. Please check your internet.";
+    }
+  }
 
-        document.querySelector(".question-text").innerText = q.questionText;
-        document.getElementById("q-counter").innerText =
-          `QUESTION ${currentQuestionIndex + 1} OF ${questions.length}`;
+  function renderQuestion() {
+    if (!questions.length) return;
+    const q = questions[currentQuestionIndex];
 
-        const container = document.querySelector(".options-container");
-        container.innerHTML = "";
+    document.querySelector(".question-text").innerText = q.questionText;
+    document.getElementById("q-counter").innerText =
+      `QUESTION ${currentQuestionIndex + 1} OF ${questions.length}`;
 
-        q.options.forEach((opt) => {
-          const div = document.createElement("div");
-          div.className = "option";
-          div.innerHTML = `<div class="option-tag">${opt.label}</div><span>${opt.text}</span>`;
-          div.onclick = () => handleSelect(div, opt.label);
-          container.appendChild(div);
-        });
+    const container = document.querySelector(".options-container");
+    container.innerHTML = "";
 
-        restoreSelectedAnswer();
+    q.options.forEach((opt) => {
+      const div = document.createElement("div");
+      div.className = "option";
+      div.innerHTML = `<div class="option-tag">${opt.label}</div><span>${opt.text}</span>`;
+      div.onclick = () => handleSelect(div, opt.label);
+      container.appendChild(div);
+    });
+
+    restoreSelectedAnswer();
+    generateGrid(); // Refresh grid to show active status
+  }
+
+  function handleSelect(el, choice) {
+    document.querySelectorAll(".option").forEach((o) => o.classList.remove("selected"));
+    el.classList.add("selected");
+
+    const qId = questions[currentQuestionIndex]._id;
+    const existing = userAnswers.find((a) => a.qId === qId);
+
+    if (existing) {
+      existing.choice = choice;
+    } else {
+      userAnswers.push({ qId, choice });
+    }
+    generateGrid();
+  }
+
+  function restoreSelectedAnswer() {
+    const qId = questions[currentQuestionIndex]._id;
+    const ans = userAnswers.find((a) => a.qId === qId);
+    if (!ans) return;
+
+    document.querySelectorAll(".option").forEach((opt) => {
+      if (opt.querySelector(".option-tag").innerText === ans.choice) {
+        opt.classList.add("selected");
       }
+    });
+  }
 
-      function handleSelect(el, choice) {
-        document
-          .querySelectorAll(".option")
-          .forEach((o) => o.classList.remove("selected"));
-        el.classList.add("selected");
+  function generateGrid() {
+    const grid = document.getElementById("nav-grid");
+    if (!grid) return;
+    grid.innerHTML = "";
 
-        const qId = questions[currentQuestionIndex]._id;
-        const existing = userAnswers.find((a) => a.qId === qId);
-
-        if (existing) {
-          existing.choice = choice;
-        } else {
-          userAnswers.push({ qId, choice });
-        }
-        generateGrid();
+    questions.forEach((_, i) => {
+      const item = document.createElement("div");
+      item.className = `grid-item ${i === currentQuestionIndex ? "active" : ""}`;
+      if (userAnswers.find((a) => a.qId === questions[i]._id)) {
+        item.classList.add("done");
       }
-
-      function restoreSelectedAnswer() {
-        const qId = questions[currentQuestionIndex]._id;
-        const ans = userAnswers.find((a) => a.qId === qId);
-        if (!ans) return;
-
-        document.querySelectorAll(".option").forEach((opt) => {
-          if (opt.querySelector(".option-tag").innerText === ans.choice) {
-            opt.classList.add("selected");
-          }
-        });
-      }
-
-      function generateGrid() {
-        const grid = document.getElementById("nav-grid");
-        if (!grid) return;
-        grid.innerHTML = "";
-
-        questions.forEach((_, i) => {
-          const item = document.createElement("div");
-          item.className = `grid-item ${i === currentQuestionIndex ? "active" : ""}`;
-          if (userAnswers.find((a) => a.qId === questions[i]._id)) {
-            item.classList.add("done");
-          }
-          item.innerText = i + 1;
-          item.onclick = () => {
-            currentQuestionIndex = i;
-            renderQuestion();
-          };
-          grid.appendChild(item);
-        });
-      }
-
-      // CONTROLS
-      document.querySelector(".btn-next").onclick = () => {
-        if (currentQuestionIndex < questions.length - 1) {
-          currentQuestionIndex++;
-          renderQuestion();
-        }
+      item.innerText = i + 1;
+      item.onclick = () => {
+        currentQuestionIndex = i;
+        renderQuestion();
       };
+      grid.appendChild(item);
+    });
+  }
 
-      document.querySelector(".btn-prev").onclick = () => {
-        if (currentQuestionIndex > 0) {
-          currentQuestionIndex--;
-          renderQuestion();
-        }
-      };
+  // --- 2. BUTTON CONTROLS (FIXED) ---
+  
+  // Use IDs or specific classes and ensure they exist
+  document.querySelector(".btn-next").onclick = () => {
+    if (currentQuestionIndex < questions.length - 1) {
+      currentQuestionIndex++;
+      renderQuestion();
+    }
+  };
 
-      document.getElementById("subject-dropdown").onchange = (e) => {
-        loadQuestions(e.target.value);
-      };
+  document.querySelector(".btn-prev").onclick = () => {
+    if (currentQuestionIndex > 0) {
+      currentQuestionIndex--;
+      renderQuestion();
+    }
+  };
 
-      // Start with Biology
-      loadQuestions("bio");
-    </script>
-  </body>
+  function submitTest() {
+    const score = userAnswers.length; // Simplified for now
+    alert(`Submission Successful! You answered ${score} out of ${questions.length} questions.`);
+    // Add your logic to POST userAnswers to your API here
+  }
+
+  // --- 3. UTILITIES (CALC & FLAG) ---
+  function toggleCalc() {
+    const modal = document.getElementById("calc-modal");
+    modal.style.display = modal.style.display === "block" ? "none" : "block";
+  }
+
+  function toggleFlag() {
+    const flagBtn = document.getElementById("flag-ui");
+    flagBtn.style.color = flagBtn.style.color === "var(--warning)" ? "var(--secondary)" : "var(--warning)";
+  }
+
+  // Calculator Logic
+  const display = document.getElementById("display");
+  window.appendToDisplay = (val) => {
+    if (display.value === "0") display.value = val;
+    else display.value += val;
+  };
+  window.clearCalc = () => display.value = "0";
+  window.deleteLast = () => display.value = display.value.slice(0, -1) || "0";
+  window.calculateResult = () => {
+    try { display.value = eval(display.value); } 
+    catch { display.value = "Error"; }
+  };
+
+  document.getElementById("subject-dropdown").onchange = (e) => {
+    loadQuestions(e.target.value);
+  };
+
+  // Initial Load
+  loadQuestions("bio");
+</script>  </body>
 </html>
