@@ -1,16 +1,14 @@
 {
   "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {
       "source": "/api/(.*)",
       "destination": "/api/$1"
     },
     {
-      "source": "/(.*)",
-      "destination": "/404.html",
-      "condition": {
-        "status": 404
-      }
+      "source": "/((?!api|assets|dashboard|login|practice|profile|register|results).*)",
+      "destination": "/404.html"
     }
   ]
 }
