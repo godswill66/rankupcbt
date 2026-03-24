@@ -399,21 +399,22 @@
       </main>
     </div>
     <script>
-      // 1. Base URL for your Render Backend
       const API_BASE = "https://rankupcbt-api-2.onrender.com/api";
 
       async function initPage() {
-        // Check what is currently in storage (Check your F12 console for this)
+        // 1. IMPROVED CHECK: Handles string versions of null/undefined
         const userId = localStorage.getItem("userId");
-        console.log("Current Session UserID:", userId);
 
-        if (!userId || userId === "undefined" || userId === "null") {
-          alert("Session expired or not found. Please login again.");
-          window.location.href = "/login.html";
+        if (!userId || userId === "null" || userId === "undefined") {
+          console.error("No valid UserID found in localStorage");
+          alert("Session expired. Please login again.");
+          window.location.href = "login.html"; // Removed leading slash for better relative pathing
           return;
         }
 
-        // Run both data fetches since we have a valid ID
+        console.log("Session Active for UserID:", userId);
+
+        // Run both fetches
         fetchUserProfile(userId);
         fetchMyResults(userId);
       }
@@ -421,14 +422,18 @@
       async function fetchUserProfile(userId) {
         try {
           const response = await fetch(`${API_BASE}/users/${userId}`);
-          const user = await response.json();
+          if (!response.ok) throw new Error("Profile not found");
 
-          if (response.ok && user.name) {
+          const user = await response.json();
+          if (user && user.name) {
             document.querySelector(".header h1").innerText =
               `Analysis: ${user.name}`;
           }
         } catch (err) {
-          console.error("Profile fetch failed:", err);
+          console.warn(
+            "Could not load user name. Ensure GET /api/users/:id exists on backend.",
+          );
+          document.querySelector(".header h1").innerText = "Analysis: Student";
         }
       }
 
@@ -442,43 +447,56 @@
           if (response.ok) {
             updateUI(data);
           } else {
+            // Handle case where user exists but has 0 test attempts
             container.innerHTML = `
           <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
             <i class="fas fa-folder-open" style="font-size: 3rem; color: #ccc;"></i>
-            <p style="margin-top:10px;">${data.message || "No results found for this user yet."}</p>
+            <p style="margin-top:10px; color: var(--text-gray);">
+              ${data.message || "No practice tests recorded yet. Start your first simulation!"}
+            </p>
           </div>`;
           }
         } catch (err) {
           console.error("Fetch Error:", err);
-          container.innerHTML = `<p style="text-align:center; color:red;">Error connecting to the RankUp server.</p>`;
+          container.innerHTML = `
+        <div style="grid-column: 1/-1; text-align: center; color: var(--danger);">
+          <i class="fas fa-exclamation-circle"></i> 
+          <p>Connection error. Please refresh the page.</p>
+        </div>`;
         }
       }
 
       function updateUI(data) {
-        // 1. Update the Big Stats
+        // 1. Update Big Stats (Added Fallbacks for missing data)
         document.getElementById("overall-score").innerHTML =
-          `${data.overallScore}<span>%</span>`;
-        document.getElementById("national-rank").innerText =
-          `#${data.nationalRank || "N/A"}`;
+          `${data.overallScore || 0}<span>%</span>`;
+        document.getElementById("national-rank").innerText = data.nationalRank
+          ? `#${data.nationalRank}`
+          : "--";
 
         // 2. Update Percentile Text
         const standingEl = document.getElementById("total-candidates");
         standingEl.innerText = data.percentile
           ? `Better than ${data.percentile}% of candidates`
-          : "Top performance calculated";
+          : "Ranking update in progress...";
 
-        // 3. Update Performance Status Color
+        // 3. Update Status Color
         const statusEl = document.getElementById("score-status");
         if (data.overallScore >= 50) {
           statusEl.style.color = "var(--success)";
-          statusEl.innerHTML = `<i class="fas fa-check-circle"></i> Above Average Performance`;
+          statusEl.innerHTML = `<i class="fas fa-check-circle"></i> Strong Performance`;
         } else {
           statusEl.style.color = "var(--danger)";
-          statusEl.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Improvement Required`;
+          statusEl.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Review Recommended`;
         }
 
         // 4. Generate Subject Cards
         const container = document.getElementById("subject-container");
+        if (!data.scores || data.scores.length === 0) {
+          container.innerHTML = "<p>No subject data found.</p>";
+          return;
+        }
+
         container.innerHTML = data.scores
           .map((item) => {
             const percentage = (item.score / item.total) * 100;
@@ -496,7 +514,6 @@
           .join("");
       }
 
-      // Start the page logic
       document.addEventListener("DOMContentLoaded", initPage);
     </script>
   </body>
