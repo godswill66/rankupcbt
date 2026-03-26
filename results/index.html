@@ -169,95 +169,79 @@
         </footer>
       </main>
     </div>
+<script>
+  const API_BASE = "https://rankupcbt-api-2.onrender.com/api";
 
-    <script>
-      // CONFIGURATION: Ensure this matches your backend URL
-      const API_BASE = "https://rankupcbt-api-2.onrender.com/api";
+  async function initPage() {
+    const userId = localStorage.getItem("userId");
+    
+    // Checking if the user is logged in
+    if (!userId || userId === "null" || userId === "undefined") {
+      alert("Session expired. Please login again.");
+      window.location.href = "login.html"; 
+      return;
+    }
 
-      async function initPage() {
-        console.log("Checking session...");
-        const userId = localStorage.getItem("userId");
-        
-        // Log precisely what is in storage
-        console.log("Found UserID:", userId);
+    // Call both functions independently so one failure doesn't stop the other
+    fetchUserProfile(userId);
+    fetchMyResults(userId);
+  }
 
-        if (!userId || userId === "null" || userId === "undefined" || userId === "") {
-          console.error("No valid session. Redirecting to login...");
-          alert("Session expired. Please login again.");
-          window.location.href = "login.html"; 
-          return;
-        }
-
-        fetchUserProfile(userId);
-        fetchMyResults(userId);
+  async function fetchUserProfile(userId) {
+    try {
+      const response = await fetch(`${API_BASE}/users/${userId}`);
+      if (response.ok) {
+        const user = await response.json();
+        document.querySelector(".header h1").innerText = `Analysis: ${user.name || 'Student'}`;
       }
+    } catch (err) {
+      console.warn("Could not load user profile name.");
+    }
+  }
 
-      async function fetchUserProfile(userId) {
-        try {
-          const response = await fetch(`${API_BASE}/users/${userId}`);
-          if (!response.ok) throw new Error("Profile Error");
-          const user = await response.json();
-          if (user?.name) {
-            document.querySelector(".header h1").innerText = `Analysis: ${user.name}`;
-          }
-        } catch (err) {
-          console.warn("User profile fetch failed.");
-          document.querySelector(".header h1").innerText = "Analysis: Student";
-        }
+  async function fetchMyResults(userId) {
+    const container = document.getElementById("subject-container");
+    try {
+      const response = await fetch(`${API_BASE}/results/latest/${userId}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        updateUI(data);
+      } else {
+        container.innerHTML = `<p style="text-align:center; padding:20px;">${data.message || 'No history found.'}</p>`;
       }
+    } catch (err) {
+      container.innerHTML = `<p style="color:red; text-align:center;">Server connection failed.</p>`;
+    }
+  }
 
-      async function fetchMyResults(userId) {
-        const container = document.getElementById("subject-container");
-        try {
-          const response = await fetch(`${API_BASE}/results/latest/${userId}`);
-          const data = await response.json();
+  function updateUI(data) {
+    // Update Stats
+    document.getElementById("overall-score").innerHTML = `${data.overallScore || 0}<span>%</span>`;
+    document.getElementById("national-rank").innerText = data.nationalRank ? `#${data.nationalRank}` : "--";
+    document.getElementById("total-candidates").innerText = data.percentile ? `Better than ${data.percentile}% of candidates` : "Rank pending...";
 
-          if (response.ok) {
-            updateUI(data);
-          } else {
-            container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px;">
-              <p>${data.message || "No practice tests recorded yet."}</p>
-            </div>`;
-          }
-        } catch (err) {
-          console.error("API Connection Error:", err);
-          container.innerHTML = `<p style="color:red; text-align:center;">Connection error. Check console.</p>`;
-        }
-      }
+    // Update Status Bar
+    const statusEl = document.getElementById("score-status");
+    const isPassing = (data.overallScore >= 50);
+    statusEl.style.color = isPassing ? "var(--success)" : "var(--danger)";
+    statusEl.innerHTML = isPassing ? `<i class="fas fa-check-circle"></i> Strong Performance` : `<i class="fas fa-exclamation-triangle"></i> Review Recommended`;
 
-      function updateUI(data) {
-        document.getElementById("overall-score").innerHTML = `${data.overallScore || 0}<span>%</span>`;
-        document.getElementById("national-rank").innerText = data.nationalRank ? `#${data.nationalRank}` : "--";
-        document.getElementById("total-candidates").innerText = data.percentile ? `Better than ${data.percentile}% of candidates` : "Ranking update in progress...";
+    // Render Subjects
+    const container = document.getElementById("subject-container");
+    container.innerHTML = (data.scores || []).map(item => {
+      const percentage = (item.score / item.total) * 100;
+      return `
+        <div class="sub-card">
+          <h4>${item.subject.toUpperCase()}</h4>
+          <div style="font-weight:700; font-size:1.2rem;">${item.score} <small>/ ${item.total}</small></div>
+          <div class="score-bar-bg"><div class="score-bar-fill" style="width: ${percentage}%"></div></div>
+          <p style="font-size: 0.8rem; color: var(--text-gray);">Accuracy: ${Math.round(percentage)}%</p>
+        </div>`;
+    }).join("");
+  }
 
-        const statusEl = document.getElementById("score-status");
-        if (data.overallScore >= 50) {
-          statusEl.style.color = "var(--success)";
-          statusEl.innerHTML = `<i class="fas fa-check-circle"></i> Strong Performance`;
-        } else {
-          statusEl.style.color = "var(--danger)";
-          statusEl.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Review Recommended`;
-        }
-
-        const container = document.getElementById("subject-container");
-        if (!data.scores || data.scores.length === 0) {
-          container.innerHTML = "<p>No subject data found.</p>";
-          return;
-        }
-
-        container.innerHTML = data.scores.map(item => {
-          const percentage = (item.score / item.total) * 100;
-          return `
-            <div class="sub-card">
-              <h4 style="margin:0 0 10px 0;">${item.subject.toUpperCase()}</h4>
-              <div style="font-weight:700; font-size:1.2rem;">${item.score} <small style="color:#999">/ ${item.total}</small></div>
-              <div class="score-bar-bg"><div class="score-bar-fill" style="width: ${percentage}%"></div></div>
-              <p style="font-size: 0.8rem; color: var(--text-gray); margin: 0;">Accuracy: ${Math.round(percentage)}%</p>
-            </div>`;
-        }).join("");
-      }
-
-      document.addEventListener("DOMContentLoaded", initPage);
-    </script>
+  document.addEventListener("DOMContentLoaded", initPage);
+</script>
   </body>
 </html>
