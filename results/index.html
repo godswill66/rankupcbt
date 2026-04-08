@@ -168,37 +168,51 @@
           </div>
         </footer>
       </main>
-    </div>
-<script>
+    </div><script>
   const API_BASE = "https://rankupcbt-api-2.onrender.com/api";
 
+  /**
+   * INITIALIZE PAGE
+   * Validates session and triggers data fetching
+   */
   async function initPage() {
     const userId = localStorage.getItem("userId");
     
-    // Checking if the user is logged in
+    // 1. Session Validation
     if (!userId || userId === "null" || userId === "undefined") {
+      console.error("Auth Error: No userId found in localStorage.");
       alert("Session expired. Please login again.");
       window.location.href = "login.html"; 
       return;
     }
 
-    // Call both functions independently so one failure doesn't stop the other
+    // 2. Load Data (Independent calls)
     fetchUserProfile(userId);
     fetchMyResults(userId);
   }
 
+  /**
+   * FETCH USER PROFILE
+   * Updates the header with the student's full name
+   */
   async function fetchUserProfile(userId) {
     try {
       const response = await fetch(`${API_BASE}/users/${userId}`);
       if (response.ok) {
         const user = await response.json();
-        document.querySelector(".header h1").innerText = `Analysis: ${user.name || 'Student'}`;
+        // FIXED: Using fullName to match your User Model
+        const displayName = user.fullName || user.username || 'Student';
+        document.querySelector(".header h1").innerText = `Analysis: ${displayName}`;
       }
     } catch (err) {
-      console.warn("Could not load user profile name.");
+      console.warn("Profile name could not be fetched:", err);
     }
   }
 
+  /**
+   * FETCH TEST RESULTS
+   * Pulls the latest exam data from the Results collection
+   */
   async function fetchMyResults(userId) {
     const container = document.getElementById("subject-container");
     try {
@@ -208,39 +222,73 @@
       if (response.ok) {
         updateUI(data);
       } else {
-        container.innerHTML = `<p style="text-align:center; padding:20px;">${data.message || 'No history found.'}</p>`;
+        // Handle 404 (No results yet) or other server errors
+        container.innerHTML = `
+          <div style="text-align:center; padding:30px; color: var(--text-gray);">
+            <i class="fas fa-info-circle" style="font-size: 2rem; margin-bottom: 10px;"></i>
+            <p>${data.message || 'No history found. Complete a test to see analysis.'}</p>
+          </div>`;
       }
     } catch (err) {
-      container.innerHTML = `<p style="color:red; text-align:center;">Server connection failed.</p>`;
+      console.error("Connection Error:", err);
+      container.innerHTML = `<p style="color:red; text-align:center; padding:20px;">Server connection failed. Check your internet.</p>`;
     }
   }
 
+  /**
+   * UPDATE UI
+   * Maps backend data to the HTML elements
+   */
   function updateUI(data) {
-    // Update Stats
+    // 1. Update Stats Cards
     document.getElementById("overall-score").innerHTML = `${data.overallScore || 0}<span>%</span>`;
     document.getElementById("national-rank").innerText = data.nationalRank ? `#${data.nationalRank}` : "--";
-    document.getElementById("total-candidates").innerText = data.percentile ? `Better than ${data.percentile}% of candidates` : "Rank pending...";
+    
+    const percentileEl = document.getElementById("total-candidates");
+    percentileEl.innerText = data.percentile 
+      ? `Better than ${data.percentile}% of candidates` 
+      : "Ranking pending...";
 
-    // Update Status Bar
+    // 2. Update Performance Status Bar
     const statusEl = document.getElementById("score-status");
     const isPassing = (data.overallScore >= 50);
-    statusEl.style.color = isPassing ? "var(--success)" : "var(--danger)";
-    statusEl.innerHTML = isPassing ? `<i class="fas fa-check-circle"></i> Strong Performance` : `<i class="fas fa-exclamation-triangle"></i> Review Recommended`;
+    
+    if (statusEl) {
+      statusEl.style.color = isPassing ? "#22c55e" : "#ef4444"; // Green vs Red
+      statusEl.innerHTML = isPassing 
+        ? `<i class="fas fa-check-circle"></i> Strong Performance` 
+        : `<i class="fas fa-exclamation-triangle"></i> Review Recommended`;
+    }
 
-    // Render Subjects
+    // 3. Render Subject Performance Cards
     const container = document.getElementById("subject-container");
-    container.innerHTML = (data.scores || []).map(item => {
-      const percentage = (item.score / item.total) * 100;
+    
+    // Safety check for the scores array
+    const subjectScores = data.scores || [];
+
+    if (subjectScores.length === 0) {
+      container.innerHTML = `<p style="text-align:center; padding:20px;">No subject breakdown available.</p>`;
+      return;
+    }
+
+    container.innerHTML = subjectScores.map(item => {
+      const percentage = item.total > 0 ? (item.score / item.total) * 100 : 0;
+      
       return `
         <div class="sub-card">
           <h4>${item.subject.toUpperCase()}</h4>
-          <div style="font-weight:700; font-size:1.2rem;">${item.score} <small>/ ${item.total}</small></div>
-          <div class="score-bar-bg"><div class="score-bar-fill" style="width: ${percentage}%"></div></div>
-          <p style="font-size: 0.8rem; color: var(--text-gray);">Accuracy: ${Math.round(percentage)}%</p>
+          <div style="font-weight:700; font-size:1.4rem; margin: 5px 0;">
+            ${item.score} <small style="color: #888; font-weight: 400;">/ ${item.total}</small>
+          </div>
+          <div class="score-bar-bg" style="background: #e5e7eb; height: 10px; border-radius: 5px; overflow: hidden; margin: 10px 0;">
+            <div class="score-bar-fill" style="width: ${percentage}%; background: var(--primary, #6366f1); height: 100%;"></div>
+          </div>
+          <p style="font-size: 0.85rem; color: #6b7280; margin: 0;">Accuracy: ${Math.round(percentage)}%</p>
         </div>`;
     }).join("");
   }
 
+  // Run when DOM is ready
   document.addEventListener("DOMContentLoaded", initPage);
 </script>
   </body>
