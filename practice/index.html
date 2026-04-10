@@ -654,6 +654,44 @@
       let userAnswers = [];
       let selectedSubject = "bio";
 
+      // --- TIMER LOGIC ---
+      let totalSeconds = 2 * 60 * 60; // 2 hours in seconds
+
+      function startTimer() {
+        const timerElement = document.getElementById("timer");
+
+        const countdown = setInterval(() => {
+          if (totalSeconds <= 0) {
+            clearInterval(countdown);
+            alert("Time is up! Your exam will be submitted automatically.");
+            submitTest(); // Auto-submit when time hits 0
+            return;
+          }
+
+          totalSeconds--;
+
+          // Calculate hours, minutes, seconds
+          const hrs = Math.floor(totalSeconds / 3600);
+          const mins = Math.floor((totalSeconds % 3600) / 60);
+          const secs = totalSeconds % 60;
+
+          // Format with leading zeros (e.g., 01:05:09)
+          timerElement.innerText = `${hrs}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+
+          // Change color to red when under 5 minutes (JAMB style warning)
+          if (totalSeconds < 300) {
+            timerElement.parentElement.style.color = "var(--danger)";
+            timerElement.parentElement.style.border = "2px solid var(--danger)";
+          }
+        }, 1000);
+      }
+
+      // Call startTimer() when the page loads
+      document.addEventListener("DOMContentLoaded", () => {
+        startTimer();
+        loadQuestions("bio"); // Your existing load call
+      });
+
       // --- 1. CORE DATA LOADING ---
       async function loadQuestions(subject) {
         const questionTextEl = document.querySelector(".question-text");
@@ -791,7 +829,7 @@
           alert(`Test Submitted! Total answered: ${score}`);
 
           // Redirect to dashboard
-          window.location.href = "dashboard";
+          window.location.href = "results.html"; // redirect to the results page after submition
         }
       }
 
